@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+.nav-link {
+    cursor: pointer;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.mineralImageModal {
+  /* width: fit-content !important; */
+  max-width: 95% !important;
+  max-height: 95%;
+  /* border: 3px solid  rgb(177, 185, 189);
+  border-radius: 8px; */
+}
+
+ .modal-dialog .modal-content{
+  border: 3px solid  rgb(177, 185, 189);
+  border-radius: 8px;
+}
+
+.modal-backdrop {
+  background-color: #5cb3fd;
+}
+
+.carousel-item img {
+  width: auto;
+  margin: auto; 
+  display: block;
+}
+
+  .carousel:focus{
+    border: none !important;
+    outline: none !important;
+  }
+
+  .right.carousel-control, .left.carousel-control {
+    opacity: 0;
+    filter:alpha(opacity=0); /* IE support */
+}

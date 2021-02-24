@@ -1,0 +1,114 @@
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from "@angular/common/http";
+import { InputCondition } from '../models/inputLocality';
+import { AuthenticationService } from '../services/authentication.service';
+import { RouterServices } from '../services/router.services';
+import { environment } from 'src/environments/environment';
+
+@Component({
+  selector: 'app-input-locality-form',
+  templateUrl: './input-locality-form.component.html',
+  styleUrls: ['./input-locality-form.component.css']
+})
+export class InputLocalityFormComponent implements OnInit {
+  submitted = false;
+  userForm: FormGroup;
+  activePage: any = {};
+  serviceErrors: any = {};
+  serverServiceErrors: any = {};
+  successLoadCondition: string;
+  inputCondition: InputCondition = new InputCondition();
+  allLocality: any = [];
+  tittleMain: string;
+
+  constructor(
+    public elementRef: ElementRef,
+    public formBuilder: FormBuilder,
+    public http: HttpClient,
+    public routerService: RouterServices,
+    public auth: AuthenticationService) {
+  }
+
+  public invalidName() {
+    return (this.submitted && this.userForm.controls.name.errors != null);
+  }
+
+  public invalidDescription() {
+    return (this.submitted && this.userForm.controls.description.errors != null);
+  }
+
+  copyServerErrors(returnData: any) {
+    this.serverServiceErrors.name = returnData.inputErrorMessage.name;
+    this.serverServiceErrors.description = returnData.inputErrorMessage.description;
+    this.serverServiceErrors.errorMessage = returnData.inputErrorMessage.errorMessage;
+    this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
+  }
+
+  cleanServerErrors() {
+    this.serverServiceErrors.name = null;
+    this.serverServiceErrors.description = null;
+    this.serverServiceErrors.uploadSuccess = null;
+    this.serverServiceErrors.errorMessage = null;
+  }
+
+  ngOnInit() {
+    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.userForm = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.maxLength(50)]],
+      description: [''],
+    },
+      { updateOn: "submit" }
+    );
+
+    let postedBy = this.auth.getLogUserId();
+    this.auth.saveActualUserId(postedBy);
+    this.http.get(environment.urlAddress + '/api/v1/user_input/locality/' + postedBy).subscribe((data: any) => {
+      this.activePage = data.activePage;
+      this.allLocality = data.localities;
+      this.tittleMain = 'Input locality';
+    }, error => {
+      this.routerService.notLoginError();
+    });
+  }
+
+  onSubmit() {
+    let formData = new FormData();
+    this.submitted = true;
+
+    if (this.userForm.invalid == true) {
+
+      this.cleanServerErrors();
+      this.inputCondition.successLoad = null;
+      return;
+
+    }
+    else {
+      Object.keys(this.userForm.value).forEach(key => {
+        formData.append(key, this.userForm.value[key]);
+      });
+
+
+      let postedBy = this.auth.getLogUserId();
+      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/locality/' + postedBy, formData).subscribe((returnData: any) => {
+
+        this.activePage = returnData.activePage;
+        this.allLocality = returnData.localities;
+        this.inputCondition.errorLoad = null;
+        this.copyServerErrors(returnData);
+
+        if (null == returnData.inputErrorMessage.uploadSuccess) {
+        }
+        else {
+          this.submitted = false;
+          this.userForm.reset();
+        }
+
+      }, error => {
+        this.routerService.notLoginError();
+        this.serverServiceErrors.uploadSuccess = null;
+      });
+    }
+  }
+
+}

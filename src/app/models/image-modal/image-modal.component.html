@@ -1,0 +1,93 @@
+<div class="modal-header">
+  <h4></h4>
+  <h4 *ngIf="imageInformation" class="modal-title">{{list.achatdbCollection.title}}</h4>
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <button *ngIf="!imageInformation" type="button" class="btn informationStyle active" aria-label="Close"
+      (click)="showImageInformation()">?</button>
+    <button *ngIf="imageInformation" type="button" class="btn informationStyle" aria-label="Close"
+      (click)="hideImageInformation()">-</button>
+    <button type="button" class="btn closeStyle" aria-label="Close" (click)="bsModalRef.hide()"><i
+        class="fa fa-close"></i>
+      <span aria-hidden="true">&#x2715;</span></button>
+  </div>
+</div>
+<div class="modal-body">
+  <carousel [(activeSlide)]="defaultSlide" (activeSlideChange)="logChangeSlide($event)" [showIndicators]="false"
+    [interval]="false">
+    <slide>
+      <div class="picsum-img-wrapper">
+        <img class="img-fluid carrouselImage" [attr.src]='getImageLarge(list.achatdbCollection.imgName)'
+          alt="image slide">
+      </div>
+      <div *ngIf="imageInformation" class="imageComment">
+        <br>{{list.achatdbCollection.comment}}
+      </div>
+    </slide>
+    <slide *ngFor="let achatImage of list.achatdbCollection.achatImages">
+      <div class="picsum-img-wrapper">
+        <img class="img-fluid carrouselImage" [attr.src]='getImageLarge(achatImage.imgName)' alt="image slide">
+      </div>
+      <div *ngIf="imageInformation" class="imageComment">
+        <br>{{achatImage.comment}}
+      </div>
+    </slide>
+  </carousel>
+</div>
+<div class="modal-footer">
+  <div class="row">
+    <div class="col">
+      <img *ngIf="imageInformation" class="LikeImage" [src]="imgSrc"
+        (mouseover)="imgSrc = '../../../assets/skins/like_button_hover.png'"
+        (mouseout)="imgSrc = '../../../assets/skins/like_button.png'" (click)="runLikeImage(list.achatdbCollection)">
+      <div *ngIf="imageInformation" class="row">
+        <div class="col">
+          <p class="LikeNumber">{{list.achatdbCollection.likes.quantity}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <button *ngIf="imageInformation" type="button" class="btn btnComments"
+        (click)="seeComments(list.achatdbCollection)">Comments</button>
+    </div>
+    <div class="col">
+      <button *ngIf="showEditItem(list.achatdbCollection.postedBy)" type="button" class="btn btnCancle"
+        (click)="editImage(list.achatdbCollection)">Edit</button>
+    </div>
+  </div>
+  <div *ngIf="showComments" class="containerComment" [ngClass]="{ 'containerCommentLogIn': auth.isLoggedIn() }">
+    <div *ngIf="auth.isLoggedIn()" class="containerComment_inputComment">
+      <div class="containerComment_inputCommentBtn">
+        <div class="row">
+
+          <div *ngIf="!showAddComment" class="col">
+            <button type="button" class="btn btnAddComment" (click)="seeAddComment(list.achatdbCollection)">Add
+              new</button>
+          </div>
+
+          <div *ngIf="showAddComment" class="col">
+
+            <button type="button" class="btn btnSubmitComment"
+              (click)="submitComment(list.achatdbCollection)">Submit</button>
+            <button type="button" class="btn btnCancleAddComment"
+              (click)="canceAddComment(list.achatdbCollection)">Cancle</button>
+          </div>
+          <div *ngIf="showAddComment" class="col">
+            <textarea class="inputCommentBox" ref-textarea [(ngModel)]="textValue" rows="4"></textarea>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let communityComment of list.achatdbCollection.communityComments" class="containerComment_text">
+      <div class="row">
+        <div *ngIf="isItemYours(communityComment.commentBy)" class="col-sm-3">
+          <button type="button" class="btn btnCommunityComments"
+            (click)="openConfirmModal(list.achatdbCollection, communityComment)">Delete</button>
+        </div>
+        <div class="col">
+          <div class="communityCommentText">{{communityComment.message}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

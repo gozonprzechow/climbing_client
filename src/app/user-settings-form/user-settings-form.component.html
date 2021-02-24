@@ -1,0 +1,30 @@
+<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
+
+<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+
+<div class="container">
+  <div class="mainFormClass">
+    <form [formGroup]="userForm" (ngSubmit)="openConfirmModal()">
+
+      <div class="submitContainer">
+        <p id="successLoadCondition"> {{this.inputCondition.errorLoad}}</p>
+      </div>
+
+      <div class="form-group has-error">
+        <div class="submitContainer">
+          <!-- Register Button -->
+          <button type="submit" class="submitButton">Delete account</button>
+        </div>
+        <div class="submitContainer">
+          <!-- Register Button -->
+          <button class="changePasswordButton" (click)="routerService.recoverPassword()">Change password</button>
+        </div>
+      </div>
+      <div class="submitContainer">
+        <br><br>
+        <p>Users spend on images space: {{this.convertedBytes.numberofBytes}}
+          [{{this.convertedBytes.unit}}]</p>
+      </div>
+    </form>
+  </div>
+</div>

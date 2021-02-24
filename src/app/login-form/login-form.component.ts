@@ -1,0 +1,150 @@
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from "@angular/common/http";
+import { InputCondition } from '../models/inputLocality';
+import { AuthenticationService, TokenPayload } from '../services/authentication.service';
+import { Globals } from '../services/globals.services';
+import { RouterServices } from '../services/router.services';
+import { environment } from 'src/environments/environment';
+
+@Component({
+  selector: 'app-login-form',
+  templateUrl: './login-form.component.html',
+  styleUrls: ['./login-form.component.css']
+})
+
+export class LoginFormComponent implements OnInit {
+  credentials: TokenPayload = {
+    email: '',
+    password: ''
+  };
+
+  submitted = false;
+  userForm: FormGroup;
+  serviceErrors: any = {};
+  serverServiceErrors: any = {};
+  successLoadCondition: string;
+  inputCondition: InputCondition = new InputCondition();
+  tittleMain: string;
+  errorMessage: string;
+  message: string;
+
+  product: any = {};
+
+  constructor(
+    public elementRef: ElementRef,
+    public formBuilder: FormBuilder,
+    public globals: Globals,
+    public auth: AuthenticationService,
+    public http: HttpClient,
+    public routerService: RouterServices) {
+    this.tittleMain = 'Login';
+  }
+
+  invalidEmail() {
+    return (this.submitted && this.userForm.controls.email.errors != null);
+  }
+
+  invalidPassword() {
+    return (this.submitted && this.userForm.controls.password.errors != null);
+  }
+
+  userNoVerified(): boolean {
+    return (this.message === "User is not approval");
+  }
+
+  userWrongPassword(): boolean {
+    return (this.message === "Password is wrong");
+  }
+
+  hideRegisterRouter(): boolean {
+    return !(this.userNoVerified() || this.userWrongPassword());
+  }
+
+  copyServerErrors(returnData: any) {
+    this.serverServiceErrors.email = returnData.inputErrorMessage.email;
+    this.serverServiceErrors.password = returnData.inputErrorMessage.password;
+    this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
+  }
+
+  cleanServerErrors() {
+    this.serverServiceErrors.email = null;
+    this.serverServiceErrors.password = null;
+    this.serverServiceErrors.uploadSuccess = null;
+  }
+
+  ngOnInit() {
+    this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+
+    this.product = history.state;
+    if (this.product.data == null) {
+      this.routerService.login();
+    }
+    else {
+      this.errorMessage = this.product.data.errorMessage;
+    }
+
+    this.userForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.maxLength(70)]],
+      password: ['', [Validators.required, Validators.maxLength(50)]],
+    },
+      { updateOn: "submit" }
+    );
+  }
+
+  runResendVerify() {
+    let formData = new FormData();
+
+    Object.keys(this.userForm.value).forEach(key => {
+      formData.append(key, this.userForm.value[key]);
+    });
+    // formData.append("deleteMessage", "Delete account");
+    this.http.post<any>(environment.urlAddress + '/api/v1/user_input/resend', formData).subscribe((data: any) => {
+      this.message = data.message;
+    });
+  }
+
+
+  onSubmit() {
+    let formData = new FormData();
+    this.submitted = true;
+
+    if (this.userForm.invalid == true) {
+
+      this.cleanServerErrors();
+      this.inputCondition.successLoad = null;
+      return;
+
+    }
+    else {
+
+      this.credentials.email = this.userForm.controls.email.value;
+      this.credentials.password = this.userForm.controls.password.value;
+
+      this.auth.login(this.credentials).subscribe((returnData: any) => {
+
+        this.inputCondition.errorLoad = null;
+        this.message = '';
+        // this.copyServerErrors(returnData);
+
+        if (null == returnData.loginSuccess) {
+        }
+        else {
+          let yourId = this.auth.getLogUserId();
+          this.auth.saveActualUserId(yourId);
+          this.routeToUserLocalities();
+        }
+
+      }, error => {
+        this.errorMessage = '';
+        this.message = error.error.message;
+      });
+    }
+  }
+
+  public routeToUserLocalities() {
+    let userId = this.auth.getActualUserId();
+    this.routerService.userLocalities(userId, 0);
+  }
+
+}

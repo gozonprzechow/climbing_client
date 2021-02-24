@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{list.confirmModalTitle}}</h4>
+  <button type="button" class="btn closeStyle" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="modalDeleteBody">
+    <p class="confirmModalMessage">
+      {{list.confirmModalMessage}}
+    </p>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="float-left">
+    <button type="button" class="btn btnConfirm" (click)="triggerConfirmEvent()">Ok</button>
+  </div>
+  <button type="button" class="btn btnCancle" (click)="bsModalRef.hide()">Cancle</button>
+</div>

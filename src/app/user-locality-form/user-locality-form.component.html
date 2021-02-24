@@ -1,0 +1,40 @@
+<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage>
+</app-main-navbar-menu>
+<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+
+<div class="wrapper" center='block'>
+  <div class="mainFormClass" center='block'>
+    <div class="wrap">
+      <ul class="list-inline cf">
+        <li *ngFor="let achatdbCollection of achatdbCollections">
+          <a>
+            <div class="imageContainer">
+              <img [attr.src]='getImage(achatdbCollection.imgName)' class='imageLocality'
+                (click)="openModal(achatdbCollection)">
+              <div *ngIf="isItemYours(achatdbCollection.postedBy)" ngbDropdown>
+                <button type='button' id='dropdown01' class='top-right btn-secondary dropdown-toggle'
+                  ngbDropdownToggle></button>
+                <div ngbDropdownMenu class='dropdownStyle' aria-labelledby='dropdown01'>
+                  <a class='dropdown-item' (click)='routerService.modifyMineral(achatdbCollection)'>Modify
+                    mineral</a>
+                  <a class='dropdown-item' (click)='routerService.addSubMineral(achatdbCollection)'>
+                    Add Sub-mineral</a>
+                  <a class='dropdown-item' (click)="openConfirmModal(achatdbCollection)">Delete mineral</a>
+                </div>
+              </div>
+              <div *ngIf="!isItemYours(achatdbCollection.postedBy)">
+              </div>
+              {{achatdbCollection.title}}<br><br>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <hr class='enderLine'>
+    </div>
+    <app-paging-buttons *ngIf='this.pagingButtons.ifAnyMorePage()' [buttonCollections]=buttonCollections
+      (clickPageButtonEvent)="clickPageButton($event)"></app-paging-buttons>
+      <div class='containerLocalityDescription'>
+        <div class='localityDescriptionText'>{{actualLocality.description}}</div>
+      </div>
+  </div>
+</div>

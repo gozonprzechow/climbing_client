@@ -1,0 +1,54 @@
+<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
+<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+
+<div class="container" center='block'>
+  <div class="mainFormClass" center='block'>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
+
+      <div class="form-group" [ngClass]="displayFieldCss('comment')">
+        <!-- Last Name -->
+        <div class="col-sm-12">
+          <label for="comment" class="control-label">Comment</label>
+          <input type="text" formControlName="comment" class="form-control" id="comment" name="comment"
+            placeholder="Comment">
+          <p *ngIf="invalidComment()" id="comment_error" class="help-block">
+            {{'Invalid comment.'}}</p>
+          <p class="help-block"> {{this.serverServiceErrors.comment}}</p>
+        </div>
+      </div>
+
+      <div class="form-group" [ngClass]="displayImgFieldCss('img')">
+        <!-- Password -->
+        <div class="imageContainer">
+          <div class="col-sm-12">
+            <label for="img" class="control-label image" id="imgId">{{this.titleImage}}</label>
+            <input type="file" class="form-control" id="img" name="img" (change)="onFileSelect($event)">
+          </div>
+        </div>
+      </div>
+
+      <div class="submitContainer">
+        <p class="help-block"> {{this.serverServiceErrors.img}}</p>
+        <p id="successLoadCondition"> {{this.serverServiceErrors.uploadSuccess}}</p>
+        <p class="help-block">{{this.inputCondition.errorLoad}}</p>
+      </div>
+
+      <div class="form-group has-error">
+        <div class="submitContainer">
+          <div class="col-sm-12">
+            <button type="submit" class="submitButton">Save changes</button>
+          </div>
+        </div>
+      </div>
+
+    </form>
+    <div class="submitContainer">
+      <img [src]="imgURL" height="200" *ngIf="imgURL">
+    </div>
+
+    <div class="submitContainer">
+      <button type="button" class="deleteSubImageButton" (click)="openConfirmModal()">
+        Delete sub image</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+
+<div class="container">
+
+  <div class="mainFormClass">
+
+    <div class="registerAccount">
+      <p *ngIf="hideRegisterRouter()" id="registerAccount_id"> If you are not register yet register here: <a
+          id="fakeHrefStyle_id" (click)="routerService.createAccount()">Register</a> </p>
+    </div>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <p>{{errorMessage}}</p>
+
+      <div class="form-group" [ngClass]="{ 'has-error': invalidEmail() }">
+        <!-- Last Name -->
+        <div class="col-sm-12">
+          <label for="email" class="control-label required">Email</label>
+          <input type="text" formControlName="email" class="form-control" id="email" name="email" placeholder="email">
+          <p *ngIf="invalidEmail()" id="email_error" class="help-block">
+            {{this.serviceErrors.email || 'Invalid email.'}}</p>
+          <p class="help-block"> {{this.serverServiceErrors.email}}</p>
+        </div>
+      </div>
+
+      <div class="form-group" [ngClass]="{ 'has-error': invalidPassword() }">
+        <!-- Last Name -->
+        <div class="col-sm-12">
+          <label for="password" class="control-label required">Password</label>
+          <input type="password" formControlName="password" class="form-control" id="password" name="password"
+            placeholder="*********">
+          <p *ngIf="invalidPassword()" id="password_error" class="help-block">
+            {{this.serviceErrors.password || 'Invalid password.'}}</p>
+          <p class="help-block"> {{this.serverServiceErrors.password}}</p>
+        </div>
+      </div>
+
+      <div class="submitContainer">
+        <p id="successLoadCondition"> {{this.serverServiceErrors.uploadSuccess}}</p>
+      </div>
+
+      <div class="submitContainer">
+        <p>{{message}}</p>
+      </div>
+
+      <div *ngIf="userNoVerified()" class="resendVerifyEmail">
+        <p> If you doesn't receive verify email resend here: <a id="fakeHrefStyle_id"
+            (click)="runResendVerify()">Resend</a> </p>
+      </div>
+
+      <div class="form-group has-error">
+        <div class="registerAccount">
+          <p *ngIf="userWrongPassword()"> If you forget password recover password here: <a id="fakeHrefStyle_id"
+              (click)="routerService.recoverPassword()">Recover password</a> </p>
+        </div>
+        <div class="submitContainer">
+          <p class="help-block"> {{this.inputCondition.errorLoad && this.serverServiceErrors.uploadSuccess}}
+          </p>
+          <!-- Register Button -->
+          <button type="submit" class="submitButton">Login</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
