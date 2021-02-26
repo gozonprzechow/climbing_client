@@ -1,5 +1,5 @@
 {
-  "name": "angular-node-express",
+  "name": "sutrak_net_angular",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "~11.0.0",
     "@angular/router": "~11.0.0",
     "@ng-bootstrap/ng-bootstrap": "^8.0.0",
+    "angular-cli": "^1.0.0-beta.28.3",
     "bootstrap": "^3.4.1",
     "ngx-bootstrap": "^6.2.0",
     "rxjs": "^6.5.5",
