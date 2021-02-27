@@ -80,7 +80,7 @@ export class UserLocalityFormComponent implements OnInit {
           this.actualLocality = data.locality;
           this.tittleMain = this.selectLocality;
           this.achatdbCollections = data.achatdbCollections;
-          this.prefix = this.globals.serverUrl + "/static/uploads/images/";
+          this.prefix = environment.serverUrl + "/static/uploads/images/";
           this.suffix = "_small";
 
           if (params.image && params.slide) {

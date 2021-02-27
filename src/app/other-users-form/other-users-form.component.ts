@@ -35,8 +35,7 @@ export class OtherUsersFormComponent implements OnInit {
     public modalService: BsModalService,
     public auth: AuthenticationService,
     public routerService: RouterServices,
-    public pagingButtons: PagingButtonsServices,
-    public globals: Globals) {
+    public pagingButtons: PagingButtonsServices) {
   }
 
   public subscriber: any;
@@ -64,7 +63,7 @@ export class OtherUsersFormComponent implements OnInit {
           this.allLocality = data.localities;
           this.tittleMain = 'Other users';
           this.otherUsersCollections = data.otherUsersCollections;
-          this.prefix = this.globals.serverUrl + "/static/uploads/images/";
+          this.prefix = environment.serverUrl + "/static/uploads/images/";
           this.suffix = "_small";
 
           if (params.image && params.slide) {

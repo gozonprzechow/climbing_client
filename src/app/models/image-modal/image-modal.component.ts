@@ -52,7 +52,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     public route: ActivatedRoute,
     private location: Location,
     public auth: AuthenticationService) {
-    this.prefix = "http://server.sutrak.net/static/uploads/images/";
+    this.prefix = environment.serverUrl + "/static/uploads/images/";
     this.confirmModalMessage = "Do you want delete this comment?";
     this.confirmModalTitle = "Delete comment";
     this.imgSrc = '../../../assets/skins/like_button.png';
