@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-node-express": {
+    "sutrak_net_angular": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/angular-node-express",
+            "outputPath": "dist/sutrak_net_angular",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-node-express:build"
+            "browserTarget": "sutrak_net_angular:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-node-express:build:production"
+              "browserTarget": "sutrak_net_angular:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-node-express:build"
+            "browserTarget": "sutrak_net_angular:build"
           }
         },
         "test": {
@@ -109,16 +109,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "angular-node-express:serve"
+            "devServerTarget": "sutrak_net_angular:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "angular-node-express:serve:production"
+              "devServerTarget": "sutrak_net_angular:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "angular-node-express"
+  "defaultProject": "sutrak_net_angular"
 }
