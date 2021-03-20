@@ -1,1 +1,24 @@
+<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
+<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
 
+<div class="wrapper" center='block'>
+  <div class="mainFormClass" center='block'>
+    <div class="wrap">
+      <div *ngFor="let otherUsersCollection of otherUsersCollections;let i = index " class="localityWrapper">
+        <a class="userName"
+          (click)="routeToAnotherUsersLocalities(otherUsersCollection.otherUser.postedBy)">{{otherUsersCollection.otherUser.name}}<br><br></a>
+        <div class="row">
+          <div *ngFor="let achatdbCollection of otherUsersCollection.achatdbCollections" class="col">
+            <div *ngIf="achatdbCollection" class="imageContainer">
+              <img [attr.src]='getImage(achatdbCollection.imgName)' class='imageLocality'
+                (click)="openModal(achatdbCollection, i)">
+              {{achatdbCollection.title}}<br>
+            </div>
+          </div>
+        </div>
+        <hr class='enderLine'>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
