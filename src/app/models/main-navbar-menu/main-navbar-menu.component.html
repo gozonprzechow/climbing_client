@@ -13,12 +13,11 @@
             [ngClass]="{ 'navbarTogglerActive': navbarOpen }">Home</a>
         </li>
         <li *ngIf="ifDisplayLocalities()" class={{activePage.homePage}}>
-          <a class="nav-link" (click)="routeToUserLocalities()" [ngClass]="{ 'navbarTogglerActive': navbarOpen }">User
-            localities</a>
+          <a class="nav-link" (click)="routeToUserLocalities()" [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{userLocalities_txt}}</a>
         </li>
         <li *ngIf="ifDisplayLocality()" class={{activePage.loaclity}} ngbDropdown>
           <a class="nav-link dropdown-toggle" id="dropdown01" ngbDropdownToggle
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">Locality</a>
+            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{locality_txt}}</a>
           <div ngbDropdownMenu class='dropdownStyle' aria-labelledby="dropdown01">
             <a *ngFor="let locality of allLocality" class="dropdown-item"
               (click)="routeToUserLocality(locality.name)">{{locality.name}}</a>
@@ -36,7 +35,7 @@
         </li>
         <li class={{activePage.otherUsers}}>
           <a class="nav-link" (click)='routerService.otherUsers(0)'
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">Other users</a>
+            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{otherUsers_txt}}</a>
         </li>
       </ul>
       <!-- <form class="form-inline my-2 my-lg-0" [ngClass]="{ 'navbarTogglerActive': navbarOpen }">
@@ -58,11 +57,9 @@
         </div>
 
         <button *ngIf="auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0" (click)="logOutHandler()"
-          [ngClass]="{ 'logButton': navbarOpen }">Log
-          out</button>
+          [ngClass]="{ 'logButton': navbarOpen }">{{logOut_txt}}</button>
         <button *ngIf="!auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0" (click)="logInHandler()"
-          [ngClass]="{ 'logButton': navbarOpen }">Log
-          in</button>
+          [ngClass]="{ 'logButton': navbarOpen }">{{logIn_txt}}</button>
       </div>
     </div>
     <!-- </div> -->

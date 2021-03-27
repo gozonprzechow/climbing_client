@@ -14,6 +14,7 @@ import { TokenInterceptor } from './services/token.interceptor.service';
 import { RouterServices } from './services/router.services';
 import { PagingButtonsServices } from './services/pagingButtons.service';
 import { MathServices } from './services/math.service';
+import { LanguageService } from './services/language.service';
 
 import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -92,6 +93,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     PagingButtonsServices,
     ModalDataInjector,
     MathServices,
+    LanguageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

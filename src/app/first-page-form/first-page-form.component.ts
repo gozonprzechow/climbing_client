@@ -4,10 +4,10 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { AuthenticationService } from '../services/authentication.service';
-import { Globals } from '../services/globals.services';
 import { ImageModalComponent } from '../models/image-modal/image-modal.component';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-first-page-form',
@@ -17,7 +17,11 @@ import { environment } from 'src/environments/environment';
 export class FirstPageFormComponent implements OnInit {
   allLocality: any = [];
   activePage: any = {};
-  tittleMain: string;
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Sbírky minerálů",
+    en: "Mineral collections"
+  };
   otherUsersCollections: any = [];
   prefix: string;
   suffix: string;
@@ -31,6 +35,7 @@ export class FirstPageFormComponent implements OnInit {
     public route: ActivatedRoute,
     public modalService: BsModalService,
     public auth: AuthenticationService,
+    public languageService: LanguageService,
     public routerService: RouterServices) {
   }
 
@@ -52,7 +57,7 @@ export class FirstPageFormComponent implements OnInit {
         .subscribe((data: any) => {
           this.activePage = data.activePage;
           this.allLocality = data.localities;
-          this.tittleMain = 'Mineral collections';
+          this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
           this.otherUsersCollections = data.otherUsersCollections;
           this.prefix = environment.serverUrl + "/static/uploads/images/";
           this.suffix = "_small";

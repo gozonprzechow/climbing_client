@@ -1,7 +1,7 @@
 import { Component, Input, HostListener } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
-import { Globals } from '../../services/globals.services';
 import { RouterServices } from '../../services/router.services';
+import { LanguageService, TextTranslator } from '../../services/language.service';
 
 @Component({
   selector: 'app-main-navbar-menu',
@@ -17,14 +17,45 @@ export class MainNavbarMenuComponent {
   navbarOpen = false;
   imgSrc: String;
 
+  userLocalities_txt: string;
+  userLocalitiesTranslation: TextTranslator = {
+    cz: "Lokality uživatele",
+    en: "User localities"
+  };
+  locality_txt: string;
+  localityTranslation: TextTranslator = {
+    cz: "Lokality",
+    en: "Locality"
+  };
+  otherUsers_txt: string;
+  otherUsersTranslation: TextTranslator = {
+    cz: "Ostatní uživatelé",
+    en: "Other users"
+  };
+  logIn_txt: string;
+  logInTranslation: TextTranslator = {
+    cz: "Přihlášení",
+    en: "Log in"
+  };
+  logOut_txt: string;
+  logOutTranslation: TextTranslator = {
+    cz: "Odhlášení",
+    en: "Log out"
+  };
+
   constructor(
     public auth: AuthenticationService,
     public routerService: RouterServices,
-    public globals: Globals) {
-      this.imgSrc = '../../../assets/skins/settings_button.png';
+    public languageService: LanguageService) {
+    this.imgSrc = '../../../assets/skins/settings_button.png';
+    this.userLocalities_txt = this.languageService.getNativeLanguageText(this.userLocalitiesTranslation);
+    this.locality_txt = this.languageService.getNativeLanguageText(this.localityTranslation);
+    this.otherUsers_txt = this.languageService.getNativeLanguageText(this.otherUsersTranslation);
+    this.logIn_txt = this.languageService.getNativeLanguageText(this.logInTranslation);
+    this.logOut_txt = this.languageService.getNativeLanguageText(this.logOutTranslation);
   }
 
-  public onResize(event){
+  public onResize(event) {
     this.navbarOpen = false;
   }
 
