@@ -16,7 +16,13 @@ export class MainNavbarMenuComponent {
   @Input() activePage: any = {};
   navbarOpen = false;
   imgSrc: String;
+  dropdownMenuClass: String = "";
 
+  home_txt: string;
+  homeTranslation: TextTranslator = {
+    cz: "Domů",
+    en: "Home"
+  };
   userLocalities_txt: string;
   userLocalitiesTranslation: TextTranslator = {
     cz: "Lokality uživatele",
@@ -27,10 +33,35 @@ export class MainNavbarMenuComponent {
     cz: "Lokality",
     en: "Locality"
   };
+  add_txt: string;
+  addTranslation: TextTranslator = {
+    cz: "Přidat",
+    en: "Add"
+  };
+  inputLocality_txt: string;
+  inputLocalityTranslation: TextTranslator = {
+    cz: "Vložit lokalitu",
+    en: "Input locality"
+  };
+  inputMineral_txt: string;
+  inputMineralTranslation: TextTranslator = {
+    cz: "Vložit minerál",
+    en: "Input mineral"
+  };
   otherUsers_txt: string;
   otherUsersTranslation: TextTranslator = {
     cz: "Ostatní uživatelé",
     en: "Other users"
+  };
+  userSettings_txt: string;
+  userSettingsTranslation: TextTranslator = {
+    cz: "Uživatelské nastavení",
+    en: "User settings"
+  };
+  adminPage_txt: string;
+  adminPageTranslation: TextTranslator = {
+    cz: "Administrátorská stránka",
+    en: "Admin page"
   };
   logIn_txt: string;
   logInTranslation: TextTranslator = {
@@ -48,15 +79,29 @@ export class MainNavbarMenuComponent {
     public routerService: RouterServices,
     public languageService: LanguageService) {
     this.imgSrc = '../../../assets/skins/settings_button.png';
+
+    this.home_txt = this.languageService.getNativeLanguageText(this.homeTranslation);
+
     this.userLocalities_txt = this.languageService.getNativeLanguageText(this.userLocalitiesTranslation);
+
     this.locality_txt = this.languageService.getNativeLanguageText(this.localityTranslation);
+
+    this.add_txt = this.languageService.getNativeLanguageText(this.addTranslation);
+    this.inputLocality_txt = this.languageService.getNativeLanguageText(this.inputLocalityTranslation);
+    this.inputMineral_txt = this.languageService.getNativeLanguageText(this.inputMineralTranslation);
+
     this.otherUsers_txt = this.languageService.getNativeLanguageText(this.otherUsersTranslation);
+
+    this.userSettings_txt = this.languageService.getNativeLanguageText(this.userSettingsTranslation);
+    this.adminPage_txt = this.languageService.getNativeLanguageText(this.adminPageTranslation);
+
     this.logIn_txt = this.languageService.getNativeLanguageText(this.logInTranslation);
     this.logOut_txt = this.languageService.getNativeLanguageText(this.logOutTranslation);
   }
 
   public onResize(event) {
     this.navbarOpen = false;
+    this.dropdownMenuClass = "";
   }
 
   public toggleNavbar() {
@@ -133,6 +178,14 @@ export class MainNavbarMenuComponent {
       }
     }
     return true;
+  }
+
+  public getDropdownMenuClass(navbarOpen): string {
+    if (navbarOpen) {
+      return "dropdown-menu-left";
+    } else {
+      return "dropdown-menu-right";
+    }
   }
 
 }

@@ -10,7 +10,7 @@
       <ul class="navbar-nav mr-auto">
         <li *ngIf="ifDisplayHome()" class="nav-item">
           <a class="nav-link" (click)="routeToYourLocalities() "
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">Home</a>
+            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{home_txt}}</a>
         </li>
         <li *ngIf="ifDisplayLocalities()" class={{activePage.homePage}}>
           <a class="nav-link" (click)="routeToUserLocalities()" [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{userLocalities_txt}}</a>
@@ -25,12 +25,10 @@
         </li>
         <li *ngIf="ifDisplayAdd()" class={{activePage.add}} ngbDropdown>
           <a class="nav-link dropdown-toggle" id="dropdown02" ngbDropdownToggle
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">Add</a>
+            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{add_txt}}</a>
           <div ngbDropdownMenu class='dropdownStyle' aria-labelledby="dropdown02">
-            <a class="dropdown-item" (click)='routerService.inputLocality()'>Input locality </a>
-            <a class="dropdown-item" (click)='routerService.inputMineral()'>Input mineral </a>
-            <a *ngIf="this.auth.isUserAdmin()" class="dropdown-item" (click)='routerService.adminHlavni()'>Admin page
-            </a>
+            <a class="dropdown-item" (click)='routerService.inputLocality()'>{{inputLocality_txt}}</a>
+            <a class="dropdown-item" (click)='routerService.inputMineral()'>{{inputMineral_txt}}</a>
           </div>
         </li>
         <li class={{activePage.otherUsers}}>
@@ -48,11 +46,11 @@
           (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
           (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
           [ngClass]="{ 'settingsButton': navbarOpen }">
-        <div *ngIf="auth.isLoggedIn()" ngbDropdownMenu class='dropdownStyle' aria-labelledby="dropdown03"
-          [ngClass]="{ 'settingsButtonDropdown': navbarOpen }">
-          <a *ngIf="this.auth.isLoggedIn()" class="dropdown-item" (click)='routerService.userSettings()'>User settings
+        <div *ngIf="auth.isLoggedIn()" ngbDropdownMenu class='{{getDropdownMenuClass(navbarOpen)}} dropdownStyle' aria-labelledby="dropdown03"
+          [ngClass]="{ 'settingsButtonDropdown': navbarOpen}">
+          <a *ngIf="this.auth.isLoggedIn()" class="dropdown-item" (click)='routerService.userSettings()'>{{userSettings_txt}}
           </a>
-          <a *ngIf="this.auth.isUserAdmin()" class="dropdown-item" (click)='routerService.adminHlavni()'>Admin page
+          <a *ngIf="this.auth.isUserAdmin()" class="dropdown-item" (click)='routerService.adminHlavni()'>{{adminPage_txt}}
           </a>
         </div>
 
