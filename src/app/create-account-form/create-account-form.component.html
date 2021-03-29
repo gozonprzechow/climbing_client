@@ -1,4 +1,4 @@
-<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
 
 <div class="container">
     <div class="mainFormClass">
@@ -7,9 +7,9 @@
             <div class="form-group" [ngClass]="{ 'has-error': invalidName() }">
                 <!-- First Name -->
                 <div class="col-sm-12">
-                    <label for="name" class="control-label required">Name</label>
+                    <label for="name" class="control-label required">{{name_txt}}</label>
                     <input type="text" formControlName="name" class="form-control" id="name" name="name"
-                        placeholder="Name">
+                        placeholder={{name_txt}}>
                     <p *ngIf="invalidName()" id="name_error" class="help-block">
                         {{this.serviceErrors.name || 'Invalid name.'}}</p>
                     <p class="help-block"> {{this.serverServiceErrors.name}}</p>
@@ -31,7 +31,7 @@
             <div class="form-group" [ngClass]="{ 'has-error': invalidPassword() }">
                 <!-- Last Name -->
                 <div class="col-sm-12">
-                    <label for="password" class="control-label required">Password</label>
+                    <label for="password" class="control-label required">{{password_txt}}</label>
                     <input type="password" formControlName="password" class="form-control" id="password"
                         name="password" placeholder="*********">
                     <p *ngIf="invalidPassword()" id="password_error" class="help-block">
@@ -49,7 +49,7 @@
                     <p class="help-block"> {{this.inputCondition.errorLoad && this.serverServiceErrors.uploadSuccess}}
                     </p>
                     <!-- Register Button -->
-                    <button type="submit" class="submitButton">Create Account</button>
+                    <button type="submit" class="submitButton">{{createAccount_txt}}</button>
                 </div>
             </div>
         </form>

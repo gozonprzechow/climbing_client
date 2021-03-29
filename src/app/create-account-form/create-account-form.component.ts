@@ -6,6 +6,7 @@ import { ValidationService } from '../models/validation';
 import { AuthenticationService, TokenPayload } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-create-account-form',
@@ -26,15 +27,39 @@ export class CreateAccountFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
+
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Vytvořit účet",
+    en: "Create account"
+  };
+  name_txt: string;
+  nameTranslation: TextTranslator = {
+    cz: "Jméno",
+    en: "Name"
+  };
+  password_txt: string;
+  passwordTranslation: TextTranslator = {
+    cz: "Heslo",
+    en: "Password"
+  };
+  createAccount_txt: string;
+  createAccountTranslation: TextTranslator = {
+    cz: "Vytvořit účet",
+    en: "Create account"
+  };
 
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public auth: AuthenticationService,
     public http: HttpClient,
+    public languageService: LanguageService,
     public routerService: RouterServices) {
-    this.tittleMain = 'Create account';
+      this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+      this.name_txt = this.languageService.getNativeLanguageText(this.nameTranslation);
+      this.password_txt = this.languageService.getNativeLanguageText(this.passwordTranslation);
+      this.createAccount_txt = this.languageService.getNativeLanguageText(this.createAccountTranslation);
   }
 
   invalidName() {

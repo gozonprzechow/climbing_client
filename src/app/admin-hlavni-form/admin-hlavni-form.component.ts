@@ -10,6 +10,7 @@ import { RouterServices } from '../services/router.services';
 import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { MathServices, ConvertedBytes } from '../services/math.service';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-admin-hlavni-form',
@@ -25,7 +26,6 @@ export class AdminHlavniFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
   activePage: any = {};
   serverInfo: any = {};
   allLocality: any = [];
@@ -39,6 +39,37 @@ export class AdminHlavniFormComponent implements OnInit {
     unit: ""
   };
 
+  deleteAccount_txt: string;
+  eleteAccountTranslation: TextTranslator = {
+    cz: "Smazat účet",
+    en: "Delete account"
+  };
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Administrátorská stránka",
+    en: "Admin page"
+  };
+  registeredUsers_txt: string;
+  registeredUsersTranslation: TextTranslator = {
+    cz: "Aktuálně registrovaní uživatelé:",
+    en: "Current registered users:"
+  };
+  imagesSpace_txt: string;
+  imagesSpaceTranslation: TextTranslator = {
+    cz: "Uživatelé zabírají na obrázkách paměti:",
+    en: "Users spend on images space:"
+  };
+  warningDeleteUserTitle_txt: string;
+  warningDeleteUserTitleTranslation: TextTranslator = {
+    cz: "Smazat uživatele",
+    en: "Delete user"
+  };
+  warningDeleteUser_txt: string;
+  warningDeleteUserTranslation: TextTranslator = {
+    cz: "Opravdu chcete smazat tohoto uživatele?",
+    en: "Really want delete this user?"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
@@ -46,10 +77,18 @@ export class AdminHlavniFormComponent implements OnInit {
     public modalService: BsModalService,
     public routerService: RouterServices,
     public mathServices: MathServices,
+    public languageService: LanguageService,
     public http: HttpClient) {
-    this.tittleMain = 'Admin page';
-    this.confirmModalMessage = "Really want delete this user?";
-    this.confirmModalTitle = "Delete user";
+    this.deleteAccount_txt = this.languageService.getNativeLanguageText(this.eleteAccountTranslation);
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.registeredUsers_txt = this.languageService.getNativeLanguageText(this.registeredUsersTranslation);
+    this.imagesSpace_txt = this.languageService.getNativeLanguageText(this.imagesSpaceTranslation);
+    this.warningDeleteUserTitle_txt = this.languageService
+      .getNativeLanguageText(this.warningDeleteUserTitleTranslation);
+    this.warningDeleteUser_txt = this.languageService
+      .getNativeLanguageText(this.warningDeleteUserTranslation);
+    this.confirmModalMessage = this.warningDeleteUser_txt;
+    this.confirmModalTitle = this.warningDeleteUserTitle_txt;
   }
 
   invalidEmail() {
