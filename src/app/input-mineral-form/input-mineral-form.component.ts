@@ -5,6 +5,7 @@ import { InputCondition } from '../models/inputMineral';
 import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-input-mineral-form',
@@ -20,10 +21,45 @@ export class InputMineralFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
   titleImage: string;
 
   imgURL: any;
+
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Vložit minerál",
+    en: "Input mineral"
+  };
+  title_txt: string;
+  titleTranslation: TextTranslator = {
+    cz: "Popisek",
+    en: "Title"
+  };
+  locality_txt: string;
+  localityTranslation: TextTranslator = {
+    cz: "Lokalita",
+    en: "Locality"
+  };
+  comment_txt: string;
+  commentTranslation: TextTranslator = {
+    cz: "Komentář",
+    en: "Comment"
+  };
+  date_txt: string;
+  dateTranslation: TextTranslator = {
+    cz: "Datum",
+    en: "Date"
+  };
+  chooseImage_txt: string;
+  chooseImageTranslation: TextTranslator = {
+    cz: "Vybrat obrázek",
+    en: "Choose image"
+  };
+  store_txt: string;
+  storeTranslation: TextTranslator = {
+    cz: "Uložit",
+    en: "Store"
+  };
 
   // @ViewChild(FormGroup, {static: false}) child : FormGroup;
 
@@ -31,8 +67,16 @@ export class InputMineralFormComponent implements OnInit {
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public http: HttpClient,
+    public languageService: LanguageService,
     public routerService: RouterServices,
     public auth: AuthenticationService) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.title_txt = this.languageService.getNativeLanguageText(this.titleTranslation);
+    this.locality_txt = this.languageService.getNativeLanguageText(this.localityTranslation);
+    this.comment_txt = this.languageService.getNativeLanguageText(this.commentTranslation);
+    this.date_txt = this.languageService.getNativeLanguageText(this.dateTranslation);
+    this.chooseImage_txt = this.languageService.getNativeLanguageText(this.chooseImageTranslation);
+    this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
   }
 
   ngOnInit() {
@@ -53,7 +97,6 @@ export class InputMineralFormComponent implements OnInit {
     this.http.get(environment.urlAddress + '/api/v1/user_input/mineral/' + postedBy).subscribe((returnData: any) => {
       this.allLocality = returnData.localities;
       this.activePage = returnData.activePage;
-      this.tittleMain = 'Input Mineral';
     }, error => {
       console.log("There was an error generating the proper GUID on the server", error);
     });
@@ -71,7 +114,7 @@ export class InputMineralFormComponent implements OnInit {
   }
 
   resetTitleImage() {
-    this.titleImage = "Choose Image";
+    this.titleImage = this.chooseImage_txt;
   }
 
   invalidTitle() {

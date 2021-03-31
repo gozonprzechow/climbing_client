@@ -56,10 +56,10 @@ export class CreateAccountFormComponent implements OnInit {
     public http: HttpClient,
     public languageService: LanguageService,
     public routerService: RouterServices) {
-      this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
-      this.name_txt = this.languageService.getNativeLanguageText(this.nameTranslation);
-      this.password_txt = this.languageService.getNativeLanguageText(this.passwordTranslation);
-      this.createAccount_txt = this.languageService.getNativeLanguageText(this.createAccountTranslation);
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.name_txt = this.languageService.getNativeLanguageText(this.nameTranslation);
+    this.password_txt = this.languageService.getNativeLanguageText(this.passwordTranslation);
+    this.createAccount_txt = this.languageService.getNativeLanguageText(this.createAccountTranslation);
   }
 
   invalidName() {
