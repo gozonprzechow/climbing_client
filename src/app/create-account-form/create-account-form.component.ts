@@ -25,6 +25,8 @@ export class CreateAccountFormComponent implements OnInit {
   userForm: FormGroup;
   serviceErrors: any = {};
   serverServiceErrors: any = {};
+  activePage: any = {};
+  allLocality: any = [];
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
 
@@ -97,6 +99,15 @@ export class CreateAccountFormComponent implements OnInit {
     },
       { updateOn: "submit" }
     );
+
+    let postedBy = this.auth.getLogUserId();
+    this.auth.saveActualUserId(postedBy);
+    this.http.get(environment.urlAddress + '/api/v1/user_input/register/' + postedBy).subscribe((returnData: any) => {
+      this.allLocality = returnData.localities;
+      this.activePage = returnData.activePage;
+    }, error => {
+      console.log("There was an error generating the proper GUID on the server", error);
+    });
   }
 
   onSubmit() {

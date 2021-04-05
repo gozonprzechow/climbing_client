@@ -9,6 +9,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { RouterServices } from '../../services/router.services';
 import { ConfirmModalComponent } from '../../models/confirm-modal/confirm-modal.component';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../../services/language.service';
 
 @Component({
   selector: 'app-image-modal',
@@ -40,7 +41,36 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   modalRef: BsModalRef;
   imgSrc: String;
 
-  testtt: any = {};
+  comments_txt: string;
+  commentsTranslation: TextTranslator = {
+    cz: "Komentáře",
+    en: "Comments"
+  };
+  edit_txt: string;
+  editTranslation: TextTranslator = {
+    cz: "Upravit",
+    en: "Edit"
+  };
+  addNew_txt: string;
+  addNewTranslation: TextTranslator = {
+    cz: "Přidat nový",
+    en: "Add new"
+  };
+  submit_txt: string;
+  submitTranslation: TextTranslator = {
+    cz: "Potvrdit",
+    en: "Submit"
+  };
+  cancle_txt: string;
+  cancleTranslation: TextTranslator = {
+    cz: "Zrušit",
+    en: "Cancle"
+  };
+  delete_txt: string;
+  deleteTranslation: TextTranslator = {
+    cz: "Smazat",
+    en: "Delete"
+  };
 
   constructor(
     public formBuilder: FormBuilder,
@@ -50,12 +80,20 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     public modalService: BsModalService,
     public router: Router,
     public route: ActivatedRoute,
+    public languageService: LanguageService,
     private location: Location,
     public auth: AuthenticationService) {
     this.prefix = environment.serverUrl + "/static/uploads/images/";
     this.confirmModalMessage = "Do you want delete this comment?";
     this.confirmModalTitle = "Delete comment";
     this.imgSrc = '../../../assets/skins/like_button.png';
+
+    this.comments_txt = this.languageService.getNativeLanguageText(this.commentsTranslation);
+    this.edit_txt = this.languageService.getNativeLanguageText(this.editTranslation);
+    this.addNew_txt = this.languageService.getNativeLanguageText(this.addNewTranslation);
+    this.submit_txt = this.languageService.getNativeLanguageText(this.submitTranslation);
+    this.cancle_txt = this.languageService.getNativeLanguageText(this.cancleTranslation);
+    this.delete_txt = this.languageService.getNativeLanguageText(this.deleteTranslation);
   }
 
   public subscriber: any;

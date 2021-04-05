@@ -5,6 +5,7 @@ import { InputCondition } from '../models/inputMineral';
 import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-input-sub-mineral-form',
@@ -20,19 +21,44 @@ export class InputSubMineralFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
   titleImage: string;
 
   imgURL: any;
   mainImage: any;
   product: any = {};
 
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Vložit pod-minerál",
+    en: "Input sub-mineral"
+  };
+  comment_txt: string;
+  commentTranslation: TextTranslator = {
+    cz: "Komentář",
+    en: "Comment"
+  };
+  chooseImage_txt: string;
+  chooseImageTranslation: TextTranslator = {
+    cz: "Vybrat obrázek",
+    en: "Choose image"
+  };
+  store_txt: string;
+  storeTranslation: TextTranslator = {
+    cz: "Uložit",
+    en: "Store"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public http: HttpClient,
     public auth: AuthenticationService,
+    public languageService: LanguageService,
     public routerService: RouterServices) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.comment_txt = this.languageService.getNativeLanguageText(this.commentTranslation);
+    this.chooseImage_txt = this.languageService.getNativeLanguageText(this.chooseImageTranslation);
+    this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
     this.resetTitleImage();
   }
 
@@ -48,7 +74,7 @@ export class InputSubMineralFormComponent implements OnInit {
   }
 
   resetTitleImage() {
-    this.titleImage = "Choose Image";
+    this.titleImage = this.chooseImage_txt;
   }
 
   invalidComment() {
@@ -93,7 +119,6 @@ export class InputSubMineralFormComponent implements OnInit {
     this.http.get(environment.urlAddress + '/api/v1/user_input/subMineral').subscribe((data: any) => {
       this.allLocality = data.localities;
       this.activePage = data.activePage;
-      this.tittleMain = 'Input Sub-mineral';
     }, error => {
     });
   }

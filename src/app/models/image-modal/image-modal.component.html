@@ -47,11 +47,11 @@
     </div>
     <div class="col">
       <button *ngIf="imageInformation" type="button" class="btn btnComments"
-        (click)="seeComments(list.achatdbCollection)">Comments</button>
+        (click)="seeComments(list.achatdbCollection)">{{comments_txt}}</button>
     </div>
     <div class="col">
       <button *ngIf="showEditItem(list.achatdbCollection.postedBy)" type="button" class="btn btnCancle"
-        (click)="editImage(list.achatdbCollection)">Edit</button>
+        (click)="editImage(list.achatdbCollection)">{{edit_txt}}</button>
     </div>
   </div>
   <div *ngIf="showComments" class="containerComment" [ngClass]="{ 'containerCommentLogIn': auth.isLoggedIn() }">
@@ -60,16 +60,16 @@
         <div class="row">
 
           <div *ngIf="!showAddComment" class="col">
-            <button type="button" class="btn btnAddComment" (click)="seeAddComment(list.achatdbCollection)">Add
-              new</button>
+            <button type="button" class="btn btnAddComment"
+              (click)="seeAddComment(list.achatdbCollection)">{{addNew_txt}}</button>
           </div>
 
           <div *ngIf="showAddComment" class="col">
 
             <button type="button" class="btn btnSubmitComment"
-              (click)="submitComment(list.achatdbCollection)">Submit</button>
+              (click)="submitComment(list.achatdbCollection)">{{submit_txt}}</button>
             <button type="button" class="btn btnCancleAddComment"
-              (click)="canceAddComment(list.achatdbCollection)">Cancle</button>
+              (click)="canceAddComment(list.achatdbCollection)">{{cancle_txt}}</button>
           </div>
           <div *ngIf="showAddComment" class="col">
             <textarea class="inputCommentBox" ref-textarea [(ngModel)]="textValue" rows="4"></textarea>
@@ -82,7 +82,7 @@
       <div class="row">
         <div *ngIf="isItemYours(communityComment.commentBy)" class="col-sm-3">
           <button type="button" class="btn btnCommunityComments"
-            (click)="openConfirmModal(list.achatdbCollection, communityComment)">Delete</button>
+            (click)="openConfirmModal(list.achatdbCollection, communityComment)">{{delete_txt}}</button>
         </div>
         <div class="col">
           <div class="communityCommentText">{{communityComment.message}}</div>
