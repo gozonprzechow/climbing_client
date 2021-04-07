@@ -71,6 +71,16 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     cz: "Smazat",
     en: "Delete"
   };
+  modalMessage_txt: string;
+  modalMessageTranslation: TextTranslator = {
+    cz: "Chcete smazat tento komentář?",
+    en: "Do you want delete this comment?"
+  };
+  modalTitle_txt: string;
+  modalTitleTranslation: TextTranslator = {
+    cz: "Smazat komentář",
+    en: "Delete comment"
+  };
 
   constructor(
     public formBuilder: FormBuilder,
@@ -83,17 +93,19 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     public languageService: LanguageService,
     private location: Location,
     public auth: AuthenticationService) {
-    this.prefix = environment.serverUrl + "/static/uploads/images/";
-    this.confirmModalMessage = "Do you want delete this comment?";
-    this.confirmModalTitle = "Delete comment";
-    this.imgSrc = '../../../assets/skins/like_button.png';
-
     this.comments_txt = this.languageService.getNativeLanguageText(this.commentsTranslation);
     this.edit_txt = this.languageService.getNativeLanguageText(this.editTranslation);
     this.addNew_txt = this.languageService.getNativeLanguageText(this.addNewTranslation);
     this.submit_txt = this.languageService.getNativeLanguageText(this.submitTranslation);
     this.cancle_txt = this.languageService.getNativeLanguageText(this.cancleTranslation);
     this.delete_txt = this.languageService.getNativeLanguageText(this.deleteTranslation);
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(this.modalMessageTranslation);
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(this.modalTitleTranslation);
+
+    this.prefix = environment.serverUrl + "/static/uploads/images/";
+    this.confirmModalMessage = this.modalMessage_txt;
+    this.confirmModalTitle = this.modalTitle_txt;
+    this.imgSrc = '../../../assets/skins/like_button.png';
   }
 
   public subscriber: any;

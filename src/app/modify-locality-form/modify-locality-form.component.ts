@@ -6,6 +6,7 @@ import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-modify-locality-form',
@@ -23,7 +24,6 @@ export class ModifyLocalityFormComponent implements OnInit {
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
   allLocality: any = [];
-  tittleMain: string;
   localityUnderChange: any = {};
   previousRoute: string;
 
@@ -31,13 +31,39 @@ export class ModifyLocalityFormComponent implements OnInit {
 
   modalRef: BsModalRef;
 
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Upravit lokalitu",
+    en: "Modify locality"
+  };
+  name_txt: string;
+  nameTranslation: TextTranslator = {
+    cz: "Jméno",
+    en: "Name"
+  };
+  description_txt: string;
+  descriptionTranslation: TextTranslator = {
+    cz: "Popis",
+    en: "Description"
+  };
+  store_txt: string;
+  storeTranslation: TextTranslator = {
+    cz: "Uložit",
+    en: "Store"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public http: HttpClient,
     public modalService: BsModalService,
     public routerService: RouterServices,
+    public languageService: LanguageService,
     public auth: AuthenticationService) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.name_txt = this.languageService.getNativeLanguageText(this.nameTranslation);
+    this.description_txt = this.languageService.getNativeLanguageText(this.descriptionTranslation);
+    this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
   }
 
   public invalidName() {
@@ -86,7 +112,6 @@ export class ModifyLocalityFormComponent implements OnInit {
       this.guid = data.guid;
       this.activePage = data.activePage;
       this.allLocality = data.localities;
-      this.tittleMain = 'Modify locality';
     }, error => {
       this.routerService.login();
     });

@@ -6,6 +6,7 @@ import { InputCondition } from '../models/inputMineral';
 import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-mondify-mineral-form',
@@ -26,11 +27,46 @@ export class MondifyMineralFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
   titleImage: string;
 
   imgURL: any;
   product: any = {};
+
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Upravit minerál",
+    en: "Modify mineral"
+  };
+  title_txt: string;
+  titleTranslation: TextTranslator = {
+    cz: "Popisek",
+    en: "Title"
+  };
+  locality_txt: string;
+  localityTranslation: TextTranslator = {
+    cz: "Lokalita",
+    en: "Locality"
+  };
+  comment_txt: string;
+  commentTranslation: TextTranslator = {
+    cz: "Komentář",
+    en: "Comment"
+  };
+  date_txt: string;
+  dateTranslation: TextTranslator = {
+    cz: "Datum",
+    en: "Date"
+  };
+  chooseImage_txt: string;
+  chooseImageTranslation: TextTranslator = {
+    cz: "Změnit obrázek",
+    en: "Change image"
+  };
+  store_txt: string;
+  storeTranslation: TextTranslator = {
+    cz: "Uložit",
+    en: "Store"
+  };
 
   constructor(
     public elementRef: ElementRef,
@@ -38,8 +74,17 @@ export class MondifyMineralFormComponent implements OnInit {
     public http: HttpClient,
     public auth: AuthenticationService,
     public routerService: RouterServices,
+    public languageService: LanguageService,
     public datePipe: DatePipe) {
-    this.prefix = "http://server.sutrak.net/static/uploads/images/";
+    this.prefix = environment.serverUrl + "/static/uploads/images/";
+
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.title_txt = this.languageService.getNativeLanguageText(this.titleTranslation);
+    this.locality_txt = this.languageService.getNativeLanguageText(this.localityTranslation);
+    this.comment_txt = this.languageService.getNativeLanguageText(this.commentTranslation);
+    this.date_txt = this.languageService.getNativeLanguageText(this.dateTranslation);
+    this.chooseImage_txt = this.languageService.getNativeLanguageText(this.chooseImageTranslation);
+    this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
   }
 
   ngOnInit() {
@@ -72,7 +117,6 @@ export class MondifyMineralFormComponent implements OnInit {
     this.http.get(environment.urlAddress + '/api/v1/user_input/modifyMineral/' + postedBy).subscribe((returnData: any) => {
       this.allLocality = returnData.localities;
       this.activePage = returnData.activePage;
-      this.tittleMain = 'Modify mineral';
     }, error => {
       console.log("There was an error generating the proper GUID on the server", error);
     });
@@ -97,7 +141,7 @@ export class MondifyMineralFormComponent implements OnInit {
   }
 
   resetTitleImage() {
-    this.titleImage = "Change Image";
+    this.titleImage = this.chooseImage_txt;
   }
 
   invalidTitle() {
@@ -146,7 +190,12 @@ export class MondifyMineralFormComponent implements OnInit {
     if (1 == event.target.files.length) {
       const file = event.target.files[0];
       this.userForm.get('img').setValue(file);
-      this.titleImage = file.name;
+      if (17 < file.name.length) {
+        this.titleImage = file.name.substr(0, 14) + "...";
+      }
+      else {
+        this.titleImage = file.name;
+      }
       event.srcElement.value = "";
 
       var reader = new FileReader();

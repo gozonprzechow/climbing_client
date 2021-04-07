@@ -1,5 +1,5 @@
 <app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
 
 <div class="container" center='block'>
     <div class="mainFormClass" center='block'>
@@ -8,9 +8,9 @@
             <div class="form-group" [ngClass]="displayFieldCss('title')">
                 <!-- First Name -->
                 <div class="col-sm-12">
-                    <label for="title" class="control-label required">Title</label>
+                    <label for="title" class="control-label required">{{title_txt}}</label>
                     <input type="text" formControlName="title" class="form-control" id="title" name="title"
-                        placeholder="Title">
+                        placeholder=title_txt>
                     <p *ngIf="invalidTitle()" id="title_error" class="help-block">
                         {{'Invalid title.'}}</p>
                     <p class="help-block"> {{this.serverServiceErrors.title}}</p>
@@ -20,9 +20,9 @@
             <div class="form-group" [ngClass]="displayFieldCss('locality')">
                 <!-- First Name -->
                 <div class="col-sm-12">
-                    <label for="locality" class="control-label required">Locality</label>
+                    <label for="locality" class="control-label required">{{locality_txt}}</label>
                     <select type="text" formControlName="locality" class="form-control" id="locality" name="locality"
-                        placeholder="Locality">
+                        placeholder=locality_txt>
                         <option *ngFor="let locality of allLocality" value={{locality.name}}>{{locality.name}}</option>
                     </select>
                     <p *ngIf="invalidLocality()" id="locality_error" class="help-block">
@@ -34,9 +34,9 @@
             <div class="form-group" [ngClass]="displayFieldCss('comment')">
                 <!-- Last Name -->
                 <div class="col-sm-12">
-                    <label for="comment" class="control-label">Comment</label>
+                    <label for="comment" class="control-label">{{comment_txt}}</label>
                     <input type="text" formControlName="comment" class="form-control" id="comment" name="comment"
-                        placeholder="Comment">
+                        placeholder=comment_txt>
                     <p *ngIf="invalidComment()" id="comment_error" class="help-block">
                         {{'Invalid comment.'}}</p>
                     <p class="help-block"> {{this.serverServiceErrors.comment}}</p>
@@ -46,7 +46,7 @@
             <div class="form-group" [ngClass]="displayFieldCss('date')">
                 <!-- Zip Code-->
                 <div class="col-sm-12">
-                    <label for="date" class="control-label required">Date</label>
+                    <label for="date" class="control-label required">{{date_txt}}</label>
                     <input type="date" formControlName="date" class="form-control" id="date" name="date"
                         placeholder="#####">
                     <p *ngIf="invalidDate()" id="date_error" class="help-block">
@@ -74,7 +74,7 @@
             <div class="form-group has-error">
                 <div class="submitContainer">
                     <div class="col-sm-12">
-                        <button type="submit" class="submitButton">Save changes</button>
+                        <button type="submit" class="submitButton">{{store_txt}}</button>
                     </div>
                 </div>
             </div>

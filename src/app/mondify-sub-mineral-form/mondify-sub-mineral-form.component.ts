@@ -8,6 +8,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-mondify-sub-mineral-form',
@@ -29,7 +30,6 @@ export class MondifySubMineralFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
   titleImage: string;
 
   imgURL: any;
@@ -39,16 +39,61 @@ export class MondifySubMineralFormComponent implements OnInit {
 
   modalRef: BsModalRef;
 
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Upravit pod-minerál",
+    en: "Modify sub-mineral"
+  };
+  comment_txt: string;
+  commentTranslation: TextTranslator = {
+    cz: "Komentář",
+    en: "Comment"
+  };
+  chooseImage_txt: string;
+  chooseImageTranslation: TextTranslator = {
+    cz: "Vybrat obrázek",
+    en: "Choose image"
+  };
+  store_txt: string;
+  storeTranslation: TextTranslator = {
+    cz: "Uložit",
+    en: "Store"
+  };
+  delete_txt: string;
+  deleteTranslation: TextTranslator = {
+    cz: "Smazat pod-minerál",
+    en: "Delete sub-image"
+  };
+  modalMessage_txt: string;
+  modalMessageTranslation: TextTranslator = {
+    cz: "Chcete smazat tento pod-minerál?",
+    en: "Do you want delete this sub-image?"
+  };
+  modalTitle_txt: string;
+  modalTitleTranslation: TextTranslator = {
+    cz: "Smazat pod-minerál",
+    en: "Delete sub-image"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public http: HttpClient,
     public modalService: BsModalService,
     public routerService: RouterServices,
+    public languageService: LanguageService,
     public auth: AuthenticationService) {
-    this.prefix = "http://server.sutrak.net/static/uploads/images/";
-    this.confirmModalMessage = "Do you want delete this sub-image?";
-    this.confirmModalTitle = "Delete sub-image";
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.comment_txt = this.languageService.getNativeLanguageText(this.commentTranslation);
+    this.chooseImage_txt = this.languageService.getNativeLanguageText(this.chooseImageTranslation);
+    this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
+    this.delete_txt = this.languageService.getNativeLanguageText(this.deleteTranslation);
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(this.modalMessageTranslation);
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(this.modalTitleTranslation);
+
+    this.prefix = environment.serverUrl + "/static/uploads/images/";
+    this.confirmModalMessage = this.modalMessage_txt;
+    this.confirmModalTitle = this.modalTitle_txt;
   }
 
   ngOnInit() {
@@ -80,7 +125,6 @@ export class MondifySubMineralFormComponent implements OnInit {
     this.http.get(environment.urlAddress + '/api/v1/user_input/modifySubMineral/' + postedBy).subscribe((returnData: any) => {
       this.allLocality = returnData.localities;
       this.activePage = returnData.activePage;
-      this.tittleMain = 'Modify Sub-mineral';
     }, error => {
     });
   }
@@ -122,7 +166,7 @@ export class MondifySubMineralFormComponent implements OnInit {
   }
 
   resetTitleImage() {
-    this.titleImage = "Change Image";
+    this.titleImage = this.chooseImage_txt;
   }
 
   invalidComment() {
@@ -153,7 +197,12 @@ export class MondifySubMineralFormComponent implements OnInit {
     if (1 == event.target.files.length) {
       const file = event.target.files[0];
       this.userForm.get('img').setValue(file);
-      this.titleImage = file.name;
+      if (17 < file.name.length) {
+        this.titleImage = file.name.substr(0, 14) + "...";
+      }
+      else {
+        this.titleImage = file.name;
+      }
       event.srcElement.value = "";
 
       var reader = new FileReader();

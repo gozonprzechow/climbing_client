@@ -1,5 +1,5 @@
 <app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
 
 <div class="container" center='block'>
   <div class="mainFormClass" center='block'>
@@ -8,9 +8,9 @@
       <div class="form-group" [ngClass]="displayFieldCss('comment')">
         <!-- Last Name -->
         <div class="col-sm-12">
-          <label for="comment" class="control-label">Comment</label>
+          <label for="comment" class="control-label">{{comment_txt}}</label>
           <input type="text" formControlName="comment" class="form-control" id="comment" name="comment"
-            placeholder="Comment">
+            placeholder=comment_txt>
           <p *ngIf="invalidComment()" id="comment_error" class="help-block">
             {{'Invalid comment.'}}</p>
           <p class="help-block"> {{this.serverServiceErrors.comment}}</p>
@@ -36,7 +36,7 @@
       <div class="form-group has-error">
         <div class="submitContainer">
           <div class="col-sm-12">
-            <button type="submit" class="submitButton">Save changes</button>
+            <button type="submit" class="submitButton">{{store_txt}}</button>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
 
     <div class="submitContainer">
       <button type="button" class="deleteSubImageButton" (click)="openConfirmModal()">
-        Delete sub image</button>
+        {{delete_txt}}</button>
     </div>
   </div>
 </div>
