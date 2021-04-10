@@ -6,6 +6,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ValidationService } from '../models/validation';
 import { AuthenticationService } from '../services/authentication.service';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-reset-password-form',
@@ -29,13 +30,38 @@ export class ResetPasswordFormComponent implements OnInit {
 
   product: any = {};
 
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Zadat nové heslo",
+    en: "Add new password"
+  };
+  password_txt: string;
+  passwordTranslation: TextTranslator = {
+    cz: "Heslo",
+    en: "Password"
+  };
+  confirmPassword_txt: string;
+  confirmPasswordTranslation: TextTranslator = {
+    cz: "Potvrzení hesla",
+    en: "Confirm password"
+  };
+  resetPassword_txt: string;
+  resetPasswordTranslation: TextTranslator = {
+    cz: "Změnit heslo",
+    en: "Reset password"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public http: HttpClient,
     public auth: AuthenticationService,
+    public languageService: LanguageService,
     public route: ActivatedRoute,) {
-    this.tittleMain = 'Add new password';
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.password_txt = this.languageService.getNativeLanguageText(this.passwordTranslation);
+    this.confirmPassword_txt = this.languageService.getNativeLanguageText(this.confirmPasswordTranslation);
+    this.resetPassword_txt = this.languageService.getNativeLanguageText(this.resetPasswordTranslation);
   }
 
   invalidPassword() {

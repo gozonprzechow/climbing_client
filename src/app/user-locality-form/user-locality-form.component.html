@@ -15,11 +15,10 @@
                 <button type='button' id='dropdown01' class='top-right btn-secondary dropdown-toggle'
                   ngbDropdownToggle></button>
                 <div ngbDropdownMenu class='dropdownStyle' aria-labelledby='dropdown01'>
-                  <a class='dropdown-item' (click)='routerService.modifyMineral(achatdbCollection)'>Modify
-                    mineral</a>
+                  <a class='dropdown-item' (click)='routerService.modifyMineral(achatdbCollection)'>{{modifyMineral_txt}}</a>
                   <a class='dropdown-item' (click)='routerService.addSubMineral(achatdbCollection)'>
-                    Add Sub-mineral</a>
-                  <a class='dropdown-item' (click)="openConfirmModal(achatdbCollection)">Delete mineral</a>
+                    {{addSubMineral_txt}}</a>
+                  <a class='dropdown-item' (click)="openConfirmModal(achatdbCollection)">{{deleteMineral_txt}}</a>
                 </div>
               </div>
               <div *ngIf="!isItemYours(achatdbCollection.postedBy)">

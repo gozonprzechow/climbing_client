@@ -10,6 +10,7 @@ import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.com
 import { RouterServices } from '../services/router.services';
 import { ButtonCollection, PagingButtonsServices } from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-user-locality-form',
@@ -36,6 +37,32 @@ export class UserLocalityFormComponent implements OnInit {
 
   buttonCollections: ButtonCollection[] = [];
 
+  modifyMineral_txt: string;
+  modifyMineralTranslation: TextTranslator = {
+    cz: "Upravit minerál",
+    en: "Modify mineral"
+  };
+  addSubMineral_txt: string;
+  addSubMineralTranslation: TextTranslator = {
+    cz: "Přidat pod-minerál",
+    en: "Add sub-mineral"
+  };
+  deleteMineral_txt: string;
+  deleteMineralTranslation: TextTranslator = {
+    cz: "Smazat minerál",
+    en: "Delete mineral"
+  };
+  modalMessage_txt: string;
+  modalMessageTranslation: TextTranslator = {
+    cz: "Chcete smazat minerál s jeho pod-minerály?",
+    en: "Do you want delete mineral with its sub-minerals?"
+  };
+  modalTitle_txt: string;
+  modalTitleTranslation: TextTranslator = {
+    cz: "Smazat minerál",
+    en: "Delete mineral"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public http: HttpClient,
@@ -44,13 +71,20 @@ export class UserLocalityFormComponent implements OnInit {
     public auth: AuthenticationService,
     public routerService: RouterServices,
     public pagingButtons: PagingButtonsServices,
+    public languageService: LanguageService,
     public router: Router,
     public globals: Globals) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-    this.confirmModalMessage = "Do you want delete whole collection?";
-    this.confirmModalTitle = "Delete image";
+    this.modifyMineral_txt = this.languageService.getNativeLanguageText(this.modifyMineralTranslation);
+    this.addSubMineral_txt = this.languageService.getNativeLanguageText(this.addSubMineralTranslation);
+    this.deleteMineral_txt = this.languageService.getNativeLanguageText(this.deleteMineralTranslation);
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(this.modalMessageTranslation);
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(this.modalTitleTranslation);
+
+    this.confirmModalMessage = this.modalMessage_txt;
+    this.confirmModalTitle = this.modalTitle_txt;
   }
 
   public subscriber: any;

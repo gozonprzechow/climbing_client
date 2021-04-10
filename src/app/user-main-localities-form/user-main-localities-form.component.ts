@@ -10,6 +10,7 @@ import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.com
 import { RouterServices } from '../services/router.services';
 import { ButtonCollection, PagingButtonsServices } from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-user-main-localities-form',
@@ -22,7 +23,6 @@ import { environment } from 'src/environments/environment';
 export class UserMainLocalitiesFormComponent implements OnInit {
   allLocality: any = [];
   activePage: any = {};
-  tittleMain: string;
   localityCollections: any = [];
   prefix: string;
   suffix: string;
@@ -33,6 +33,32 @@ export class UserMainLocalitiesFormComponent implements OnInit {
 
   buttonCollections: ButtonCollection[] = [];
 
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Lokality uživatele",
+    en: "User localities"
+  };
+  modifyLocality_txt: string;
+  modifyLocalityTranslation: TextTranslator = {
+    cz: "Upravit lokalitu",
+    en: "Modify locality"
+  };
+  deleteLocality_txt: string;
+  deleteLocalityTranslation: TextTranslator = {
+    cz: "Smazat lokalitu",
+    en: "Delete locality"
+  };
+  modalMessage_txt: string;
+  modalMessageTranslation: TextTranslator = {
+    cz: "Chcete smazat tuto lokalitu a všechny její kolekce?",
+    en: "Do you want delete this locality and all their collections?"
+  };
+  modalTitle_txt: string;
+  modalTitleTranslation: TextTranslator = {
+    cz: "Smazat lokalitu",
+    en: "Delete locality"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public http: HttpClient,
@@ -42,12 +68,19 @@ export class UserMainLocalitiesFormComponent implements OnInit {
     public auth: AuthenticationService,
     public globals: Globals,
     public router: Router,
+    public languageService: LanguageService,
     public modalService: BsModalService) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-    this.confirmModalMessage = "Do you want delete this locality and all their collections?";
-    this.confirmModalTitle = "Delete locality";
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.modifyLocality_txt = this.languageService.getNativeLanguageText(this.modifyLocalityTranslation);
+    this.deleteLocality_txt = this.languageService.getNativeLanguageText(this.deleteLocalityTranslation);
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(this.modalMessageTranslation);
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(this.modalTitleTranslation);
+
+    this.confirmModalMessage = this.modalMessage_txt;
+    this.confirmModalTitle = this.modalTitle_txt;
   }
 
   public subscriber: any;
@@ -78,7 +111,6 @@ export class UserMainLocalitiesFormComponent implements OnInit {
           this.buttonCollections = this.pagingButtons.createButtonsField();
           this.activePage = data.activePage;
           this.allLocality = data.localities;
-          this.tittleMain = 'User localities';
           this.localityCollections = data.localityCollections;
           this.prefix = environment.serverUrl + "/static/uploads/images/";
           this.suffix = "_small";

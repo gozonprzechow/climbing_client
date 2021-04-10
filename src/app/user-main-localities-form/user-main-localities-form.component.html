@@ -1,5 +1,5 @@
 <app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]=tittleMain></custom-tittle-main>
+<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
 
 <div class="wrapper" center='block'>
   <div class="mainFormClass" center='block'>
@@ -12,8 +12,8 @@
             ngbDropdownToggle></button>
           <div ngbDropdownMenu class='dropdownStyle' aria-labelledby='dropdown01'>
             <a class='dropdown-item' (click)='routerService.modifyLocality(localityCollection.locality)'>
-              Modify locality</a>
-            <a class='dropdown-item' (click)="openConfirmModal(localityCollection.locality)">Delete locality</a>
+              {{modifyLocality_txt}}</a>
+            <a class='dropdown-item' (click)="openConfirmModal(localityCollection.locality)">{{deleteLocality_txt}}</a>
           </div>
         </div>
         <br><br>

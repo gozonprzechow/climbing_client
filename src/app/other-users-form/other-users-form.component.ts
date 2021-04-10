@@ -9,6 +9,7 @@ import { ImageModalComponent } from '../models/image-modal/image-modal.component
 import { RouterServices } from '../services/router.services';
 import { ButtonCollection, PagingButtonsServices } from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-other-users-form',
@@ -18,7 +19,6 @@ import { environment } from 'src/environments/environment';
 export class OtherUsersFormComponent implements OnInit {
   allLocality: any = [];
   activePage: any = {};
-  tittleMain: string;
   otherUsersCollections: any = [];
   prefix: string;
   suffix: string;
@@ -26,6 +26,12 @@ export class OtherUsersFormComponent implements OnInit {
   modalRef: BsModalRef;
 
   buttonCollections: ButtonCollection[] = [];
+
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Ostatní uživatelé",
+    en: "Other users"
+  };
 
   constructor(
     public elementRef: ElementRef,
@@ -35,7 +41,9 @@ export class OtherUsersFormComponent implements OnInit {
     public modalService: BsModalService,
     public auth: AuthenticationService,
     public routerService: RouterServices,
+    public languageService: LanguageService,
     public pagingButtons: PagingButtonsServices) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
   }
 
   public subscriber: any;
@@ -61,7 +69,6 @@ export class OtherUsersFormComponent implements OnInit {
           this.buttonCollections = this.pagingButtons.createButtonsField();
           this.activePage = data.activePage;
           this.allLocality = data.localities;
-          this.tittleMain = 'Other users';
           this.otherUsersCollections = data.otherUsersCollections;
           this.prefix = environment.serverUrl + "/static/uploads/images/";
           this.suffix = "_small";

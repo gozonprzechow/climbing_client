@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService } from '../services/authentication.service';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-recover-password-form',
@@ -18,17 +19,29 @@ export class RecoverPasswordFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
   errorMessage: string;
 
   returnMessage: string;
+
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Obnovení hesla",
+    en: "Password recovery"
+  };
+  recoverPassword_txt: string;
+  recoverPasswordTranslation: TextTranslator = {
+    cz: "Obnovit heslo",
+    en: "Recover password"
+  };
 
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public auth: AuthenticationService,
+    public languageService: LanguageService,
     public http: HttpClient) {
-    this.tittleMain = 'Password recovery';
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.recoverPassword_txt = this.languageService.getNativeLanguageText(this.recoverPasswordTranslation);
   }
 
   invalidEmail() {
@@ -80,9 +93,6 @@ export class RecoverPasswordFormComponent implements OnInit {
         if (null == returnData.inputErrorMessage.uploadSuccess) {
         }
         else {
-          // this.submitted = false;
-          // this.userForm.controls.password.setValue('');
-          // this.userForm.reset();
           this.returnMessage = returnData.message;
           this.submitted = false;
           this.userForm.reset();

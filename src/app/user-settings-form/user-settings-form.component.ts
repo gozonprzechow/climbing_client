@@ -10,6 +10,7 @@ import { RouterServices } from '../services/router.services';
 import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { MathServices, ConvertedBytes } from '../services/math.service';
 import { environment } from 'src/environments/environment';
+import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-user-settings-form',
@@ -25,18 +26,48 @@ export class UserSettingsFormComponent implements OnInit {
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
-  tittleMain: string;
   activePage: any = {};
   userInfo: any = {};
   allLocality: any = [];
 
   confirmModalMessage: string;
   confirmModalTitle: string;
-  
+
   modalRef: BsModalRef;
   convertedBytes: ConvertedBytes = {
     numberofBytes: 0,
     unit: ""
+  };
+
+  titleMain_txt: string;
+  titleMainTranslation: TextTranslator = {
+    cz: "Uživatelské nastavení",
+    en: "User settings"
+  };
+  deleteAccount_txt: string;
+  eleteAccountTranslation: TextTranslator = {
+    cz: "Smazat účet",
+    en: "Delete account"
+  };
+  changePassword_txt: string;
+  changePasswordTranslation: TextTranslator = {
+    cz: "Změnit heslo",
+    en: "Change password"
+  };
+  imagesSpace_txt: string;
+  imagesSpaceTranslation: TextTranslator = {
+    cz: "Velikost obrázků uživatele:",
+    en: "Size of user image:"
+  };
+  warningDeleteaccountTitle_txt: string;
+  warningDeleteaccountTitleTranslation: TextTranslator = {
+    cz: "Smazat účet",
+    en: "Delete account"
+  };
+  warningDeleteaccount_txt: string;
+  warningDeleteaccountTranslation: TextTranslator = {
+    cz: "Opravdu chcete smazat účet?",
+    en: "Really want delete account?"
   };
 
   constructor(
@@ -45,11 +76,19 @@ export class UserSettingsFormComponent implements OnInit {
     public auth: AuthenticationService,
     public modalService: BsModalService,
     public routerService: RouterServices,
+    public languageService: LanguageService,
     public mathServices: MathServices,
     public http: HttpClient) {
-    this.tittleMain = 'User settings';
-    this.confirmModalMessage = "Really want delete account?";
-    this.confirmModalTitle = "Delete account";
+    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    this.deleteAccount_txt = this.languageService.getNativeLanguageText(this.eleteAccountTranslation);
+    this.changePassword_txt = this.languageService.getNativeLanguageText(this.changePasswordTranslation);
+    this.imagesSpace_txt = this.languageService.getNativeLanguageText(this.imagesSpaceTranslation);
+    this.warningDeleteaccountTitle_txt = this.languageService
+      .getNativeLanguageText(this.warningDeleteaccountTitleTranslation);
+    this.warningDeleteaccount_txt = this.languageService
+      .getNativeLanguageText(this.warningDeleteaccountTranslation);
+    this.confirmModalMessage = this.warningDeleteaccount_txt;
+    this.confirmModalTitle = this.warningDeleteaccountTitle_txt;
   }
 
   invalidEmail() {
