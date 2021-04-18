@@ -14,12 +14,12 @@ import { SuccesCreateAccountFormComponent } from './create-account-form/succes-c
 import { VerifiedCreateAccountFormComponent } from './verified-create-account-form/verified-create-account-form.component';
 import { RecoverPasswordFormComponent } from './recover-password-form/recover-password-form.component';
 import { ResetPasswordFormComponent } from './reset-password-form/reset-password-form.component';
-import { SuccesResetPasswordFormComponent } from './reset-password-form/succes-reset-password-form/succes-reset-password-form.component';
 import { OtherUsersFormComponent } from './other-users-form/other-users-form.component';
 import { ImageModalComponent } from './models/image-modal/image-modal.component';
 import { AdminHlavniFormComponent } from './admin-hlavni-form/admin-hlavni-form.component';
 import { FirstPageFormComponent } from './first-page-form/first-page-form.component';
 import { UserSettingsFormComponent } from './user-settings-form/user-settings-form.component';
+import { ChatFormComponent } from './chat-form/chat-form.component';
 
 
 const routes: Routes = [
@@ -51,10 +51,6 @@ const routes: Routes = [
     path: 'resetPassword/:uid',
     component: ResetPasswordFormComponent
   },
-  // {
-  //   path: 'resetPassword/success',
-  //   component: SuccesResetPasswordFormComponent
-  // },
   {
     path: 'login',
     component: LoginFormComponent
@@ -90,6 +86,10 @@ const routes: Routes = [
   {
     path: 'userSettings',
     component: UserSettingsFormComponent
+  },
+  {
+    path: 'chat',
+    component: ChatFormComponent
   },
   {
     path: 'locality/:uid/:page/:idPostedBy',

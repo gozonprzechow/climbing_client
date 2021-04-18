@@ -42,6 +42,12 @@
         </form> -->
       <!-- <img class="settingsImage" src="../../../assets/skins/Like_medium.jpg"> -->
       <div ngbDropdown>
+        <img *ngIf="auth.isLoggedIn()" class="chatImage" [src]="imgChatSrc"
+          (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
+          (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
+          (click)='routerService.userSettings()'
+          [ngClass]="{ 'chatButton': navbarOpen }">
+
         <img *ngIf="auth.isLoggedIn()" class="settingsImage dropdown-toggle" ngbDropdownToggle [src]="imgSrc"
           (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
           (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
@@ -54,7 +60,7 @@
           </a>
         </div>
 
-        <button *ngIf="auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0" (click)="logOutHandler()"
+        <button *ngIf="auth.isLoggedIn()" class="btn btnLogin" (click)="logOutHandler()"
           [ngClass]="{ 'logButton': navbarOpen }">{{logOut_txt}}</button>
         <button *ngIf="!auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0" (click)="logInHandler()"
           [ngClass]="{ 'logButton': navbarOpen }">{{logIn_txt}}</button>

@@ -15,6 +15,7 @@ export class MainNavbarMenuComponent {
   @Input() allLocality: any = [];
   @Input() activePage: any = {};
   navbarOpen = false;
+  imgChatSrc: String;
   imgSrc: String;
   dropdownMenuClass: String = "";
 
@@ -79,6 +80,7 @@ export class MainNavbarMenuComponent {
     public routerService: RouterServices,
     public languageService: LanguageService) {
     this.imgSrc = '../../../assets/skins/settings_button.png';
+    this.imgChatSrc = '../../../assets/skins/message_button.png';
 
     this.home_txt = this.languageService.getNativeLanguageText(this.homeTranslation);
 

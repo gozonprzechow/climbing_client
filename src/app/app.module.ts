@@ -36,6 +36,7 @@ import { OtherUsersFormComponent } from './other-users-form/other-users-form.com
 import { AdminHlavniFormComponent } from './admin-hlavni-form/admin-hlavni-form.component';
 import { FirstPageFormComponent } from './first-page-form/first-page-form.component';
 import { UserSettingsFormComponent } from './user-settings-form/user-settings-form.component';
+import { ChatFormComponent } from './chat-form/chat-form.component';
 
 import { ConfirmModalComponent } from './models/confirm-modal/confirm-modal.component';
 import { MainNavbarMenuComponent } from './models/main-navbar-menu/main-navbar-menu.component';
@@ -73,7 +74,8 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     ModifyLocalityFormComponent,
     FirstPageFormComponent,
     PagingButtonsComponent,
-    UserSettingsFormComponent
+    UserSettingsFormComponent,
+    ChatFormComponent
   ],
   imports: [
     BrowserModule,
