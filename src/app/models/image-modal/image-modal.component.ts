@@ -148,8 +148,8 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
       } else {
         this.location.go(this.previousUrl + "/" + this.list.achatdbCollection._id + "/" + this.actualSlide);
       }
-      this.setSlide(this.actualSlide);
     }
+    this.setSlide(this.actualSlide);
   }
 
   setSlide(slide: number) {
