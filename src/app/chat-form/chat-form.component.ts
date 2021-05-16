@@ -21,6 +21,7 @@ export class ChatFormComponent implements OnInit {
   };
 
   submitted = false;
+  showAddMessage: boolean = false;
   userForm: FormGroup;
   serviceErrors: any = {};
   serverServiceErrors: any = {};
@@ -30,13 +31,14 @@ export class ChatFormComponent implements OnInit {
   inputCondition: InputCondition = new InputCondition();
   errorMessage: string;
   message: string;
+  messageValue: string;
 
   product: any = {};
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Přihlášení",
-    en: "Login"
+    cz: "Zprávy",
+    en: "Chat"
   };
   registerQuestion_txt: string;
   registerQuestionTranslation: TextTranslator = {
@@ -79,6 +81,22 @@ export class ChatFormComponent implements OnInit {
     en: "Login"
   };
 
+  addNew_txt: string;
+  addNewTranslation: TextTranslator = {
+    cz: "Přidat nový",
+    en: "Add new"
+  };
+  submit_txt: string;
+  submitTranslation: TextTranslator = {
+    cz: "Potvrdit",
+    en: "Submit"
+  };
+  cancle_txt: string;
+  cancleTranslation: TextTranslator = {
+    cz: "Zrušit",
+    en: "Cancle"
+  };
+
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
@@ -96,6 +114,9 @@ export class ChatFormComponent implements OnInit {
     this.recoverQuestion_txt = this.languageService.getNativeLanguageText(this.recoverQuestionTranslation);
     this.recover_txt = this.languageService.getNativeLanguageText(this.recoverTranslation);
     this.login_txt = this.languageService.getNativeLanguageText(this.loginTranslation);
+    this.addNew_txt = this.languageService.getNativeLanguageText(this.addNewTranslation);
+    this.submit_txt = this.languageService.getNativeLanguageText(this.submitTranslation);
+    this.cancle_txt = this.languageService.getNativeLanguageText(this.cancleTranslation);
   }
 
   invalidEmail() {
@@ -206,6 +227,30 @@ export class ChatFormComponent implements OnInit {
         this.message = error.error.message;
       });
     }
+  }
+
+  public seeAddMessage() {
+    this.showAddMessage = true;
+  }
+
+  public submitMessage() {
+    // this.newCommentText = this.textValue;
+    // let formData = new FormData();
+    // formData.append("mainImage", achatdbCollection._id);
+    // formData.append("newCommentText", this.newCommentText);
+
+    // let postedBy = this.auth.getLogUserId();
+    // this.subscriber = this.route.params.subscribe(params => {
+    //   this.http.post<any>(environment.urlAddress + '/api/v1/user_input/comment/' + params.uid + '/' + postedBy, formData)
+    //     .subscribe((data: any) => {
+    //       this.list.achatdbCollection.communityComments.push(data.communityComment);
+    //       this.textValue = "";
+    //     });
+    // });
+  }
+
+  public canceAddMessage() {
+    this.showAddMessage = false;
   }
 
   public routeToUserLocalities() {

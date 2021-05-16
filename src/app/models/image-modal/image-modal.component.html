@@ -60,16 +60,14 @@
         <div class="row">
 
           <div *ngIf="!showAddComment" class="col">
-            <button type="button" class="btn btnAddComment"
-              (click)="seeAddComment(list.achatdbCollection)">{{addNew_txt}}</button>
+            <button type="button" class="btn btnAddComment" (click)="seeAddComment()">{{addNew_txt}}</button>
           </div>
 
           <div *ngIf="showAddComment" class="col">
 
             <button type="button" class="btn btnSubmitComment"
               (click)="submitComment(list.achatdbCollection)">{{submit_txt}}</button>
-            <button type="button" class="btn btnCancleAddComment"
-              (click)="canceAddComment(list.achatdbCollection)">{{cancle_txt}}</button>
+            <button type="button" class="btn btnCancleAddComment" (click)="canceAddComment()">{{cancle_txt}}</button>
           </div>
           <div *ngIf="showAddComment" class="col">
             <textarea class="inputCommentBox" ref-textarea [(ngModel)]="textValue" rows="4"></textarea>
@@ -80,11 +78,15 @@
     </div>
     <div *ngFor="let communityComment of list.achatdbCollection.communityComments" class="containerComment_text">
       <div class="row">
-        <div *ngIf="isItemYours(communityComment.commentBy)" class="col-sm-3">
+        <div *ngIf="isItemYours(communityComment.commentBy)" class="col-2 commentPosterNameColumn">
+          <div class="communityCommentPosterName">{{communityComment.posterName}}</div>
           <button type="button" class="btn btnCommunityComments"
             (click)="openConfirmModal(list.achatdbCollection, communityComment)">{{delete_txt}}</button>
         </div>
-        <div class="col">
+        <!-- <div class="col-sm-2">
+          <div class="communityCommentText">{{communityComment.posterName}}</div>
+        </div> -->
+        <div class="co-10">
           <div class="communityCommentText">{{communityComment.message}}</div>
         </div>
       </div>

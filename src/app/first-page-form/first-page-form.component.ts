@@ -53,7 +53,7 @@ export class FirstPageFormComponent implements OnInit {
         postedBy = this.auth.getActualUserId();
       }
 
-      this.http.get(environment.urlAddress + '/api/v1/locality/firstPage/' + '/' + postedBy)
+      this.http.get(environment.urlAddress + '/api/v1/locality/firstPage/' + postedBy)
         .subscribe((data: any) => {
           this.activePage = data.activePage;
           this.allLocality = data.localities;
@@ -63,8 +63,8 @@ export class FirstPageFormComponent implements OnInit {
           this.suffix = "_small";
 
           if (params.image && params.slide) {
-            let previousUrl = "firstPage/";
-            const achatdbCollection = this.otherUsersCollections[params.userNum]
+            let previousUrl = "./";
+            const achatdbCollection = this.otherUsersCollections[0]
               .achatdbCollections.find(({ _id }) => _id === params.image);
             this.openModalOnImage(achatdbCollection, params.slide, previousUrl, params.userNum);
           }
@@ -104,7 +104,7 @@ export class FirstPageFormComponent implements OnInit {
   openModal(achatdbCollection, numOfUserCollection) {
     let previousUrl;
     this.subscriber = this.route.params.subscribe(params => {
-      previousUrl = "firstPage/";
+      previousUrl = "./";
       const initialState = {
         list: {
           "achatdbCollection": achatdbCollection,

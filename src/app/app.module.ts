@@ -40,6 +40,7 @@ import { ChatFormComponent } from './chat-form/chat-form.component';
 
 import { ConfirmModalComponent } from './models/confirm-modal/confirm-modal.component';
 import { MainNavbarMenuComponent } from './models/main-navbar-menu/main-navbar-menu.component';
+import { ChatNavbarMenuComponent } from './models/chat-navbar-menu/chat-navbar-menu.component';
 import { ImageModalComponent } from './models/image-modal/image-modal.component';
 import { TittleMain } from './models/customTittle';
 import { PagingButtonsComponent } from './models/paging-buttons/paging-buttons.component';
@@ -75,7 +76,8 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     FirstPageFormComponent,
     PagingButtonsComponent,
     UserSettingsFormComponent,
-    ChatFormComponent
+    ChatFormComponent,
+    ChatNavbarMenuComponent
   ],
   imports: [
     BrowserModule,

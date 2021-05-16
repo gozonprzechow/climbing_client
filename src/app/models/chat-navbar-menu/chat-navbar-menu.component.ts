@@ -4,18 +4,17 @@ import { RouterServices } from '../../services/router.services';
 import { LanguageService, TextTranslator } from '../../services/language.service';
 
 @Component({
-  selector: 'app-main-navbar-menu',
-  templateUrl: './main-navbar-menu.component.html',
-  styleUrls: ['./main-navbar-menu.component.css'],
+  selector: 'app-chat-navbar-menu',
+  templateUrl: './chat-navbar-menu.component.html',
+  styleUrls: ['./chat-navbar-menu.component.css'],
   host: {
     '(window:resize)': 'onResize($event)'
   }
 })
-export class MainNavbarMenuComponent {
+export class ChatNavbarMenuComponent {
   @Input() allLocality: any = [];
   @Input() activePage: any = {};
   navbarOpen = false;
-  showAddComment: boolean = false;
   imgChatSrc: String;
   imgSrc: String;
   dropdownMenuClass: String = "";
@@ -80,7 +79,7 @@ export class MainNavbarMenuComponent {
     public auth: AuthenticationService,
     public routerService: RouterServices,
     public languageService: LanguageService) {
-    this.imgSrc = '../../../assets/skins/settings_button.png';
+    this.imgSrc = '../../../assets/skins/back_arrow.png';
     this.imgChatSrc = '../../../assets/skins/message_button.png';
 
     this.home_txt = this.languageService.getNativeLanguageText(this.homeTranslation);
@@ -192,3 +191,4 @@ export class MainNavbarMenuComponent {
   }
 
 }
+

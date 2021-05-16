@@ -138,13 +138,18 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
       this.list.previousUrl = null;
     }
 
-    if (this.numOfItemCollection) {
-      this.location.go(this.previousUrl + "/" + this.numOfItemCollection + "/" +
+    if ("./" == this.previousUrl) {
+      this.location.go(this.previousUrl + "0" + "/" +
         this.list.achatdbCollection._id + "/" + this.actualSlide);
     } else {
-      this.location.go(this.previousUrl + "/" + this.list.achatdbCollection._id + "/" + this.actualSlide);
+      if (this.numOfItemCollection && ("./" != this.previousUrl)) {
+        this.location.go(this.previousUrl + "/" + this.numOfItemCollection + "/" +
+          this.list.achatdbCollection._id + "/" + this.actualSlide);
+      } else {
+        this.location.go(this.previousUrl + "/" + this.list.achatdbCollection._id + "/" + this.actualSlide);
+      }
+      this.setSlide(this.actualSlide);
     }
-    this.setSlide(this.actualSlide);
   }
 
   setSlide(slide: number) {
@@ -222,7 +227,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     this.showComments = !this.showComments;
   }
 
-  public seeAddComment(achatdbCollection) {
+  public seeAddComment() {
     this.showAddComment = true;
   }
 
@@ -257,7 +262,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     });
   }
 
-  public canceAddComment(achatdbCollection) {
+  public canceAddComment() {
     this.showAddComment = false;
   }
 

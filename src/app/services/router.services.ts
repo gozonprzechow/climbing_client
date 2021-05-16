@@ -116,4 +116,9 @@ export class RouterServices {
     let path = '/recoverPassword';
     this.router.navigate([path]);
   }
+
+  public chat(): void {
+    let path = '/chat';
+    this.router.navigate([path]);
+  }
 }

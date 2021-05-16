@@ -89,17 +89,6 @@
   color: white;
 }
 
-.btnAddComment {
-  width:110px;
-  padding: 8px 0;
-  border: 3px solid #383a39 !important;
-  text-align: center;
-  border-radius: 5px;
-  background-color: rgb(85, 83, 83) !important;
-  color: white;
-  cursor: pointer;
-}
-
 .btnCommunityComments {
   width:110px;
   padding: 8px 0;
@@ -107,6 +96,17 @@
   text-align: center;
   border-radius: 5px;
   margin: 15px;
+  background-color: rgb(85, 83, 83) !important;
+  color: white;
+  cursor: pointer;
+}
+
+.btnAddComment {
+  width:110px;
+  padding: 8px 0;
+  border: 3px solid #383a39 !important;
+  text-align: center;
+  border-radius: 5px;
   background-color: rgb(85, 83, 83) !important;
   color: white;
   cursor: pointer;
@@ -190,10 +190,23 @@
 }
 
 .communityCommentText {
-  text-align: center;
+  text-align: left;
   color: rgb(199, 199, 199);
   word-break: break-word;
   margin: 15px;
+}
+
+.communityCommentPosterName {
+  text-align: left;
+  font-weight: bold;
+  color: rgb(199, 199, 199);
+  word-break: break-word;
+  margin: 15px;
+}
+
+.commentPosterNameColumn {
+  min-width: 150px;
+  max-width: 250px;
 }
 
 /* Style close button */

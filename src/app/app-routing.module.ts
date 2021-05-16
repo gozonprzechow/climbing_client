@@ -15,7 +15,6 @@ import { VerifiedCreateAccountFormComponent } from './verified-create-account-fo
 import { RecoverPasswordFormComponent } from './recover-password-form/recover-password-form.component';
 import { ResetPasswordFormComponent } from './reset-password-form/reset-password-form.component';
 import { OtherUsersFormComponent } from './other-users-form/other-users-form.component';
-import { ImageModalComponent } from './models/image-modal/image-modal.component';
 import { AdminHlavniFormComponent } from './admin-hlavni-form/admin-hlavni-form.component';
 import { FirstPageFormComponent } from './first-page-form/first-page-form.component';
 import { UserSettingsFormComponent } from './user-settings-form/user-settings-form.component';
@@ -80,10 +79,6 @@ const routes: Routes = [
     component: ModifyLocalityFormComponent
   },
   {
-    path: 'home',
-    component: UserMainLocalitiesFormComponent
-  },
-  {
     path: 'userSettings',
     component: UserSettingsFormComponent
   },
@@ -116,9 +111,9 @@ const routes: Routes = [
     component: OtherUsersFormComponent
   },
   {
-    path: 'additem',
-    component: ImageModalComponent
-  }
+    path: ':page/:image/:slide',
+    component: FirstPageFormComponent
+  },
 
 ];
 

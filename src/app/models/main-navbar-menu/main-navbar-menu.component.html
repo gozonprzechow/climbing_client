@@ -45,7 +45,7 @@
         <img *ngIf="auth.isLoggedIn()" class="chatImage" [src]="imgChatSrc"
           (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
           (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
-          (click)='routerService.userSettings()'
+          (click)='routerService.chat()'
           [ngClass]="{ 'chatButton': navbarOpen }">
 
         <img *ngIf="auth.isLoggedIn()" class="settingsImage dropdown-toggle" ngbDropdownToggle [src]="imgSrc"

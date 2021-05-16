@@ -1,0 +1,28 @@
+<div class="containerOfNav">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #242020;">
+      <a class="navbar-brand" href="#"></a>
+      <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- <div class="containerNavbar"> -->
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault"
+        [ngClass]="{ 'show': navbarOpen, 'collapseFrame': navbarOpen }">
+        <ul class="navbar-nav mr-auto">
+            <img *ngIf="auth.isLoggedIn()" class="backArrowImage" [src]="imgSrc"
+            (mouseover)="imgSrc = '../../../assets/skins/back_arrow_hoover.png'"
+            (mouseout)="imgSrc = '../../../assets/skins/back_arrow.png'"
+            (click)="routeToYourLocalities()"
+            [ngClass]="{ 'chatButton': navbarOpen }">
+        </ul>
+
+        <div ngbDropdown>
+          <img *ngIf="auth.isLoggedIn()" class="chatImage" [src]="imgChatSrc"
+            (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
+            (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
+            (click)='routerService.chat()'
+            [ngClass]="{ 'chatButton': navbarOpen }">
+        </div>
+      </div>
+      <!-- </div> -->
+    </nav>
+  </div>

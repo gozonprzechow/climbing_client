@@ -1,66 +1,25 @@
-<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
+<app-chat-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-chat-navbar-menu>
 <custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
 
 <div class="container">
 
-  <div class="mainFormClass">
+  <div class="containerChat">
+    <div class="containerChat_inputMessage">
+      <div class="containerChat_inputMessageBtn">
+        <div class="row">
+          <div *ngIf="!showAddMessage" class="col">
+            <button type="button" class="btn btnAddMessage" (click)="seeAddMessage()">{{addNew_txt}}</button>
+          </div>
+          <div *ngIf="showAddMessage" class="col">
 
-    <div class="registerAccount">
-      <p *ngIf="hideRegisterRouter()" id="registerAccount_id"> {{registerQuestion_txt}} <a
-          id="fakeHrefStyle_id" (click)="routerService.createAccount()">{{register_txt}}</a> </p>
+            <button type="button" class="btn btnSubmitMessage" (click)="submitMessage()">{{submit_txt}}</button>
+            <button type="button" class="btn btnCancleAddMessage" (click)="canceAddMessage()">{{cancle_txt}}</button>
+          </div>
+          <div *ngIf="showAddMessage" class="col">
+            <textarea class="inputCommentBox" ref-textarea [(ngModel)]="messageValue" rows="4"></textarea>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <p>{{errorMessage}}</p>
-
-      <div class="form-group" [ngClass]="{ 'has-error': invalidEmail() }">
-        <!-- Last Name -->
-        <div class="col-sm-12">
-          <label for="email" class="control-label required">Email</label>
-          <input type="text" formControlName="email" class="form-control" id="email" name="email" placeholder="email">
-          <p *ngIf="invalidEmail()" id="email_error" class="help-block">
-            {{this.serviceErrors.email || 'Invalid email.'}}</p>
-          <p class="help-block"> {{this.serverServiceErrors.email}}</p>
-        </div>
-      </div>
-
-      <div class="form-group" [ngClass]="{ 'has-error': invalidPassword() }">
-        <!-- Last Name -->
-        <div class="col-sm-12">
-          <label for="password" class="control-label required">{{password_txt}}</label>
-          <input type="password" formControlName="password" class="form-control" id="password" name="password"
-            placeholder="*********">
-          <p *ngIf="invalidPassword()" id="password_error" class="help-block">
-            {{this.serviceErrors.password || 'Invalid password.'}}</p>
-          <p class="help-block"> {{this.serverServiceErrors.password}}</p>
-        </div>
-      </div>
-
-      <div class="submitContainer">
-        <p id="successLoadCondition"> {{this.serverServiceErrors.uploadSuccess}}</p>
-      </div>
-
-      <div class="submitContainer">
-        <p>{{message}}</p>
-      </div>
-
-      <div *ngIf="userNoVerified()" class="resendVerifyEmail">
-        <p> {{resendQuestion_txt}} <a id="fakeHrefStyle_id"
-            (click)="runResendVerify()">{{resend_txt}}</a> </p>
-      </div>
-
-      <div class="form-group has-error">
-        <div class="registerAccount">
-          <p *ngIf="userWrongPassword()"> {{recoverQuestion_txt}} <a id="fakeHrefStyle_id"
-              (click)="routerService.recoverPassword()">{{recover_txt}}</a> </p>
-        </div>
-        <div class="submitContainer">
-          <p class="help-block"> {{this.inputCondition.errorLoad && this.serverServiceErrors.uploadSuccess}}
-          </p>
-          <!-- Register Button -->
-          <button type="submit" class="submitButton">{{login_txt}}</button>
-        </div>
-      </div>
-    </form>
   </div>
 </div>
