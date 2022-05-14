@@ -1,110 +1,168 @@
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { RouterServices } from '../../services/router.services';
 import { LanguageService, TextTranslator } from '../../services/language.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { ConfirmModalComponent } from '../../models/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-main-navbar-menu',
   templateUrl: './main-navbar-menu.component.html',
   styleUrls: ['./main-navbar-menu.component.css'],
   host: {
-    '(window:resize)': 'onResize($event)'
-  }
+    '(window:resize)': 'onResize($event)',
+  },
 })
-export class MainNavbarMenuComponent {
+export class MainNavbarMenuComponent implements OnInit {
   @Input() allLocality: any = [];
   @Input() activePage: any = {};
   navbarOpen = false;
   showAddComment: boolean = false;
+  message_alert: boolean = false;
+  show_add_friend_option: boolean = false;
+  imgAddSrc: String;
   imgChatSrc: String;
   imgSrc: String;
-  dropdownMenuClass: String = "";
+  dropdownMenuClass: String = '';
+  modalRef: BsModalRef;
 
   home_txt: string;
   homeTranslation: TextTranslator = {
-    cz: "Domů",
-    en: "Home"
+    cz: 'Domů',
+    en: 'Home',
   };
   userLocalities_txt: string;
   userLocalitiesTranslation: TextTranslator = {
-    cz: "Lokality uživatele",
-    en: "User localities"
+    cz: 'Lokality uživatele',
+    en: 'User localities',
   };
   locality_txt: string;
   localityTranslation: TextTranslator = {
-    cz: "Lokality",
-    en: "Locality"
+    cz: 'Lokality',
+    en: 'Locality',
   };
   add_txt: string;
   addTranslation: TextTranslator = {
-    cz: "Přidat",
-    en: "Add"
+    cz: 'Přidat',
+    en: 'Add',
   };
   inputLocality_txt: string;
   inputLocalityTranslation: TextTranslator = {
-    cz: "Vložit lokalitu",
-    en: "Input locality"
+    cz: 'Vložit lokalitu',
+    en: 'Input locality',
   };
   inputMineral_txt: string;
   inputMineralTranslation: TextTranslator = {
-    cz: "Vložit minerál",
-    en: "Input mineral"
+    cz: 'Vložit minerál',
+    en: 'Input mineral',
   };
   otherUsers_txt: string;
   otherUsersTranslation: TextTranslator = {
-    cz: "Ostatní uživatelé",
-    en: "Other users"
+    cz: 'Ostatní uživatelé',
+    en: 'Other users',
   };
   userSettings_txt: string;
   userSettingsTranslation: TextTranslator = {
-    cz: "Uživatelské nastavení",
-    en: "User settings"
+    cz: 'Uživatelské nastavení',
+    en: 'User settings',
   };
   adminPage_txt: string;
   adminPageTranslation: TextTranslator = {
-    cz: "Administrátorská stránka",
-    en: "Admin page"
+    cz: 'Administrátorská stránka',
+    en: 'Admin page',
   };
   logIn_txt: string;
   logInTranslation: TextTranslator = {
-    cz: "Přihlášení",
-    en: "Log in"
+    cz: 'Přihlášení',
+    en: 'Log in',
   };
   logOut_txt: string;
   logOutTranslation: TextTranslator = {
-    cz: "Odhlášení",
-    en: "Log out"
+    cz: 'Odhlášení',
+    en: 'Log out',
+  };
+
+  requestFriendshipModalMessage_txt: string;
+  requestFriendshipModalMessageTranslation: TextTranslator = {
+    cz: 'Chcete poslat žádost o přátelství?',
+    en: 'Do you want send friendship request?',
+  };
+  requestFriendshipModalTitle_txt: string;
+  requestFriendshipModalTitleTranslation: TextTranslator = {
+    cz: 'Žádost o přátelství',
+    en: 'Friendship request',
   };
 
   constructor(
     public auth: AuthenticationService,
     public routerService: RouterServices,
-    public languageService: LanguageService) {
+    public modalService: BsModalService,
+    public http: HttpClient,
+    public languageService: LanguageService,
+  ) {
     this.imgSrc = '../../../assets/skins/settings_button.png';
     this.imgChatSrc = '../../../assets/skins/message_button.png';
+    this.imgAddSrc = '../../../assets/skins/add_friend_button.png';
 
     this.home_txt = this.languageService.getNativeLanguageText(this.homeTranslation);
 
-    this.userLocalities_txt = this.languageService.getNativeLanguageText(this.userLocalitiesTranslation);
+    this.userLocalities_txt = this.languageService.getNativeLanguageText(
+      this.userLocalitiesTranslation,
+    );
 
-    this.locality_txt = this.languageService.getNativeLanguageText(this.localityTranslation);
+    this.locality_txt = this.languageService.getNativeLanguageText(
+      this.localityTranslation,
+    );
 
     this.add_txt = this.languageService.getNativeLanguageText(this.addTranslation);
-    this.inputLocality_txt = this.languageService.getNativeLanguageText(this.inputLocalityTranslation);
-    this.inputMineral_txt = this.languageService.getNativeLanguageText(this.inputMineralTranslation);
+    this.inputLocality_txt = this.languageService.getNativeLanguageText(
+      this.inputLocalityTranslation,
+    );
+    this.inputMineral_txt = this.languageService.getNativeLanguageText(
+      this.inputMineralTranslation,
+    );
 
-    this.otherUsers_txt = this.languageService.getNativeLanguageText(this.otherUsersTranslation);
+    this.otherUsers_txt = this.languageService.getNativeLanguageText(
+      this.otherUsersTranslation,
+    );
 
-    this.userSettings_txt = this.languageService.getNativeLanguageText(this.userSettingsTranslation);
-    this.adminPage_txt = this.languageService.getNativeLanguageText(this.adminPageTranslation);
+    this.userSettings_txt = this.languageService.getNativeLanguageText(
+      this.userSettingsTranslation,
+    );
+    this.adminPage_txt = this.languageService.getNativeLanguageText(
+      this.adminPageTranslation,
+    );
 
     this.logIn_txt = this.languageService.getNativeLanguageText(this.logInTranslation);
     this.logOut_txt = this.languageService.getNativeLanguageText(this.logOutTranslation);
+
+    this.requestFriendshipModalMessage_txt = this.languageService.getNativeLanguageText(
+      this.requestFriendshipModalMessageTranslation,
+    );
+
+    this.requestFriendshipModalTitle_txt = this.languageService.getNativeLanguageText(
+      this.requestFriendshipModalTitleTranslation,
+    );
+  }
+
+  ngOnInit() {
+    if (this.auth.isLoggedIn()) {
+      let formData = new FormData();
+      formData.append('actual_user_id', this.auth.getActualUserId());
+      this.http
+        .post<any>(environment.urlAddress + '/api/v1/user_input/mainNavbarMenu', formData)
+        .subscribe((returnData: any) => {
+          this.show_add_friend_option = returnData.show_add_friend_option;
+          this.message_alert = returnData.message_alert;
+        });
+    }
   }
 
   public onResize(event) {
     this.navbarOpen = false;
-    this.dropdownMenuClass = "";
+    this.dropdownMenuClass = '';
   }
 
   public toggleNavbar() {
@@ -164,8 +222,7 @@ export class MainNavbarMenuComponent {
   }
 
   public ifDisplayLocality(): boolean {
-    if ((null == this.auth.getActualUserId()) ||
-      ("null" == this.auth.getActualUserId())) {
+    if (null == this.auth.getActualUserId() || 'null' == this.auth.getActualUserId()) {
       if (!this.auth.isLoggedIn()) {
         return false;
       }
@@ -174,8 +231,7 @@ export class MainNavbarMenuComponent {
   }
 
   public ifDisplayLocalities(): boolean {
-    if ((null == this.auth.getActualUserId()) ||
-      ("null" == this.auth.getActualUserId())) {
+    if (null == this.auth.getActualUserId() || 'null' == this.auth.getActualUserId()) {
       if (!this.auth.isLoggedIn()) {
         return false;
       }
@@ -183,12 +239,61 @@ export class MainNavbarMenuComponent {
     return true;
   }
 
-  public getDropdownMenuClass(navbarOpen): string {
-    if (navbarOpen) {
-      return "dropdown-menu-left";
-    } else {
-      return "dropdown-menu-right";
+  public ifDisplayAddFriend(): boolean {
+    if (this.auth.getActualUserId() == this.auth.getLogUserId()) {
+      return false;
     }
+    if (this.auth.isLoggedIn() && this.show_add_friend_option) {
+      return true;
+    }
+    return false;
   }
 
+  public openAddFriendshipModal() {
+    const initialState = {
+      list: {
+        confirmModalMessage: this.requestFriendshipModalMessage_txt,
+        confirmModalTitle: this.requestFriendshipModalTitle_txt,
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.modalRef = this.modalService.show(
+      ConfirmModalComponent,
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
+    );
+    this.modalRef.content.event.subscribe((res) => {
+      this.addFriendship();
+    });
+  }
+
+  public addFriendship() {
+    let requested_user_id = this.auth.getActualUserId();
+    let formData = new FormData();
+    formData.append('friend_id', requested_user_id);
+    let logUser = this.auth.getLogUserId();
+    console.log(requested_user_id);
+    this.http
+      .post<any>(
+        environment.urlAddress +
+          '/api/v1/user_input/requestFriendship/' +
+          logUser +
+          '/' +
+          requested_user_id,
+        formData,
+      )
+      .subscribe((data: any) => {
+        if (data.success_flag) {
+          this.show_add_friend_option = false;
+        }
+      });
+  }
+
+  public getDropdownMenuClass(navbarOpen): string {
+    if (navbarOpen) {
+      return 'dropdown-menu-left';
+    } else {
+      return 'dropdown-menu-right';
+    }
+  }
 }

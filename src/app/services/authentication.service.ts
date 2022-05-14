@@ -36,6 +36,13 @@ export class AuthenticationService {
     this.actualUserId = actualUserId;
   }
 
+  public isItemYours(userId) {
+    if ((userId == this.getLogUserId()) && (this.isLoggedIn())) {
+      return true;
+    }
+    return false;
+  }
+
   public getActualUserId(): string {
     this.actualUserId = localStorage.getItem('actual-user-id');
     return this.actualUserId;
@@ -85,6 +92,13 @@ export class AuthenticationService {
     }
 
     return postedBy;
+  }
+
+  public isIdLogUser(id) {
+    if (id === this.getLogUserId()) {
+      return true;
+    }
+    return false;
   }
 
   public isUserAdmin(): any {

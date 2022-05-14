@@ -1,83 +1,195 @@
-.dropdownStyle{
-    background-color: rgb(167, 172, 179);
-  }
-  
-  .collapseFrame {
-    background-color: #626262 !important;
-    border: 2px solid #4b4b4b !important;
-    border-radius: 6px;
-  }
-  
-  .navbarTogglerActive {
-    margin-left: 10px;
-  }
-  
-  .logButton {
-    margin-bottom: 10px !important;
-    background-color: #242020;
-  }
-  
-  .logButton:hover {
-    color:  white !important;
-    margin-bottom: 10px !important;
-    background-color: #28a745;
-  }
-  
-  .btnLogin {
-    color:  #28a745 !important;
-    border: 1px solid #28a745 !important;
-  }
-  
-  .btnLogin:hover {
-    color:  white !important;
-    background-color: #28a745;
-  }
-  
-  .settingsButton {
-    /* margin-left: 10px; */
-    margin-bottom: 9px;
-    /* margin-top: 7px; */
-  }
-  
-  .chatButton {
-    margin-left: 10px;
-    margin-bottom: 9px;
-    /* margin-top: 7px; */
-  }
-  
-  .settingsButtonDropdown {
-    margin-left: 10px;
-    margin-bottom: 9px;
-    margin-top: -7px;
-  }
-  
-  .containerNavbar {
-    border: 3px solid #4b4b4b !important;
-    border-radius: 6px;
-  }
-  
-  .backArrowImage {
-    width:90px;
-    height: 38px;
-    padding: 0px 0;
-    border: 1px solid #28a745 !important;
-    text-align: center;
-    border-radius: 5px;
-    color: black;
-    cursor: pointer;
-    font-size: 24px;
-    margin-right: 4px;
-  }
-  
-  .chatImage {
-    width:60px;
-    height: 38px;
-    padding: 0px 0;
-    border: 1px solid #28a745 !important;
-    text-align: center;
-    border-radius: 5px;
-    color: black;
-    cursor: pointer;
-    font-size: 24px;
-    margin-right: 4px;
-  }
+.dropdownStyle {
+  background-color: rgb(167, 172, 179);
+}
+
+.collapseFrame {
+  background-color: #626262 !important;
+  border: 2px solid #4b4b4b !important;
+  border-radius: 6px;
+}
+
+.navbarTogglerActive {
+  margin-left: 10px;
+}
+
+.logButton {
+  margin-bottom: 10px !important;
+  background-color: #242020;
+}
+
+.logButton:hover {
+  color: white !important;
+  margin-bottom: 10px !important;
+  background-color: #28a745;
+}
+
+.btnLogin {
+  color: #28a745 !important;
+  border: 1px solid #28a745 !important;
+}
+
+.btnLogin:hover {
+  color: white !important;
+  background-color: #28a745;
+}
+
+.settingsButton {
+  /* margin-left: 10px; */
+  margin-bottom: 9px;
+  /* margin-top: 7px; */
+}
+
+.phoneModeBack {
+  margin-top: 9px;
+  margin-left: 10px;
+  margin-bottom: 9px;
+  /* margin-top: 7px; */
+}
+
+.phoneModeAlertFriendship {
+  margin-top: 9px;
+  margin-left: 10px;
+}
+
+.phoneModeInputSearchedUser {
+  margin-left: 10px;
+}
+
+.settingsButtonDropdown {
+  margin-left: 10px;
+  margin-bottom: 9px;
+  margin-top: -7px;
+}
+
+.containerNavbar {
+  border: 3px solid #4b4b4b !important;
+  border-radius: 6px;
+}
+
+.backArrowImage {
+  width: 90px;
+  height: 38px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 4px;
+}
+
+.alertImage {
+  width: 38px;
+  height: 38px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 4px;
+}
+
+.searchImage {
+  width: 38px;
+  height: 38px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 4px;
+}
+
+.hideItem {
+  visibility: hidden;
+  display: none;
+}
+
+.searchUser{
+  height: 38px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: text;
+  margin-right: 4px;
+}
+
+.alertChat{
+  position: fixed;
+  font-weight: bold;
+  font-size: 20px;
+  top: 22px; 
+  right: 24px; 
+  color: red;
+}
+
+.imgDeleteRequestFriendship {
+  width: 30px;
+  height: 30px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 3px;
+  float: right;
+  position: relative;
+  top: -6px; 
+  right: -18px;
+  opacity: 0.4;
+}
+
+.imgDeleteRequestFriendship:hover {
+  position: relative;
+  top: -6px; 
+  right: -18px;
+  opacity: 1;
+  /* cursor: pointer !important; */
+}
+
+.imgDeleteFriendshipRequest {
+  width: 30px;
+  height: 30px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 3px;
+  float: right;
+  position: relative;
+  top: -6px; 
+  right: -18px;
+  opacity: 0.4;
+}
+
+.imgDeleteFriendshipRequest:hover {
+  position: relative;
+  top: -6px; 
+  right: -18px;
+  opacity: 1;
+  /* cursor: pointer !important; */
+}
+
+.confirmFriendshipRequest{
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: normal;
+  margin-bottom: 7px;
+}
+
+.dropdownFriendshipRequest{
+  min-width: 280px !important;
+  margin-bottom: -12px !important;
+}

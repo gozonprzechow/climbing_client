@@ -5,7 +5,7 @@
 export const environment = {
   production: true,
   urlAddress: '',
-  serverUrl: 'http://localhost:3000'
+  serverUrl: 'http://localhost:3000',
 };
 
 /*

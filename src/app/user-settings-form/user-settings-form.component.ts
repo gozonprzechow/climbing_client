@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { InputCondition } from '../models/inputLocality';
@@ -15,14 +15,11 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 @Component({
   selector: 'app-user-settings-form',
   templateUrl: './user-settings-form.component.html',
-  styleUrls: ['./user-settings-form.component.css']
+  styleUrls: ['./user-settings-form.component.css'],
 })
-
 export class UserSettingsFormComponent implements OnInit {
-
   submitted = false;
   userForm: FormGroup;
-  serviceErrors: any = {};
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
@@ -32,42 +29,54 @@ export class UserSettingsFormComponent implements OnInit {
 
   confirmModalMessage: string;
   confirmModalTitle: string;
+  titleImage: string;
+  imgURL: any;
 
   modalRef: BsModalRef;
   convertedBytes: ConvertedBytes = {
     numberofBytes: 0,
-    unit: ""
+    unit: '',
   };
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Uživatelské nastavení",
-    en: "User settings"
+    cz: 'Uživatelské nastavení',
+    en: 'User settings',
   };
   deleteAccount_txt: string;
   eleteAccountTranslation: TextTranslator = {
-    cz: "Smazat účet",
-    en: "Delete account"
+    cz: 'Smazat účet',
+    en: 'Delete account',
   };
   changePassword_txt: string;
   changePasswordTranslation: TextTranslator = {
-    cz: "Změnit heslo",
-    en: "Change password"
+    cz: 'Změnit heslo',
+    en: 'Change password',
   };
   imagesSpace_txt: string;
   imagesSpaceTranslation: TextTranslator = {
-    cz: "Velikost obrázků uživatele:",
-    en: "Size of user image:"
+    cz: 'Velikost obrázků uživatele:',
+    en: 'Size of user image:',
   };
   warningDeleteaccountTitle_txt: string;
   warningDeleteaccountTitleTranslation: TextTranslator = {
-    cz: "Smazat účet",
-    en: "Delete account"
+    cz: 'Smazat účet',
+    en: 'Delete account',
   };
   warningDeleteaccount_txt: string;
   warningDeleteaccountTranslation: TextTranslator = {
-    cz: "Opravdu chcete smazat účet?",
-    en: "Really want delete account?"
+    cz: 'Opravdu chcete smazat účet?',
+    en: 'Really want delete account?',
+  };
+  profilePhotoLabel_txt: string;
+  profilePhotoLabelTranslation: TextTranslator = {
+    cz: 'Přidat fotku',
+    en: 'Add photo',
+  };
+  saveChanges_txt: string;
+  saveChangesTranslation: TextTranslator = {
+    cz: 'Uložit změny',
+    en: 'Save changes',
   };
 
   constructor(
@@ -78,77 +87,164 @@ export class UserSettingsFormComponent implements OnInit {
     public routerService: RouterServices,
     public languageService: LanguageService,
     public mathServices: MathServices,
-    public http: HttpClient) {
-    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
-    this.deleteAccount_txt = this.languageService.getNativeLanguageText(this.eleteAccountTranslation);
-    this.changePassword_txt = this.languageService.getNativeLanguageText(this.changePasswordTranslation);
-    this.imagesSpace_txt = this.languageService.getNativeLanguageText(this.imagesSpaceTranslation);
-    this.warningDeleteaccountTitle_txt = this.languageService
-      .getNativeLanguageText(this.warningDeleteaccountTitleTranslation);
-    this.warningDeleteaccount_txt = this.languageService
-      .getNativeLanguageText(this.warningDeleteaccountTranslation);
+    public http: HttpClient,
+  ) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
+    this.deleteAccount_txt = this.languageService.getNativeLanguageText(
+      this.eleteAccountTranslation,
+    );
+    this.changePassword_txt = this.languageService.getNativeLanguageText(
+      this.changePasswordTranslation,
+    );
+    this.imagesSpace_txt = this.languageService.getNativeLanguageText(
+      this.imagesSpaceTranslation,
+    );
+    this.warningDeleteaccountTitle_txt = this.languageService.getNativeLanguageText(
+      this.warningDeleteaccountTitleTranslation,
+    );
+    this.warningDeleteaccount_txt = this.languageService.getNativeLanguageText(
+      this.warningDeleteaccountTranslation,
+    );
+    this.profilePhotoLabel_txt = this.languageService.getNativeLanguageText(
+      this.profilePhotoLabelTranslation,
+    );
+    this.saveChanges_txt = this.languageService.getNativeLanguageText(
+      this.saveChangesTranslation,
+    );
     this.confirmModalMessage = this.warningDeleteaccount_txt;
     this.confirmModalTitle = this.warningDeleteaccountTitle_txt;
   }
 
   invalidEmail() {
-    return (this.submitted && this.userForm.controls.email.errors != null);
+    return this.submitted && this.userForm.controls.email.errors != null;
   }
 
   copyServerErrors(returnData: any) {
-    this.serverServiceErrors.email = returnData.inputErrorMessage.email;
+    this.serverServiceErrors.profile_image = returnData.inputErrorMessage.profile_image;
     this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
   }
 
   cleanServerErrors() {
-    this.serverServiceErrors.email = null;
+    this.serverServiceErrors.profile_image = null;
     this.serverServiceErrors.uploadSuccess = null;
   }
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
-    this.userForm = this.formBuilder.group({
-      email: ['', [Validators.required, ValidationService.emailValidator]],
-    },
-      { updateOn: "submit" }
+    this.userForm = this.formBuilder.group(
+      {
+        // email: ['', [Validators.required, ValidationService.emailValidator]],
+        img: [null],
+      },
+      { updateOn: 'submit' },
     );
 
     let postedBy = this.auth.getLogUserId();
     this.auth.saveActualUserId(postedBy);
-    this.http.get(environment.urlAddress + '/api/v1/user_input/accountSettings/' + postedBy).subscribe((data: any) => {
-      this.userInfo = data.userInfo;
-      this.convertedBytes = this.mathServices.setUserFriendlyByteUnit(this.userInfo.imagesSize);
-      this.activePage = data.activePage;
-      this.allLocality = data.localities;
-    }, error => {
-      this.routerService.notLoginError();
-    });
+    this.http
+      .get(environment.urlAddress + '/api/v1/user_input/accountSettings/' + postedBy)
+      .subscribe(
+        (data: any) => {
+          this.userInfo = data.userInfo;
+          this.convertedBytes = this.mathServices.setUserFriendlyByteUnit(
+            this.userInfo.imagesSize,
+          );
+          this.activePage = data.activePage;
+          this.allLocality = data.localities;
+        },
+        (error) => {
+          this.routerService.notLoginError();
+        },
+      );
   }
 
   openConfirmModal() {
     const initialState = {
       list: {
-        "confirmModalMessage": this.confirmModalMessage,
-        "confirmModalTitle": this.confirmModalTitle,
-        "modalRef": BsModalRef
-      }
+        confirmModalMessage: this.confirmModalMessage,
+        confirmModalTitle: this.confirmModalTitle,
+        modalRef: BsModalRef,
+      },
     };
 
     this.modalRef = this.modalService.show(
       ConfirmModalComponent,
-      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState })
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
     );
-    this.modalRef.content.event.subscribe(res => {
+    this.modalRef.content.event.subscribe((res) => {
       this.runDeleteAccount();
     });
   }
 
   runDeleteAccount() {
     let formData = new FormData();
-    formData.append("deleteMessage", "Delete account");
-    this.http.post<any>(environment.urlAddress + '/api/v1/user_input/deleteAccount', formData).subscribe((data: any) => {
-      this.auth.logout();
-    });
+    formData.append('deleteMessage', 'Delete account');
+    this.http
+      .post<any>(environment.urlAddress + '/api/v1/user_input/deleteAccount', formData)
+      .subscribe((data: any) => {
+        this.auth.logout();
+      });
   }
 
+  onFileSelect(event) {
+    if (1 == event.target.files.length) {
+      const file = event.target.files[0];
+      console.log(file);
+      this.userForm.get('img').setValue(file);
+      if (17 < file.name.length) {
+        this.titleImage = file.name.substr(0, 14) + '...';
+      } else {
+        this.titleImage = file.name;
+      }
+      event.srcElement.value = '';
+
+      if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (_event) => {
+          this.imgURL = reader.result as string;
+        };
+      } else {
+        this.imgURL = null;
+      }
+    }
+  }
+
+  onSubmit() {
+    let formData = new FormData();
+    this.submitted = true;
+
+    if (this.userForm.invalid == true) {
+      this.cleanServerErrors();
+      this.inputCondition.successLoad = null;
+      return;
+    } else {
+      Object.keys(this.userForm.value).forEach((key) => {
+        formData.append(key, this.userForm.value[key]);
+      });
+      this.http
+        .post<any>(
+          environment.urlAddress + '/api/v1/user_input/modifyUserInfo',
+          formData,
+        )
+        .subscribe(
+          (returnData: any) => {
+            this.inputCondition.errorLoad = null;
+            this.copyServerErrors(returnData);
+            if (null == returnData.inputErrorMessage.uploadSuccess) {
+            } else {
+              this.submitted = false;
+              this.userForm.get('img').setValue('', { emitEvent: true });
+              this.imgURL = null;
+            }
+          },
+          (error) => {
+            this.routerService.notLoginError();
+            this.serverServiceErrors.uploadSuccess = null;
+          },
+        );
+    }
+  }
 }

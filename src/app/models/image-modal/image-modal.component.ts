@@ -1,22 +1,22 @@
 import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
-import { Router, ActivatedRoute } from "@angular/router";
+import { HttpClient } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { RouterServices } from '../../services/router.services';
 import { ConfirmModalComponent } from '../../models/confirm-modal/confirm-modal.component';
+import { AddOfferModalComponent } from '../../models/add-offer-modal/add-offer-modal.component';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../../services/language.service';
 
 @Component({
   selector: 'app-image-modal',
   templateUrl: './image-modal.component.html',
-  styleUrls: ['./image-modal.component.css']
+  styleUrls: ['./image-modal.component.css'],
 })
-
 export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   submitted = false;
   userForm: FormGroup;
@@ -28,7 +28,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   newCommentText: string;
   textValue: string;
 
-  numOfItemCollection: string = "";
+  numOfItemCollection: string = '';
   actualSlide: number = 0;
   defaultSlide: number = 0;
   list: any = {};
@@ -40,46 +40,48 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   confirmModalTitle: string;
   modalRef: BsModalRef;
   imgSrc: String;
+  imgPriceSrc: String;
+  imgAuctionSrc: String;
 
   comments_txt: string;
   commentsTranslation: TextTranslator = {
-    cz: "Komentáře",
-    en: "Comments"
+    cz: 'Komentáře',
+    en: 'Comments',
   };
   edit_txt: string;
   editTranslation: TextTranslator = {
-    cz: "Upravit",
-    en: "Edit"
+    cz: 'Upravit',
+    en: 'Edit',
   };
   addNew_txt: string;
   addNewTranslation: TextTranslator = {
-    cz: "Přidat nový",
-    en: "Add new"
+    cz: 'Přidat nový',
+    en: 'Add new',
   };
   submit_txt: string;
   submitTranslation: TextTranslator = {
-    cz: "Potvrdit",
-    en: "Submit"
+    cz: 'Potvrdit',
+    en: 'Submit',
   };
   cancle_txt: string;
   cancleTranslation: TextTranslator = {
-    cz: "Zrušit",
-    en: "Cancle"
+    cz: 'Zrušit',
+    en: 'Cancle',
   };
   delete_txt: string;
   deleteTranslation: TextTranslator = {
-    cz: "Smazat",
-    en: "Delete"
+    cz: 'Smazat',
+    en: 'Delete',
   };
   modalMessage_txt: string;
   modalMessageTranslation: TextTranslator = {
-    cz: "Chcete smazat tento komentář?",
-    en: "Do you want delete this comment?"
+    cz: 'Chcete smazat tento komentář?',
+    en: 'Do you want delete this comment?',
   };
   modalTitle_txt: string;
   modalTitleTranslation: TextTranslator = {
-    cz: "Smazat komentář",
-    en: "Delete comment"
+    cz: 'Smazat komentář',
+    en: 'Delete comment',
   };
 
   constructor(
@@ -92,34 +94,43 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     public route: ActivatedRoute,
     public languageService: LanguageService,
     private location: Location,
-    public auth: AuthenticationService) {
-    this.comments_txt = this.languageService.getNativeLanguageText(this.commentsTranslation);
+    public auth: AuthenticationService,
+  ) {
+    this.comments_txt = this.languageService.getNativeLanguageText(
+      this.commentsTranslation,
+    );
     this.edit_txt = this.languageService.getNativeLanguageText(this.editTranslation);
     this.addNew_txt = this.languageService.getNativeLanguageText(this.addNewTranslation);
     this.submit_txt = this.languageService.getNativeLanguageText(this.submitTranslation);
     this.cancle_txt = this.languageService.getNativeLanguageText(this.cancleTranslation);
     this.delete_txt = this.languageService.getNativeLanguageText(this.deleteTranslation);
-    this.modalMessage_txt = this.languageService.getNativeLanguageText(this.modalMessageTranslation);
-    this.modalTitle_txt = this.languageService.getNativeLanguageText(this.modalTitleTranslation);
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(
+      this.modalMessageTranslation,
+    );
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(
+      this.modalTitleTranslation,
+    );
 
-    this.prefix = environment.serverUrl + "/static/uploads/images/";
+    // this.prefix = environment.serverUrl + '/static/uploads/images/';
     this.confirmModalMessage = this.modalMessage_txt;
     this.confirmModalTitle = this.modalTitle_txt;
     this.imgSrc = '../../../assets/skins/like_button.png';
+    this.imgPriceSrc = '../../../assets/skins/insert_prize_collection.png';
+    this.imgAuctionSrc = '../../../assets/skins/insert_auction_collection.png';
   }
 
   public subscriber: any;
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     if (this.previousUrl) {
-      this.location.go(this.previousUrl);
+      this.changeUrl(this.previousUrl);
     }
   }
 
   ngAfterViewChecked() {
+    this.prefix = environment.serverUrl + '/'+ this.list.achatdbCollection.imgPath;
     if (this.list.actualSlide) {
       this.actualSlide = this.list.actualSlide;
       this.list.actualSlide = null;
@@ -129,7 +140,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
       this.numOfItemCollection = this.list.numOfItemCollection;
       this.list.numOfItemCollection = null;
     } else if (0 === this.list.numOfItemCollection) {
-      this.numOfItemCollection = "0";
+      this.numOfItemCollection = '0';
       this.list.numOfItemCollection = null;
     }
 
@@ -138,15 +149,34 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
       this.list.previousUrl = null;
     }
 
-    if ("./" == this.previousUrl) {
-      this.location.go(this.previousUrl + "0" + "/" +
-        this.list.achatdbCollection._id + "/" + this.actualSlide);
+    if ('./' == this.previousUrl) {
+      this.changeUrl(
+        this.previousUrl +
+          '0' +
+          '/' +
+          this.list.achatdbCollection._id +
+          '/' +
+          this.actualSlide,
+      );
     } else {
-      if (this.numOfItemCollection && ("./" != this.previousUrl)) {
-        this.location.go(this.previousUrl + "/" + this.numOfItemCollection + "/" +
-          this.list.achatdbCollection._id + "/" + this.actualSlide);
+      if (this.numOfItemCollection && './' != this.previousUrl) {
+        this.changeUrl(
+          this.previousUrl +
+            '/' +
+            this.numOfItemCollection +
+            '/' +
+            this.list.achatdbCollection._id +
+            '/' +
+            this.actualSlide,
+        );
       } else {
-        this.location.go(this.previousUrl + "/" + this.list.achatdbCollection._id + "/" + this.actualSlide);
+        this.changeUrl(
+          this.previousUrl +
+            '/' +
+            this.list.achatdbCollection._id +
+            '/' +
+            this.actualSlide,
+        );
       }
     }
     this.setSlide(this.actualSlide);
@@ -159,17 +189,17 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   openConfirmModal(achatdbCollection, communityComment) {
     const initialState = {
       list: {
-        "confirmModalMessage": this.confirmModalMessage,
-        "confirmModalTitle": this.confirmModalTitle,
-        "modalRef": BsModalRef
-      }
+        confirmModalMessage: this.confirmModalMessage,
+        confirmModalTitle: this.confirmModalTitle,
+        modalRef: BsModalRef,
+      },
     };
 
     this.modalRef = this.modalService.show(
       ConfirmModalComponent,
-      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState })
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
     );
-    this.modalRef.content.event.subscribe(res => {
+    this.modalRef.content.event.subscribe((res) => {
       this.deleteComment(achatdbCollection, communityComment);
     });
   }
@@ -202,25 +232,123 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     this.actualSlide = Number(event);
 
     if (this.numOfItemCollection) {
-      this.location.go(this.previousUrl + "/" + this.numOfItemCollection + "/" +
-        this.list.achatdbCollection._id + "/" + this.actualSlide);
+      this.changeUrl(
+        this.previousUrl +
+          '/' +
+          this.numOfItemCollection +
+          '/' +
+          this.list.achatdbCollection._id +
+          '/' +
+          this.actualSlide,
+      );
     } else {
-      this.location.go(this.previousUrl + "/" + this.list.achatdbCollection._id + "/" + this.actualSlide);
+      this.changeUrl(
+        this.previousUrl + '/' + this.list.achatdbCollection._id + '/' + this.actualSlide,
+      );
     }
   }
 
   public runLikeImage(achatdbCollection) {
     if (this.auth.isLoggedIn()) {
       let formData = new FormData();
-      formData.append("achatdbCollection", JSON.stringify(achatdbCollection));
+      formData.append('achatdbCollection', JSON.stringify(achatdbCollection));
 
       let postedBy = this.auth.getLogUserId();
-      this.subscriber = this.route.params.subscribe(params => {
-        this.http.post<any>(environment.urlAddress + '/api/v1/user_input/like/' + params.uid + '/' + postedBy, formData).subscribe((data: any) => {
-          this.list.achatdbCollection.likes.quantity = data.likes.quantity;
-        });
+      this.subscriber = this.route.params.subscribe((params) => {
+        this.http
+          .post<any>(
+            environment.urlAddress +
+              '/api/v1/user_input/like/' +
+              params.uid +
+              '/' +
+              postedBy,
+            formData,
+          )
+          .subscribe((data: any) => {
+            this.list.achatdbCollection.likes.quantity = data.likes.quantity;
+          });
       });
     }
+  }
+
+  public ifLoginLikeImage(status) {
+    if (this.imageInformation && this.auth.isLoggedIn() && 0 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifLogoutLikeImage(status) {
+    if (this.imageInformation && !this.auth.isLoggedIn() && 0 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifLike(status) {
+    if (this.imageInformation && 0 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifLoginPriceBindImage(status) {
+    if (this.imageInformation && this.auth.isLoggedIn() && 1 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifLogoutPriceBindImage(status) {
+    if (this.imageInformation && !this.auth.isLoggedIn() && 1 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifPrice(status) {
+    if (this.imageInformation && 1 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifLoginAuctionBindImage(status) {
+    if (this.imageInformation && this.auth.isLoggedIn() && 2 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifLogoutAuctionBindImage(status) {
+    if (this.imageInformation && !this.auth.isLoggedIn() && 2 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifAuction(status) {
+    if (this.imageInformation && 2 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public sendOfferModal() {
+    const initialState = {
+      list: {
+        achat_collection: this.list.achatdbCollection,
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.modalRef = this.modalService.show(
+      AddOfferModalComponent,
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
+    );
+    this.modalRef.content.event.subscribe((data: any) => {
+      this.list.achatdbCollection.price = data.new_price;
+    });
   }
 
   public seeComments(achatdbCollection) {
@@ -234,30 +362,47 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   public submitComment(achatdbCollection) {
     this.newCommentText = this.textValue;
     let formData = new FormData();
-    formData.append("mainImage", achatdbCollection._id);
-    formData.append("newCommentText", this.newCommentText);
+    formData.append('mainImage', achatdbCollection._id);
+    formData.append('newCommentText', this.newCommentText);
 
     let postedBy = this.auth.getLogUserId();
-    this.subscriber = this.route.params.subscribe(params => {
-      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/comment/' + params.uid + '/' + postedBy, formData)
+    this.subscriber = this.route.params.subscribe((params) => {
+      this.http
+        .post<any>(
+          environment.urlAddress +
+            '/api/v1/user_input/comment/' +
+            params.uid +
+            '/' +
+            postedBy,
+          formData,
+        )
         .subscribe((data: any) => {
           this.list.achatdbCollection.communityComments.push(data.communityComment);
-          this.textValue = "";
+          this.textValue = '';
         });
     });
   }
 
   public deleteComment(achatdbCollection, communityComment) {
     let formData = new FormData();
-    formData.append("mainImageId", achatdbCollection._id);
-    formData.append("communityCommentId", communityComment._id);
-    formData.append("communityCommentCommentBy", communityComment.commentBy);
+    formData.append('mainImageId', achatdbCollection._id);
+    formData.append('communityCommentId', communityComment._id);
+    formData.append('communityCommentCommentBy', communityComment.commentBy);
 
     let postedBy = this.auth.getLogUserId();
-    this.subscriber = this.route.params.subscribe(params => {
-      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/deleteComment/' + params.uid + '/' + postedBy, formData)
+    this.subscriber = this.route.params.subscribe((params) => {
+      this.http
+        .post<any>(
+          environment.urlAddress +
+            '/api/v1/user_input/deleteComment/' +
+            params.uid +
+            '/' +
+            postedBy,
+          formData,
+        )
         .subscribe((data: any) => {
-          this.list.achatdbCollection.communityComments = data.achatdbCollection.communityComments;
+          this.list.achatdbCollection.communityComments =
+            data.achatdbCollection.communityComments;
         });
     });
   }
@@ -276,11 +421,14 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   public isItemYours(userId) {
     if (userId == this.auth.getLogUserId()) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
+  private changeUrl(url) {
+    if (this.list.dontUseUrl !== true) {
+      this.location.go(url);
+    }
+  }
 }
-

@@ -1,17 +1,16 @@
-.mainFormClass
-{
+.mainFormClass {
   width: 60%;
   margin-left: auto;
   margin-right: auto;
   color: rgb(160, 160, 160);
 }
 
-.control-label.required:after { 
+.control-label.required:after {
   color: #d00;
-  content: "*";
+  content: '*';
   position: absolute;
   margin-left: 5px;
-  top:7px;
+  top: 7px;
 }
 
 .submitContainer {
@@ -20,7 +19,7 @@
 }
 
 .submitButton {
-  width:150px;
+  width: 150px;
   padding: 8px 0;
   border: 2px solid rgb(48, 136, 207);
   text-align: center;
@@ -35,12 +34,11 @@
   color: white;
 }
 
-#successLoadCondition
-{
+#successLoadCondition {
   color: rgb(43, 155, 43);
 }
 
 .inputDescriptionBox {
-  width:100%;
+  width: 100%;
   height: 150px;
 }

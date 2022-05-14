@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { InputCondition } from '../models/inputLocality';
@@ -15,11 +15,9 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 @Component({
   selector: 'app-admin-hlavni-form',
   templateUrl: './admin-hlavni-form.component.html',
-  styleUrls: ['./admin-hlavni-form.component.css']
+  styleUrls: ['./admin-hlavni-form.component.css'],
 })
-
 export class AdminHlavniFormComponent implements OnInit {
-
   submitted = false;
   userForm: FormGroup;
   serviceErrors: any = {};
@@ -36,38 +34,38 @@ export class AdminHlavniFormComponent implements OnInit {
   modalRef: BsModalRef;
   convertedBytes: ConvertedBytes = {
     numberofBytes: 0,
-    unit: ""
+    unit: '',
   };
 
   deleteAccount_txt: string;
   eleteAccountTranslation: TextTranslator = {
-    cz: "Smazat účet",
-    en: "Delete account"
+    cz: 'Smazat účet',
+    en: 'Delete account',
   };
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Administrátorská stránka",
-    en: "Admin page"
+    cz: 'Administrátorská stránka',
+    en: 'Admin page',
   };
   registeredUsers_txt: string;
   registeredUsersTranslation: TextTranslator = {
-    cz: "Aktuálně registrovaní uživatelé:",
-    en: "Current registered users:"
+    cz: 'Aktuálně registrovaní uživatelé:',
+    en: 'Current registered users:',
   };
   imagesSpace_txt: string;
   imagesSpaceTranslation: TextTranslator = {
-    cz: "Uživatelé zabírají na obrázkách paměti:",
-    en: "Users spend on images space:"
+    cz: 'Uživatelé zabírají na obrázkách paměti:',
+    en: 'Users spend on images space:',
   };
   warningDeleteUserTitle_txt: string;
   warningDeleteUserTitleTranslation: TextTranslator = {
-    cz: "Smazat uživatele",
-    en: "Delete user"
+    cz: 'Smazat uživatele',
+    en: 'Delete user',
   };
   warningDeleteUser_txt: string;
   warningDeleteUserTranslation: TextTranslator = {
-    cz: "Opravdu chcete smazat tohoto uživatele?",
-    en: "Really want delete this user?"
+    cz: 'Opravdu chcete smazat tohoto uživatele?',
+    en: 'Really want delete this user?',
   };
 
   constructor(
@@ -78,21 +76,32 @@ export class AdminHlavniFormComponent implements OnInit {
     public routerService: RouterServices,
     public mathServices: MathServices,
     public languageService: LanguageService,
-    public http: HttpClient) {
-    this.deleteAccount_txt = this.languageService.getNativeLanguageText(this.eleteAccountTranslation);
-    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
-    this.registeredUsers_txt = this.languageService.getNativeLanguageText(this.registeredUsersTranslation);
-    this.imagesSpace_txt = this.languageService.getNativeLanguageText(this.imagesSpaceTranslation);
-    this.warningDeleteUserTitle_txt = this.languageService
-      .getNativeLanguageText(this.warningDeleteUserTitleTranslation);
-    this.warningDeleteUser_txt = this.languageService
-      .getNativeLanguageText(this.warningDeleteUserTranslation);
+    public http: HttpClient,
+  ) {
+    this.deleteAccount_txt = this.languageService.getNativeLanguageText(
+      this.eleteAccountTranslation,
+    );
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
+    this.registeredUsers_txt = this.languageService.getNativeLanguageText(
+      this.registeredUsersTranslation,
+    );
+    this.imagesSpace_txt = this.languageService.getNativeLanguageText(
+      this.imagesSpaceTranslation,
+    );
+    this.warningDeleteUserTitle_txt = this.languageService.getNativeLanguageText(
+      this.warningDeleteUserTitleTranslation,
+    );
+    this.warningDeleteUser_txt = this.languageService.getNativeLanguageText(
+      this.warningDeleteUserTranslation,
+    );
     this.confirmModalMessage = this.warningDeleteUser_txt;
     this.confirmModalTitle = this.warningDeleteUserTitle_txt;
   }
 
   invalidEmail() {
-    return (this.submitted && this.userForm.controls.email.errors != null);
+    return this.submitted && this.userForm.controls.email.errors != null;
   }
 
   copyServerErrors(returnData: any) {
@@ -107,38 +116,46 @@ export class AdminHlavniFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
-    this.userForm = this.formBuilder.group({
-      email: ['', [Validators.required, ValidationService.emailValidator]],
-    },
-      { updateOn: "submit" }
+    this.userForm = this.formBuilder.group(
+      {
+        email: ['', [Validators.required, ValidationService.emailValidator]],
+      },
+      { updateOn: 'submit' },
     );
 
     let postedBy = this.auth.getLogUserId();
     this.auth.saveActualUserId(postedBy);
-    this.http.get(environment.urlAddress + '/api/v1/user_input/deleteAccountAdmin/' + postedBy).subscribe((data: any) => {
-      this.serverInfo = data.serverInfo;
-      this.convertedBytes = this.mathServices.setUserFriendlyByteUnit(this.serverInfo.imagesSize);
-      this.activePage = data.activePage;
-      this.allLocality = data.localities;
-    }, error => {
-      this.routerService.notLoginError();
-    });
+    this.http
+      .get(environment.urlAddress + '/api/v1/user_input/deleteAccountAdmin/' + postedBy)
+      .subscribe(
+        (data: any) => {
+          this.serverInfo = data.serverInfo;
+          this.convertedBytes = this.mathServices.setUserFriendlyByteUnit(
+            this.serverInfo.imagesSize,
+          );
+          this.activePage = data.activePage;
+          this.allLocality = data.localities;
+        },
+        (error) => {
+          this.routerService.notLoginError();
+        },
+      );
   }
 
   openConfirmModal() {
     const initialState = {
       list: {
-        "confirmModalMessage": this.confirmModalMessage,
-        "confirmModalTitle": this.confirmModalTitle,
-        "modalRef": BsModalRef
-      }
+        confirmModalMessage: this.confirmModalMessage,
+        confirmModalTitle: this.confirmModalTitle,
+        modalRef: BsModalRef,
+      },
     };
 
     this.modalRef = this.modalService.show(
       ConfirmModalComponent,
-      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState })
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
     );
-    this.modalRef.content.event.subscribe(res => {
+    this.modalRef.content.event.subscribe((res) => {
       this.onSubmit();
     });
   }
@@ -148,36 +165,36 @@ export class AdminHlavniFormComponent implements OnInit {
     this.submitted = true;
 
     if (this.userForm.invalid == true) {
-
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
       return;
-
-    }
-    else {
-
-      Object.keys(this.userForm.value).forEach(key => {
+    } else {
+      Object.keys(this.userForm.value).forEach((key) => {
         formData.append(key, this.userForm.value[key]);
       });
-      formData.append("deleteMessage", "Delete account by admin");
-      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/deleteAccountAdmin', formData).subscribe((returnData: any) => {
+      formData.append('deleteMessage', 'Delete account by admin');
+      this.http
+        .post<any>(
+          environment.urlAddress + '/api/v1/user_input/deleteAccountAdmin',
+          formData,
+        )
+        .subscribe(
+          (returnData: any) => {
+            this.inputCondition.errorLoad = returnData.deleteSuccess;
+            this.serverInfo = returnData.serverInfo;
+            this.copyServerErrors(returnData);
 
-        this.inputCondition.errorLoad = returnData.deleteSuccess;
-        this.serverInfo = returnData.serverInfo;
-        this.copyServerErrors(returnData);
-
-        if (null == returnData.inputErrorMessage.uploadSuccess) {
-        }
-        else {
-          this.submitted = false;
-          this.userForm.reset();
-        }
-
-      }, error => {
-        this.routerService.notLoginError();
-        this.serverServiceErrors.uploadSuccess = null;
-      });
+            if (null == returnData.inputErrorMessage.uploadSuccess) {
+            } else {
+              this.submitted = false;
+              this.userForm.reset();
+            }
+          },
+          (error) => {
+            this.routerService.notLoginError();
+            this.serverServiceErrors.uploadSuccess = null;
+          },
+        );
     }
   }
-
 }

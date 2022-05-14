@@ -1,69 +1,156 @@
 <div class="containerOfNav">
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #242020;">
+  <nav
+    class="navbar navbar-expand-md navbar-dark fixed-top"
+    style="background-color: #242020"
+  >
     <a class="navbar-brand" href="#"></a>
     <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
       <span class="navbar-toggler-icon"></span>
     </button>
     <!-- <div class="containerNavbar"> -->
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault"
-      [ngClass]="{ 'show': navbarOpen, 'collapseFrame': navbarOpen }">
+    <div
+      class="collapse navbar-collapse"
+      id="navbarsExampleDefault"
+      [ngClass]="{ show: navbarOpen, collapseFrame: navbarOpen }"
+    >
       <ul class="navbar-nav mr-auto">
         <li *ngIf="ifDisplayHome()" class="nav-item">
-          <a class="nav-link" (click)="routeToYourLocalities() "
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{home_txt}}</a>
+          <a
+            class="nav-link"
+            (click)="routeToYourLocalities()"
+            [ngClass]="{ navbarTogglerActive: navbarOpen }"
+            >{{ home_txt }}</a
+          >
         </li>
-        <li *ngIf="ifDisplayLocalities()" class={{activePage.homePage}}>
-          <a class="nav-link" (click)="routeToUserLocalities()" [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{userLocalities_txt}}</a>
+        <li *ngIf="ifDisplayLocalities()" class="{{ activePage.homePage }}">
+          <a
+            class="nav-link"
+            (click)="routeToUserLocalities()"
+            [ngClass]="{ navbarTogglerActive: navbarOpen }"
+            >{{ userLocalities_txt }}</a
+          >
         </li>
-        <li *ngIf="ifDisplayLocality()" class={{activePage.loaclity}} ngbDropdown>
-          <a class="nav-link dropdown-toggle" id="dropdown01" ngbDropdownToggle
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{locality_txt}}</a>
-          <div ngbDropdownMenu class='dropdownStyle' aria-labelledby="dropdown01">
-            <a *ngFor="let locality of allLocality" class="dropdown-item"
-              (click)="routeToUserLocality(locality.name)">{{locality.name}}</a>
+        <li *ngIf="ifDisplayLocality()" class="{{ activePage.loaclity }}" ngbDropdown>
+          <a
+            class="nav-link dropdown-toggle"
+            id="dropdown01"
+            ngbDropdownToggle
+            [ngClass]="{ navbarTogglerActive: navbarOpen }"
+            >{{ locality_txt }}</a
+          >
+          <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown01">
+            <a
+              *ngFor="let locality of allLocality"
+              class="dropdown-item"
+              (click)="routeToUserLocality(locality.name)"
+              >{{ locality.name }}</a
+            >
           </div>
         </li>
-        <li *ngIf="ifDisplayAdd()" class={{activePage.add}} ngbDropdown>
-          <a class="nav-link dropdown-toggle" id="dropdown02" ngbDropdownToggle
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{add_txt}}</a>
-          <div ngbDropdownMenu class='dropdownStyle' aria-labelledby="dropdown02">
-            <a class="dropdown-item" (click)='routerService.inputLocality()'>{{inputLocality_txt}}</a>
-            <a class="dropdown-item" (click)='routerService.inputMineral()'>{{inputMineral_txt}}</a>
+        <li *ngIf="ifDisplayAdd()" class="{{ activePage.add }}" ngbDropdown>
+          <a
+            class="nav-link dropdown-toggle"
+            id="dropdown02"
+            ngbDropdownToggle
+            [ngClass]="{ navbarTogglerActive: navbarOpen }"
+            >{{ add_txt }}</a
+          >
+          <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown02">
+            <a class="dropdown-item" (click)="routerService.inputLocality()">{{
+              inputLocality_txt
+            }}</a>
+            <a class="dropdown-item" (click)="routerService.inputMineral()">{{
+              inputMineral_txt
+            }}</a>
           </div>
         </li>
-        <li class={{activePage.otherUsers}}>
-          <a class="nav-link" (click)='routerService.otherUsers(0)'
-            [ngClass]="{ 'navbarTogglerActive': navbarOpen }">{{otherUsers_txt}}</a>
+        <li class="{{ activePage.otherUsers }}">
+          <a
+            class="nav-link"
+            (click)="routerService.otherUsers(0)"
+            [ngClass]="{ navbarTogglerActive: navbarOpen }"
+            >{{ otherUsers_txt }}</a
+          >
         </li>
       </ul>
-      <!-- <form class="form-inline my-2 my-lg-0" [ngClass]="{ 'navbarTogglerActive': navbarOpen }">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form> -->
-      <!-- <img class="settingsImage" src="../../../assets/skins/Like_medium.jpg"> -->
-      <div ngbDropdown>
-        <img *ngIf="auth.isLoggedIn()" class="chatImage" [src]="imgChatSrc"
-          (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
-          (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
-          (click)='routerService.chat()'
-          [ngClass]="{ 'chatButton': navbarOpen }">
 
-        <img *ngIf="auth.isLoggedIn()" class="settingsImage dropdown-toggle" ngbDropdownToggle [src]="imgSrc"
+      <div ngbDropdown>
+        <div *ngIf="ifDisplayAddFriend()" class="chatImageBox">
+          <div class="chatImageBoxRelative">
+            <img
+              class="addFriendImage"
+              [src]="imgAddSrc"
+              (mouseover)="imgAddSrc = '../../../assets/skins/add_friend_button_hover.png'"
+              (mouseout)="imgAddSrc = '../../../assets/skins/add_friend_button.png'"
+              (click)="openAddFriendshipModal()"
+              [ngClass]="{ chatButton: navbarOpen }"
+            />
+          </div>
+        </div>
+
+        <div class="chatImageBox">
+          <div class="chatImageBoxRelative">
+            <img
+              *ngIf="auth.isLoggedIn()"
+              class="chatImage"
+              [src]="imgChatSrc"
+              (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
+              (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
+              (click)="routerService.chat(null, 0)"
+              [ngClass]="{ chatButton: navbarOpen }"
+            />
+            <div class="chatImageBoxAbsolute">
+              <p *ngIf="message_alert" class="alertChat">!</p>
+            </div>
+          </div>
+        </div>
+
+        <img
+          *ngIf="auth.isLoggedIn()"
+          class="settingsImage dropdown-toggle"
+          ngbDropdownToggle
+          [src]="imgSrc"
           (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
           (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
-          [ngClass]="{ 'settingsButton': navbarOpen }">
-        <div *ngIf="auth.isLoggedIn()" ngbDropdownMenu class='{{getDropdownMenuClass(navbarOpen)}} dropdownStyle' aria-labelledby="dropdown03"
-          [ngClass]="{ 'settingsButtonDropdown': navbarOpen}">
-          <a *ngIf="this.auth.isLoggedIn()" class="dropdown-item" (click)='routerService.userSettings()'>{{userSettings_txt}}
+          [ngClass]="{ settingsButton: navbarOpen }"
+        />
+        <div
+          *ngIf="auth.isLoggedIn()"
+          ngbDropdownMenu
+          class="{{ getDropdownMenuClass(navbarOpen) }} dropdownStyle"
+          aria-labelledby="dropdown03"
+          [ngClass]="{ settingsButtonDropdown: navbarOpen }"
+        >
+          <a
+            *ngIf="this.auth.isLoggedIn()"
+            class="dropdown-item"
+            (click)="routerService.userSettings()"
+            >{{ userSettings_txt }}
           </a>
-          <a *ngIf="this.auth.isUserAdmin()" class="dropdown-item" (click)='routerService.adminHlavni()'>{{adminPage_txt}}
+          <a
+            *ngIf="this.auth.isUserAdmin()"
+            class="dropdown-item"
+            (click)="routerService.adminHlavni()"
+            >{{ adminPage_txt }}
           </a>
         </div>
 
-        <button *ngIf="auth.isLoggedIn()" class="btn btnLogin" (click)="logOutHandler()"
-          [ngClass]="{ 'logButton': navbarOpen }">{{logOut_txt}}</button>
-        <button *ngIf="!auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0" (click)="logInHandler()"
-          [ngClass]="{ 'logButton': navbarOpen }">{{logIn_txt}}</button>
+        <button
+          *ngIf="auth.isLoggedIn()"
+          class="btn btnLogin"
+          (click)="logOutHandler()"
+          [ngClass]="{ logButton: navbarOpen }"
+        >
+          {{ logOut_txt }}
+        </button>
+        <button
+          *ngIf="!auth.isLoggedIn()"
+          class="btn btn-outline-success my-2 my-sm-0"
+          (click)="logInHandler()"
+          [ngClass]="{ logButton: navbarOpen }"
+        >
+          {{ logIn_txt }}
+        </button>
       </div>
     </div>
     <!-- </div> -->

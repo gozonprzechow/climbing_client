@@ -1,37 +1,33 @@
-.wrapper
-{
+.wrapper {
   /* color: rgb(160, 160, 160); */
   margin-left: auto;
   margin-right: auto;
 }
 
-.mainFormClass
-{
-    color: white;
-    text-align: center;
-    margin-left: 80px;
-    margin-right: 150px;
+.mainFormClass {
+  color: white;
+  text-align: center;
+  margin-left: 80px;
+  margin-right: 150px;
 }
 
-.imageLocality
-{
+.imageLocality {
   display: block;
   margin-left: auto;
   margin-right: auto;
-    cursor: pointer;
-    border: 5px;  	
-    border-style: solid;
-    border-color: #4b4b4b;
-    border-radius: 6px;
+  cursor: pointer;
+  border: 5px;
+  border-style: solid;
+  border-color: #4b4b4b;
+  border-radius: 6px;
 }
 
-.enderLine
-{
+.enderLine {
   min-width: 240px;
   background-color: rgb(177, 185, 189);
 }
 
-.top-right{
+.top-right {
   /* position: absolute;
   top: 20px;
   right: 17px; */
@@ -41,7 +37,7 @@
   /* cursor: pointer !important; */
 }
 
-.top-right:hover{
+.top-right:hover {
   /* position: absolute;
   top: 20px;
   right: 17px; */
@@ -67,7 +63,7 @@
   margin-left: 7px;
 }
 
-.dropdownStyle{
+.dropdownStyle {
   background-color: rgb(167, 172, 179);
 }
 
@@ -84,7 +80,7 @@
 }
 
 .pagingButtons {
-  width:45px;
+  width: 45px;
   height: 45px;
   padding: 0px 0;
   border: 3px solid rgb(48, 136, 207) !important;
@@ -98,9 +94,7 @@
 }
 
 .pagingButtons.active {
-
   background-color: rgb(75, 73, 73);
-
 }
 
 /* Style on hover colour */

@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
@@ -11,9 +11,8 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 @Component({
   selector: 'app-modify-locality-form',
   templateUrl: './modify-locality-form.component.html',
-  styleUrls: ['./modify-locality-form.component.css']
+  styleUrls: ['./modify-locality-form.component.css'],
 })
-
 export class ModifyLocalityFormComponent implements OnInit {
   submitted = false;
   userForm: FormGroup;
@@ -33,23 +32,23 @@ export class ModifyLocalityFormComponent implements OnInit {
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Upravit lokalitu",
-    en: "Modify locality"
+    cz: 'Upravit lokalitu',
+    en: 'Modify locality',
   };
   name_txt: string;
   nameTranslation: TextTranslator = {
-    cz: "Jméno",
-    en: "Name"
+    cz: 'Jméno',
+    en: 'Name',
   };
   description_txt: string;
   descriptionTranslation: TextTranslator = {
-    cz: "Popis",
-    en: "Description"
+    cz: 'Popis',
+    en: 'Description',
   };
   store_txt: string;
   storeTranslation: TextTranslator = {
-    cz: "Uložit",
-    en: "Store"
+    cz: 'Uložit',
+    en: 'Store',
   };
 
   constructor(
@@ -59,19 +58,24 @@ export class ModifyLocalityFormComponent implements OnInit {
     public modalService: BsModalService,
     public routerService: RouterServices,
     public languageService: LanguageService,
-    public auth: AuthenticationService) {
-    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    public auth: AuthenticationService,
+  ) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
     this.name_txt = this.languageService.getNativeLanguageText(this.nameTranslation);
-    this.description_txt = this.languageService.getNativeLanguageText(this.descriptionTranslation);
+    this.description_txt = this.languageService.getNativeLanguageText(
+      this.descriptionTranslation,
+    );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
   }
 
   public invalidName() {
-    return (this.submitted && this.userForm.controls.name.errors != null);
+    return this.submitted && this.userForm.controls.name.errors != null;
   }
 
   public invalidDescription() {
-    return (this.submitted && this.userForm.controls.description.errors != null);
+    return this.submitted && this.userForm.controls.description.errors != null;
   }
 
   copyServerErrors(returnData: any) {
@@ -94,27 +98,35 @@ export class ModifyLocalityFormComponent implements OnInit {
     this.product = history.state;
     if (this.product.data == null) {
       this.routerService.inputLocality();
-    }
-    else {
+    } else {
       this.localityUnderChange = this.product.data.locality;
       this.previousRoute = this.product.data.previousRoute;
     }
 
-    this.userForm = this.formBuilder.group({
-      name: [this.localityUnderChange.name, [Validators.required, Validators.maxLength(50)]],
-      description: [this.localityUnderChange.description],
-    },
-      { updateOn: "submit" }
+    this.userForm = this.formBuilder.group(
+      {
+        name: [
+          this.localityUnderChange.name,
+          [Validators.required, Validators.maxLength(50)],
+        ],
+        description: [this.localityUnderChange.description],
+      },
+      { updateOn: 'submit' },
     );
 
     let postedBy = this.auth.getLogUserId();
-    this.http.get(environment.urlAddress + '/api/v1/user_input/locality/' + postedBy).subscribe((data: any) => {
-      this.guid = data.guid;
-      this.activePage = data.activePage;
-      this.allLocality = data.localities;
-    }, error => {
-      this.routerService.login();
-    });
+    this.http
+      .get(environment.urlAddress + '/api/v1/user_input/locality/' + postedBy)
+      .subscribe(
+        (data: any) => {
+          this.guid = data.guid;
+          this.activePage = data.activePage;
+          this.allLocality = data.localities;
+        },
+        (error) => {
+          this.routerService.login();
+        },
+      );
   }
 
   onSubmit() {
@@ -122,34 +134,35 @@ export class ModifyLocalityFormComponent implements OnInit {
     this.submitted = true;
 
     if (this.userForm.invalid == true) {
-
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
       return;
-
-    }
-    else {
-      Object.keys(this.userForm.value).forEach(key => {
+    } else {
+      Object.keys(this.userForm.value).forEach((key) => {
         formData.append(key, this.userForm.value[key]);
       });
 
-
       let postedBy = this.auth.getLogUserId();
-      formData.append("locality", JSON.stringify(this.localityUnderChange));
-      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/modifyLocality/' + postedBy, formData).subscribe((returnData: any) => {
+      formData.append('locality', JSON.stringify(this.localityUnderChange));
+      this.http
+        .post<any>(
+          environment.urlAddress + '/api/v1/user_input/modifyLocality/' + postedBy,
+          formData,
+        )
+        .subscribe(
+          (returnData: any) => {
+            this.copyReturnData(returnData);
 
-        this.copyReturnData(returnData);
-
-        if (null == returnData.inputErrorMessage.uploadSuccess) {
-        }
-        else {
-          this.setDataOnUploadSuccess();
-        }
-
-      }, error => {
-        this.routerService.notLoginError();
-        this.serverServiceErrors.uploadSuccess = null;
-      });
+            if (null == returnData.inputErrorMessage.uploadSuccess) {
+            } else {
+              this.setDataOnUploadSuccess();
+            }
+          },
+          (error) => {
+            this.routerService.notLoginError();
+            this.serverServiceErrors.uploadSuccess = null;
+          },
+        );
     }
   }
 
@@ -165,5 +178,4 @@ export class ModifyLocalityFormComponent implements OnInit {
     this.userForm.reset();
     this.routerService.returnToPreviousPage(this.previousRoute);
   }
-
 }

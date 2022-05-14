@@ -1,41 +1,60 @@
-<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
+<app-main-navbar-menu
+  [allLocality]="allLocality"
+  [activePage]="activePage"
+></app-main-navbar-menu>
 
-<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
+<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
 
 <div class="container">
   <div class="mainFormClass">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-
       <div class="form-group" [ngClass]="{ 'has-error': invalidName() }">
         <!-- First Name -->
         <div class="col-sm-12">
-          <label for="name" class="control-label required">{{name_txt}}</label>
-          <input type="text" formControlName="name" class="form-control" id="name" name="name" placeholder=name_txt>
+          <label for="name" class="control-label required">{{ name_txt }}</label>
+          <input
+            type="text"
+            formControlName="name"
+            class="form-control"
+            id="name"
+            name="name"
+            placeholder="name_txt"
+          />
           <p *ngIf="invalidName()" id="name_error" class="help-block">
-            {{this.serviceErrors.name || 'Invalid name.'}}</p>
-          <p class="help-block"> {{this.serverServiceErrors.name}}</p>
+            {{ this.serviceErrors.name || 'Invalid name.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.name }}</p>
         </div>
       </div>
 
       <div class="form-group" [ngClass]="{ 'has-error': invalidDescription() }">
         <!-- Last Name -->
         <div class="col-sm-12">
-          <label for="description" class="control-label required">{{description_txt}}</label>
-          <textarea type="text" formControlName="description" class="form-control inputDescriptionBox" id="description"
-            name="description" placeholder=description_txt></textarea>
+          <label for="description" class="control-label required">{{
+            description_txt
+          }}</label>
+          <textarea
+            type="text"
+            formControlName="description"
+            class="form-control inputDescriptionBox"
+            id="description"
+            name="description"
+            placeholder="description_txt"
+          ></textarea>
           <p *ngIf="invalidDescription()" id="description_error" class="help-block">
-            {{this.serviceErrors.description || 'Invalid description.'}}</p>
-          <p class="help-block"> {{this.serverServiceErrors.description}}</p>
+            {{ this.serviceErrors.description || 'Invalid description.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.description }}</p>
         </div>
       </div>
 
       <div class="submitContainer">
-        <p id="successLoadCondition"> {{this.serverServiceErrors.uploadSuccess}}</p>
+        <p id="successLoadCondition">{{ this.serverServiceErrors.uploadSuccess }}</p>
       </div>
 
       <div class="submitContainer">
         <p class="help-block">
-          {{this.inputCondition.errorLoad}}{{serverServiceErrors.errorMessage}}
+          {{ this.inputCondition.errorLoad }}{{ serverServiceErrors.errorMessage }}
         </p>
       </div>
 
@@ -43,7 +62,7 @@
         <div class="submitContainer">
           <div class="col-sm-12">
             <!-- Register Button -->
-            <button type="submit" class="submitButton">{{store_txt}}</button>
+            <button type="submit" class="submitButton">{{ store_txt }}</button>
           </div>
         </div>
       </div>

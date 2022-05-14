@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Router, ActivatedRoute } from "@angular/router";
+import { HttpClient } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { AuthenticationService } from '../services/authentication.service';
@@ -8,18 +8,19 @@ import { Globals } from '../services/globals.services';
 import { ImageModalComponent } from '../models/image-modal/image-modal.component';
 import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { RouterServices } from '../services/router.services';
-import { ButtonCollection, PagingButtonsServices } from '../services/pagingButtons.service';
+import { ImageService } from '../services/image.service';
+import {
+  ButtonCollection,
+  PagingButtonsServices,
+} from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-user-locality-form',
   templateUrl: './user-locality-form.component.html',
-  styleUrls: [
-    './user-locality-form.component.css'
-  ]
+  styleUrls: ['./user-locality-form.component.css'],
 })
-
 export class UserLocalityFormComponent implements OnInit {
   selectLocality: string;
   allLocality: any = [];
@@ -27,8 +28,6 @@ export class UserLocalityFormComponent implements OnInit {
   activePage: any = {};
   tittleMain: string;
   achatdbCollections: any = [];
-  prefix: string;
-  suffix: string;
   deleteCollection: any = {};
   confirmModalMessage: string;
   confirmModalTitle: string;
@@ -39,28 +38,28 @@ export class UserLocalityFormComponent implements OnInit {
 
   modifyMineral_txt: string;
   modifyMineralTranslation: TextTranslator = {
-    cz: "Upravit minerál",
-    en: "Modify mineral"
+    cz: 'Upravit minerál',
+    en: 'Modify mineral',
   };
   addSubMineral_txt: string;
   addSubMineralTranslation: TextTranslator = {
-    cz: "Přidat pod-minerál",
-    en: "Add sub-mineral"
+    cz: 'Přidat pod-minerál',
+    en: 'Add sub-mineral',
   };
   deleteMineral_txt: string;
   deleteMineralTranslation: TextTranslator = {
-    cz: "Smazat minerál",
-    en: "Delete mineral"
+    cz: 'Smazat minerál',
+    en: 'Delete mineral',
   };
   modalMessage_txt: string;
   modalMessageTranslation: TextTranslator = {
-    cz: "Chcete smazat minerál s jeho pod-minerály?",
-    en: "Do you want delete mineral with its sub-minerals?"
+    cz: 'Chcete smazat minerál s jeho pod-minerály?',
+    en: 'Do you want delete mineral with its sub-minerals?',
   };
   modalTitle_txt: string;
   modalTitleTranslation: TextTranslator = {
-    cz: "Smazat minerál",
-    en: "Delete mineral"
+    cz: 'Smazat minerál',
+    en: 'Delete mineral',
   };
 
   constructor(
@@ -73,15 +72,27 @@ export class UserLocalityFormComponent implements OnInit {
     public pagingButtons: PagingButtonsServices,
     public languageService: LanguageService,
     public router: Router,
-    public globals: Globals) {
+    public globals: Globals,
+    public imageService: ImageService,
+  ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-    this.modifyMineral_txt = this.languageService.getNativeLanguageText(this.modifyMineralTranslation);
-    this.addSubMineral_txt = this.languageService.getNativeLanguageText(this.addSubMineralTranslation);
-    this.deleteMineral_txt = this.languageService.getNativeLanguageText(this.deleteMineralTranslation);
-    this.modalMessage_txt = this.languageService.getNativeLanguageText(this.modalMessageTranslation);
-    this.modalTitle_txt = this.languageService.getNativeLanguageText(this.modalTitleTranslation);
+    this.modifyMineral_txt = this.languageService.getNativeLanguageText(
+      this.modifyMineralTranslation,
+    );
+    this.addSubMineral_txt = this.languageService.getNativeLanguageText(
+      this.addSubMineralTranslation,
+    );
+    this.deleteMineral_txt = this.languageService.getNativeLanguageText(
+      this.deleteMineralTranslation,
+    );
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(
+      this.modalMessageTranslation,
+    );
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(
+      this.modalTitleTranslation,
+    );
 
     this.confirmModalMessage = this.modalMessage_txt;
     this.confirmModalTitle = this.modalTitle_txt;
@@ -93,19 +104,26 @@ export class UserLocalityFormComponent implements OnInit {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
 
     let postedBy;
-    this.subscriber = this.route.params.subscribe(params => {
+    this.subscriber = this.route.params.subscribe((params) => {
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
-      }
-      else {
+      } else {
         postedBy = params.idPostedBy;
       }
 
       this.pagingButtons.setActualPage(params.page);
 
-      this.http.get(environment.urlAddress + '/api/v1/locality/one/' + params.uid + '/' + this.pagingButtons.getActualPage() + '/' + postedBy)
+      this.http
+        .get(
+          environment.urlAddress +
+          '/api/v1/locality/one/' +
+          params.uid +
+          '/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          postedBy,
+        )
         .subscribe((data: any) => {
-
           this.pagingButtons.setNumOfPage(data.numberOfPages);
           this.buttonCollections = this.pagingButtons.createButtonsField();
           this.selectLocality = data.title;
@@ -114,18 +132,18 @@ export class UserLocalityFormComponent implements OnInit {
           this.actualLocality = data.locality;
           this.tittleMain = this.selectLocality;
           this.achatdbCollections = data.achatdbCollections;
-          this.prefix = environment.serverUrl + "/static/uploads/images/";
-          this.suffix = "_small";
 
           if (params.image && params.slide) {
-            let previousUrl = "locality/" + params.uid + "/" + params.page + "/" + params.idPostedBy;
-            const achatdbCollection = this.achatdbCollections.find(({ _id }) => _id === params.image);
+            let previousUrl =
+              'locality/' + params.uid + '/' + params.page + '/' + params.idPostedBy;
+            const achatdbCollection = this.achatdbCollections.find(
+              ({ _id }) => _id === params.image,
+            );
             this.openModalOnImage(achatdbCollection, params.slide, previousUrl);
           }
         });
     });
   }
-
 
   clickPageButton(page: number): void {
     let postedBy = this.auth.getActualUserId();
@@ -135,24 +153,25 @@ export class UserLocalityFormComponent implements OnInit {
     this.routerService.userLocality(this.selectLocality, postedBy, page);
   }
 
-  getImage(imgName): string {
-    return this.prefix + imgName + this.suffix;
-  }
-
   openModal(achatdbCollection) {
     let previousUrl;
-    this.subscriber = this.route.params.subscribe(params => {
-      previousUrl = "locality/" + params.uid + "/" + params.page + "/" + params.idPostedBy;
+    this.subscriber = this.route.params.subscribe((params) => {
+      previousUrl =
+        'locality/' + params.uid + '/' + params.page + '/' + params.idPostedBy;
       const initialState = {
         list: {
-          "achatdbCollection": achatdbCollection,
-          "previousUrl": previousUrl
-        }
+          achatdbCollection: achatdbCollection,
+          previousUrl: previousUrl,
+        },
       };
 
       this.modalRef = this.modalService.show(
         ImageModalComponent,
-        Object.assign({ animated: false }, { class: 'mineralImageModal' }, { initialState })
+        Object.assign(
+          { animated: false },
+          { class: 'mineralImageModal' },
+          { initialState },
+        ),
       );
     });
   }
@@ -160,33 +179,37 @@ export class UserLocalityFormComponent implements OnInit {
   openModalOnImage(achatdbCollection, actualSlide, previousUrl) {
     const initialState = {
       list: {
-        "achatdbCollection": achatdbCollection,
-        "actualSlide": actualSlide,
-        "previousUrl": previousUrl
-      }
+        achatdbCollection: achatdbCollection,
+        actualSlide: actualSlide,
+        previousUrl: previousUrl,
+      },
     };
 
     this.modalRef = this.modalService.show(
       ImageModalComponent,
-      Object.assign({ animated: false }, { class: 'mineralImageModal' }, { initialState })
+      Object.assign(
+        { animated: false },
+        { class: 'mineralImageModal' },
+        { initialState },
+      ),
     );
   }
 
   openConfirmModal(achatdbCollection) {
     const initialState = {
       list: {
-        "confirmModalMessage": this.confirmModalMessage,
-        "confirmModalTitle": this.confirmModalTitle,
-        "modalRef": BsModalRef
-      }
+        confirmModalMessage: this.confirmModalMessage,
+        confirmModalTitle: this.confirmModalTitle,
+        modalRef: BsModalRef,
+      },
     };
 
     this.modalRef = this.modalService.show(
       ConfirmModalComponent,
-      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState })
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
     );
     this.deleteCollection = achatdbCollection;
-    this.modalRef.content.event.subscribe(res => {
+    this.modalRef.content.event.subscribe((res) => {
       this.confirmDeleteImage();
     });
   }
@@ -194,41 +217,45 @@ export class UserLocalityFormComponent implements OnInit {
   confirmDeleteImage() {
     let formData = new FormData();
 
-    formData.append("achatdbCollection", JSON.stringify(this.deleteCollection));
+    formData.append('achatdbCollection', JSON.stringify(this.deleteCollection));
 
     let postedBy;
-    this.subscriber = this.route.params.subscribe(params => {
+    this.subscriber = this.route.params.subscribe((params) => {
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
-      }
-      else {
+      } else {
         postedBy = params.idPostedBy;
       }
 
-      this.pagingButtons.setActualPageOnDeleteItem(params.page, this.achatdbCollections.length);
+      this.pagingButtons.setActualPageOnDeleteItem(
+        params.page,
+        this.achatdbCollections.length,
+      );
 
-      this.http.post<any>(
-        environment.urlAddress + '/api/v1/locality/one/' + params.uid + '/' + this.pagingButtons.getActualPage() + '/' + postedBy, formData
-      ).subscribe((data: any) => {
-
-        this.pagingButtons.setNumOfPage(data.numberOfPages);
-        this.buttonCollections = this.pagingButtons.createButtonsField();
-        this.activePage = data.activePage;
-        this.actualLocality = data.locality;
-        this.allLocality = data.localities;
-        this.achatdbCollections = data.achatdbCollections;
-        this.routerService.userLocality(params.uid, postedBy, this.pagingButtons.getActualPage());
-      });
+      this.http
+        .post<any>(
+          environment.urlAddress +
+          '/api/v1/locality/one/' +
+          params.uid +
+          '/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          postedBy,
+          formData,
+        )
+        .subscribe((data: any) => {
+          this.pagingButtons.setNumOfPage(data.numberOfPages);
+          this.buttonCollections = this.pagingButtons.createButtonsField();
+          this.activePage = data.activePage;
+          this.actualLocality = data.locality;
+          this.allLocality = data.localities;
+          this.achatdbCollections = data.achatdbCollections;
+          this.routerService.userLocality(
+            params.uid,
+            postedBy,
+            this.pagingButtons.getActualPage(),
+          );
+        });
     });
   }
-
-  public isItemYours(userId) {
-    if (userId == this.auth.getLogUserId()) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
 }

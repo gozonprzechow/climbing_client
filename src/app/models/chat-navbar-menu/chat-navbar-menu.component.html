@@ -1,28 +1,140 @@
 <div class="containerOfNav">
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #242020;">
-      <a class="navbar-brand" href="#"></a>
-      <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <!-- <div class="containerNavbar"> -->
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault"
-        [ngClass]="{ 'show': navbarOpen, 'collapseFrame': navbarOpen }">
-        <ul class="navbar-nav mr-auto">
-            <img *ngIf="auth.isLoggedIn()" class="backArrowImage" [src]="imgSrc"
-            (mouseover)="imgSrc = '../../../assets/skins/back_arrow_hoover.png'"
-            (mouseout)="imgSrc = '../../../assets/skins/back_arrow.png'"
-            (click)="routeToYourLocalities()"
-            [ngClass]="{ 'chatButton': navbarOpen }">
-        </ul>
+  <nav
+    class="navbar navbar-expand-md navbar-dark fixed-top"
+    style="background-color: #242020"
+  >
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- <div class="containerNavbar"> -->
+    <div
+      class="collapse navbar-collapse"
+      id="navbarsExampleDefault"
+      [ngClass]="{ show: navbarOpen, collapseFrame: navbarOpen }"
+    >
+      <ul class="navbar-nav mr-auto">
+        <img
+          *ngIf="auth.isLoggedIn()"
+          class="backArrowImage"
+          [src]="imgSrc"
+          (mouseover)="imgSrc = '../../../assets/skins/back_arrow_hoover.png'"
+          (mouseout)="imgSrc = '../../../assets/skins/back_arrow.png'"
+          (click)="routeToYourLocalities()"
+          [ngClass]="{ phoneModeBack: navbarOpen }"
+        />
+      </ul>
 
-        <div ngbDropdown>
-          <img *ngIf="auth.isLoggedIn()" class="chatImage" [src]="imgChatSrc"
-            (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
-            (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
-            (click)='routerService.chat()'
-            [ngClass]="{ 'chatButton': navbarOpen }">
+      <div ngbDropdown>
+        <!-- First Name -->
+        <input
+          type="text"
+          class="searchUser"
+          id="search_user"
+          name="search_user"
+          [(ngModel)]="search_user"
+          placeholder="Search user"
+          [ngClass]="{ phoneModeInputSearchedUser: navbarOpen }"
+        />
+        <img
+          *ngIf="auth.isLoggedIn()"
+          class="alertImage"
+          ngbDropdownToggle
+          [src]="img_search"
+          (mouseover)="img_search = '../../../assets/skins/search_button_hover.png'"
+          (mouseout)="img_search = '../../../assets/skins/search_button.png'"
+          (click)="searchUser()"
+        />
+        <div
+          ngbDropdownMenu
+          class="dropdownStyle dropdown-menu-right"
+          aria-labelledby="dropdown03"
+        >
+          <div
+            *ngFor="let searched_user of this.searched_users_collection"
+            class="dropdown-item"
+          >
+            <div
+              *ngIf="searched_user.button_visibility"
+              class="row dropdownFriendshipRequest"
+            >
+              <div
+                class="col-10 confirmFriendshipRequest"
+                (click)="dropdownRouteChat(searched_user)"
+              >
+                {{ searched_user.name }}
+              </div>
+              <div *ngIf="searched_user.button_visibility" class="col-1">
+                <img
+                  id="dropdown03"
+                  class="imgDeleteFriendshipRequest"
+                  ngbDropdownToggle
+                  [src]="img_add_friendship_request"
+                  (click)="dropdownAddFriendship(searched_user)"
+                />
+              </div>
+            </div>
+            <div
+              *ngIf="!searched_user.button_visibility"
+              class="row dropdownFriendshipRequest"
+              (click)="dropdownRouteChat(searched_user)"
+            >
+              <div
+                class="col-10 confirmFriendshipRequest"
+              >
+                {{ searched_user.name }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- </div> -->
-    </nav>
-  </div>
+
+      <div ngbDropdown>
+        <img
+          *ngIf="auth.isLoggedIn()"
+          class="alertImage"
+          ngbDropdownToggle
+          [src]="imgAlertSrc"
+          (mouseover)="imgAlertSrc = '../../../assets/skins/alert_button_hover.png'"
+          (mouseout)="imgAlertSrc = '../../../assets/skins/alert_button.png'"
+          (click)="deactiveFriendAlert()"
+          [ngClass]="{ phoneModeAlertFriendship: navbarOpen }"
+        />
+        <div
+          ngbDropdownMenu
+          class="{{ getAlertDropdownMenuClass() }}"
+          aria-labelledby="dropdown02"
+        >
+          <div
+            *ngFor="
+              let frienship_requester of friends.frienship_requesters;
+              let num_in_array = index
+            "
+            class="dropdown-item"
+          >
+            <div class="row dropdownFriendshipRequest">
+              <div
+                class="col-10 confirmFriendshipRequest"
+                (click)="openConfirmModal(frienship_requester, num_in_array)"
+              >
+                {{ frienship_requester.user_name }}
+              </div>
+              <div class="col-1">
+                <img
+                  id="dropdown02"
+                  *ngIf="auth.isLoggedIn()"
+                  class="imgDeleteFriendshipRequest"
+                  ngbDropdownToggle
+                  [src]="img_remove_friendship_request"
+                  (click)="openRefuseModal(frienship_requester.user_id, num_in_array)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <p *ngIf="friends.friend_alert" class="alertChat">!</p>
+      </div>
+    </div>
+    <!-- </div> -->
+  </nav>
+</div>

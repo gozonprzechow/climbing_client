@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Router, ActivatedRoute } from "@angular/router";
+import { HttpClient } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { AuthenticationService } from '../services/authentication.service';
@@ -8,24 +8,23 @@ import { Globals } from '../services/globals.services';
 import { ImageModalComponent } from '../models/image-modal/image-modal.component';
 import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { RouterServices } from '../services/router.services';
-import { ButtonCollection, PagingButtonsServices } from '../services/pagingButtons.service';
+import { ImageService } from '../services/image.service';
+import {
+  ButtonCollection,
+  PagingButtonsServices,
+} from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 
 @Component({
   selector: 'app-user-main-localities-form',
   templateUrl: './user-main-localities-form.component.html',
-  styleUrls: [
-    './user-main-localities-form.component.css'
-  ]
+  styleUrls: ['./user-main-localities-form.component.css'],
 })
-
 export class UserMainLocalitiesFormComponent implements OnInit {
   allLocality: any = [];
   activePage: any = {};
   localityCollections: any = [];
-  prefix: string;
-  suffix: string;
   confirmModalMessage: string;
   confirmModalTitle: string;
 
@@ -35,28 +34,28 @@ export class UserMainLocalitiesFormComponent implements OnInit {
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Lokality uživatele",
-    en: "User localities"
+    cz: 'Lokality uživatele',
+    en: 'User localities',
   };
   modifyLocality_txt: string;
   modifyLocalityTranslation: TextTranslator = {
-    cz: "Upravit lokalitu",
-    en: "Modify locality"
+    cz: 'Upravit lokalitu',
+    en: 'Modify locality',
   };
   deleteLocality_txt: string;
   deleteLocalityTranslation: TextTranslator = {
-    cz: "Smazat lokalitu",
-    en: "Delete locality"
+    cz: 'Smazat lokalitu',
+    en: 'Delete locality',
   };
   modalMessage_txt: string;
   modalMessageTranslation: TextTranslator = {
-    cz: "Chcete smazat tuto lokalitu a všechny její kolekce?",
-    en: "Do you want delete this locality and all their collections?"
+    cz: 'Chcete smazat tuto lokalitu a všechny její kolekce?',
+    en: 'Do you want delete this locality and all their collections?',
   };
   modalTitle_txt: string;
   modalTitleTranslation: TextTranslator = {
-    cz: "Smazat lokalitu",
-    en: "Delete locality"
+    cz: 'Smazat lokalitu',
+    en: 'Delete locality',
   };
 
   constructor(
@@ -69,15 +68,27 @@ export class UserMainLocalitiesFormComponent implements OnInit {
     public globals: Globals,
     public router: Router,
     public languageService: LanguageService,
-    public modalService: BsModalService) {
+    public modalService: BsModalService,
+    public imageService: ImageService,
+  ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
-    this.modifyLocality_txt = this.languageService.getNativeLanguageText(this.modifyLocalityTranslation);
-    this.deleteLocality_txt = this.languageService.getNativeLanguageText(this.deleteLocalityTranslation);
-    this.modalMessage_txt = this.languageService.getNativeLanguageText(this.modalMessageTranslation);
-    this.modalTitle_txt = this.languageService.getNativeLanguageText(this.modalTitleTranslation);
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
+    this.modifyLocality_txt = this.languageService.getNativeLanguageText(
+      this.modifyLocalityTranslation,
+    );
+    this.deleteLocality_txt = this.languageService.getNativeLanguageText(
+      this.deleteLocalityTranslation,
+    );
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(
+      this.modalMessageTranslation,
+    );
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(
+      this.modalTitleTranslation,
+    );
 
     this.confirmModalMessage = this.modalMessage_txt;
     this.confirmModalTitle = this.modalTitle_txt;
@@ -94,36 +105,44 @@ export class UserMainLocalitiesFormComponent implements OnInit {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
 
     let postedBy;
-    this.subscriber = this.route.params.subscribe(params => {
+    this.subscriber = this.route.params.subscribe((params) => {
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
-      }
-      else {
+      } else {
         postedBy = params.idPostedBy;
       }
 
       this.pagingButtons.setActualPage(params.page);
 
-      this.http.get(environment.urlAddress + '/api/v1/locality/all/' + this.pagingButtons.getActualPage() + '/' + postedBy)
+      this.http
+        .get(
+          environment.urlAddress +
+          '/api/v1/locality/all/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          postedBy,
+        )
         .subscribe((data: any) => {
-
           this.pagingButtons.setNumOfPage(data.numberOfPages);
           this.buttonCollections = this.pagingButtons.createButtonsField();
           this.activePage = data.activePage;
           this.allLocality = data.localities;
           this.localityCollections = data.localityCollections;
-          this.prefix = environment.serverUrl + "/static/uploads/images/";
-          this.suffix = "_small";
 
           if (params.image && params.slide) {
-            let previousUrl = "localities/" + params.page + "/" + params.idPostedBy;
-            const achatdbCollection = this.localityCollections[params.localityNum]
-              .achatdbCollections.find(({ _id }) => _id === params.image);
-            this.openModalOnImage(achatdbCollection, params.slide, previousUrl, params.localityNum);
+            let previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
+            const achatdbCollection = this.localityCollections[
+              params.localityNum
+            ].achatdbCollections.find(({ _id }) => _id === params.image);
+            this.openModalOnImage(
+              achatdbCollection,
+              params.slide,
+              previousUrl,
+              params.localityNum,
+            );
           }
         });
     });
-
   }
   clickPageButton(page: number): void {
     let postedBy = this.auth.getActualUserId();
@@ -133,32 +152,25 @@ export class UserMainLocalitiesFormComponent implements OnInit {
     this.routerService.userLocalities(postedBy, page);
   }
 
-  getImage(imgName): string {
-    return this.prefix + imgName + this.suffix;
-  }
-
-  isItemExist(collection) {
-    if ((collection == "") || (collection == null)) {
-      return false;
-    }
-    return true;
-  }
-
   openModal(achatdbCollection, numOflocalityCollection) {
     let previousUrl;
-    this.subscriber = this.route.params.subscribe(params => {
-      previousUrl = "localities/" + params.page + "/" + params.idPostedBy;
+    this.subscriber = this.route.params.subscribe((params) => {
+      previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
       const initialState = {
         list: {
-          "achatdbCollection": achatdbCollection,
-          "previousUrl": previousUrl,
-          "numOfItemCollection": numOflocalityCollection
-        }
+          achatdbCollection: achatdbCollection,
+          previousUrl: previousUrl,
+          numOfItemCollection: numOflocalityCollection,
+        },
       };
 
       this.modalRef = this.modalService.show(
         ImageModalComponent,
-        Object.assign({ animated: false }, { class: 'mineralImageModal' }, { initialState })
+        Object.assign(
+          { animated: false },
+          { class: 'mineralImageModal' },
+          { initialState },
+        ),
       );
     });
   }
@@ -166,33 +178,37 @@ export class UserMainLocalitiesFormComponent implements OnInit {
   openModalOnImage(achatdbCollection, actualSlide, previousUrl, numOflocalityCollection) {
     const initialState = {
       list: {
-        "achatdbCollection": achatdbCollection,
-        "actualSlide": actualSlide,
-        "previousUrl": previousUrl,
-        "numOfItemCollection": numOflocalityCollection
-      }
+        achatdbCollection: achatdbCollection,
+        actualSlide: actualSlide,
+        previousUrl: previousUrl,
+        numOfItemCollection: numOflocalityCollection,
+      },
     };
 
     this.modalRef = this.modalService.show(
       ImageModalComponent,
-      Object.assign({ animated: false }, { class: 'mineralImageModal' }, { initialState })
+      Object.assign(
+        { animated: false },
+        { class: 'mineralImageModal' },
+        { initialState },
+      ),
     );
   }
 
   openConfirmModal(locality) {
     const initialState = {
       list: {
-        "confirmModalMessage": this.confirmModalMessage,
-        "confirmModalTitle": this.confirmModalTitle,
-        "modalRef": BsModalRef
-      }
+        confirmModalMessage: this.confirmModalMessage,
+        confirmModalTitle: this.confirmModalTitle,
+        modalRef: BsModalRef,
+      },
     };
 
     this.modalRef = this.modalService.show(
       ConfirmModalComponent,
-      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState })
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
     );
-    this.modalRef.content.event.subscribe(res => {
+    this.modalRef.content.event.subscribe((res) => {
       this.runDeleteLocality(locality);
     });
   }
@@ -200,34 +216,38 @@ export class UserMainLocalitiesFormComponent implements OnInit {
   runDeleteLocality(locality) {
     let formData = new FormData();
 
-    formData.append("locality", JSON.stringify(locality));
+    formData.append('locality', JSON.stringify(locality));
 
     let postedBy;
-    this.subscriber = this.route.params.subscribe(params => {
+    this.subscriber = this.route.params.subscribe((params) => {
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
-      }
-      else {
+      } else {
         postedBy = params.idPostedBy;
       }
 
-      this.pagingButtons.setActualPageOnDeleteItem(params.page, this.localityCollections.length);
+      this.pagingButtons.setActualPageOnDeleteItem(
+        params.page,
+        this.localityCollections.length,
+      );
 
-      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/deleteLocality/' + this.pagingButtons.getActualPage() + '/' + postedBy, formData).subscribe((data: any) => {
-        this.pagingButtons.setNumOfPage(data.numberOfPages);
-        this.buttonCollections = this.pagingButtons.createButtonsField();
-        this.activePage = data.activePage;
-        this.allLocality = data.localities;
-        this.localityCollections = data.localityCollections;
-        this.routerService.userLocalities(postedBy, this.pagingButtons.getActualPage());
-      });
+      this.http
+        .post<any>(
+          environment.urlAddress +
+          '/api/v1/user_input/deleteLocality/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          postedBy,
+          formData,
+        )
+        .subscribe((data: any) => {
+          this.pagingButtons.setNumOfPage(data.numberOfPages);
+          this.buttonCollections = this.pagingButtons.createButtonsField();
+          this.activePage = data.activePage;
+          this.allLocality = data.localities;
+          this.localityCollections = data.localityCollections;
+          this.routerService.userLocalities(postedBy, this.pagingButtons.getActualPage());
+        });
     });
-  }
-
-  public isItemYours(userId) {
-    if (userId != this.auth.getLogUserId()) {
-      return false;
-    }
-    return true;
   }
 }

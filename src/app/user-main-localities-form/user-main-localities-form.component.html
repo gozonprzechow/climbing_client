@@ -1,35 +1,75 @@
-<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
+<app-main-navbar-menu
+  [allLocality]="allLocality"
+  [activePage]="activePage"
+></app-main-navbar-menu>
+<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
 
-<div class="wrapper" center='block'>
-  <div class="mainFormClass" center='block'>
+<div class="wrapper" center="block">
+  <div class="mainFormClass" center="block">
     <div class="wrap">
-      <div *ngFor="let localityCollection of localityCollections;let i = index " class="localityWrapper">
-        <a class="localityName" (click)="routeToUserLocality(localityCollection.locality.name)">
-          {{localityCollection.locality.name}}</a>
-        <div *ngIf="isItemYours(localityCollection.locality.postedBy)" class="dropdownLocality" ngbDropdown>
-          <button type='button' id='dropdown01' class='top-right btn-secondary dropdown-toggle'
-            ngbDropdownToggle></button>
-          <div ngbDropdownMenu class='dropdownStyle' aria-labelledby='dropdown01'>
-            <a class='dropdown-item' (click)='routerService.modifyLocality(localityCollection.locality)'>
-              {{modifyLocality_txt}}</a>
-            <a class='dropdown-item' (click)="openConfirmModal(localityCollection.locality)">{{deleteLocality_txt}}</a>
+      <div
+        *ngFor="let localityCollection of localityCollections; let i = index"
+        class="localityWrapper"
+      >
+        <a
+          class="localityName"
+          (click)="routeToUserLocality(localityCollection.locality.name)"
+        >
+          {{ localityCollection.locality.name }}</a
+        >
+        <div
+          *ngIf="auth.isItemYours(localityCollection.locality.postedBy)"
+          class="dropdownLocality"
+          ngbDropdown
+        >
+          <button
+            type="button"
+            id="dropdown01"
+            class="top-right btn-secondary dropdown-toggle"
+            ngbDropdownToggle
+          ></button>
+          <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown01">
+            <a
+              class="dropdown-item"
+              (click)="routerService.modifyLocality(localityCollection.locality)"
+            >
+              {{ modifyLocality_txt }}</a
+            >
+            <a
+              class="dropdown-item"
+              (click)="openConfirmModal(localityCollection.locality)"
+              >{{ deleteLocality_txt }}</a
+            >
           </div>
         </div>
-        <br><br>
+        <br /><br />
         <div class="row">
-          <div *ngFor="let achatdbCollection of localityCollection.achatdbCollections" class="col">
+          <div
+            *ngFor="let achatdbCollection of localityCollection.achatdbCollections"
+            class="col"
+          >
             <div *ngIf="achatdbCollection" class="imageContainer">
-              <img [attr.src]='getImage(achatdbCollection.imgName)' class='imageLocality'
-                (click)="openModal(achatdbCollection, i)">
-              {{achatdbCollection.title}}<br>
+              <img
+                [attr.src]="
+                  imageService.getImage(
+                    achatdbCollection.imgName,
+                    achatdbCollection.imgPath
+                  )
+                "
+                class="imageLocality"
+                (click)="openModal(achatdbCollection, i)"
+              />
+              {{ achatdbCollection.title }}<br />
             </div>
           </div>
         </div>
-        <hr class='enderLine'>
+        <hr class="enderLine" />
       </div>
-      <app-paging-buttons *ngIf='this.pagingButtons.ifAnyMorePage()' [buttonCollections]=buttonCollections
-        (clickPageButtonEvent)="clickPageButton($event)"></app-paging-buttons>
+      <app-paging-buttons
+        *ngIf="this.pagingButtons.ifAnyMorePage()"
+        [buttonCollections]="buttonCollections"
+        (clickPageButtonEvent)="clickPageButton($event)"
+      ></app-paging-buttons>
     </div>
   </div>
 </div>

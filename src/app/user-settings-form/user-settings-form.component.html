@@ -1,30 +1,65 @@
-<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
+<app-main-navbar-menu
+  [allLocality]="allLocality"
+  [activePage]="activePage"
+></app-main-navbar-menu>
 
-<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
+<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
 
 <div class="container">
   <div class="mainFormClass">
-    <form [formGroup]="userForm" (ngSubmit)="openConfirmModal()">
-
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="submitContainer">
-        <p id="successLoadCondition"> {{this.inputCondition.errorLoad}}</p>
+        <p id="successLoadCondition">{{ this.inputCondition.errorLoad }}</p>
       </div>
 
+      <div class="form-group">
+        <!-- Password -->
+        <div class="imageContainer">
+          <div class="col-sm-12">
+            <label for="img" class="control-label image" id="imgId">{{
+              profilePhotoLabel_txt
+            }}</label>
+            <input
+              type="file"
+              class="form-control"
+              id="img"
+              name="img"
+              (change)="onFileSelect($event)"
+            />
+          </div>
+        </div>
+        <div class="submitContainer">
+          <img [src]="imgURL" height="200" *ngIf="imgURL" />
+        </div>
+      </div>
       <div class="form-group has-error">
         <div class="submitContainer">
-          <!-- Register Button -->
-          <button type="submit" class="submitButton">{{deleteAccount_txt}}</button>
+          <button type="submit" class="submitButton">{{ saveChanges_txt }}</button>
         </div>
-        <div class="submitContainer">
-          <!-- Register Button -->
-          <button class="changePasswordButton" (click)="routerService.recoverPassword()">{{changePassword_txt}}</button>
-        </div>
-      </div>
-      <div class="submitContainer">
-        <br><br>
-        <p>{{imagesSpace_txt}} {{this.convertedBytes.numberofBytes}}
-          [{{this.convertedBytes.unit}}]</p>
       </div>
     </form>
+
+    <div class="form-group has-error">
+      <div class="submitContainer">
+        <!-- Register Button -->
+        <button type="button" class="deleteButton" (click)="openConfirmModal()">
+          {{ deleteAccount_txt }}
+        </button>
+      </div>
+      <div class="submitContainer">
+        <!-- Register Button -->
+        <button class="changePasswordButton" (click)="routerService.recoverPassword()">
+          {{ changePassword_txt }}
+        </button>
+      </div>
+    </div>
+    <div class="submitContainer">
+      <br /><br />
+      <p>
+        {{ imagesSpace_txt }} {{ this.convertedBytes.numberofBytes }} [{{
+          this.convertedBytes.unit
+        }}]
+      </p>
+    </div>
   </div>
 </div>

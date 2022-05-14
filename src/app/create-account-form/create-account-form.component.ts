@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
 import { ValidationService } from '../models/validation';
 import { AuthenticationService, TokenPayload } from '../services/authentication.service';
@@ -11,14 +11,13 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 @Component({
   selector: 'app-create-account-form',
   templateUrl: './create-account-form.component.html',
-  styleUrls: ['./create-account-form.component.css']
+  styleUrls: ['./create-account-form.component.css'],
 })
-
 export class CreateAccountFormComponent implements OnInit {
   credentials: TokenPayload = {
     email: '',
     name: '',
-    password: ''
+    password: '',
   };
 
   submitted = false;
@@ -32,23 +31,23 @@ export class CreateAccountFormComponent implements OnInit {
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Vytvořit účet",
-    en: "Create account"
+    cz: 'Vytvořit účet',
+    en: 'Create account',
   };
   name_txt: string;
   nameTranslation: TextTranslator = {
-    cz: "Jméno",
-    en: "Name"
+    cz: 'Jméno',
+    en: 'Name',
   };
   password_txt: string;
   passwordTranslation: TextTranslator = {
-    cz: "Heslo",
-    en: "Password"
+    cz: 'Heslo',
+    en: 'Password',
   };
   createAccount_txt: string;
   createAccountTranslation: TextTranslator = {
-    cz: "Vytvořit účet",
-    en: "Create account"
+    cz: 'Vytvořit účet',
+    en: 'Create account',
   };
 
   constructor(
@@ -57,23 +56,30 @@ export class CreateAccountFormComponent implements OnInit {
     public auth: AuthenticationService,
     public http: HttpClient,
     public languageService: LanguageService,
-    public routerService: RouterServices) {
-    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    public routerService: RouterServices,
+  ) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
     this.name_txt = this.languageService.getNativeLanguageText(this.nameTranslation);
-    this.password_txt = this.languageService.getNativeLanguageText(this.passwordTranslation);
-    this.createAccount_txt = this.languageService.getNativeLanguageText(this.createAccountTranslation);
+    this.password_txt = this.languageService.getNativeLanguageText(
+      this.passwordTranslation,
+    );
+    this.createAccount_txt = this.languageService.getNativeLanguageText(
+      this.createAccountTranslation,
+    );
   }
 
   invalidName() {
-    return (this.submitted && this.userForm.controls.name.errors != null);
+    return this.submitted && this.userForm.controls.name.errors != null;
   }
 
   invalidEmail() {
-    return (this.submitted && this.userForm.controls.email.errors != null);
+    return this.submitted && this.userForm.controls.email.errors != null;
   }
 
   invalidPassword() {
-    return (this.submitted && this.userForm.controls.password.errors != null);
+    return this.submitted && this.userForm.controls.password.errors != null;
   }
 
   copyServerErrors(returnData: any) {
@@ -92,22 +98,31 @@ export class CreateAccountFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
-    this.userForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.maxLength(50)]],
-      email: ['', [Validators.required, ValidationService.emailValidator]],
-      password: ['', [Validators.required, ValidationService.passwordValidator]],
-    },
-      { updateOn: "submit" }
+    this.userForm = this.formBuilder.group(
+      {
+        name: ['', [Validators.required, Validators.maxLength(50)]],
+        email: ['', [Validators.required, ValidationService.emailValidator]],
+        password: ['', [Validators.required, ValidationService.passwordValidator]],
+      },
+      { updateOn: 'submit' },
     );
 
     let postedBy = this.auth.getLogUserId();
     this.auth.saveActualUserId(postedBy);
-    this.http.get(environment.urlAddress + '/api/v1/user_input/register/' + postedBy).subscribe((returnData: any) => {
-      this.allLocality = returnData.localities;
-      this.activePage = returnData.activePage;
-    }, error => {
-      console.log("There was an error generating the proper GUID on the server", error);
-    });
+    this.http
+      .get(environment.urlAddress + '/api/v1/user_input/register/' + postedBy)
+      .subscribe(
+        (returnData: any) => {
+          this.allLocality = returnData.localities;
+          this.activePage = returnData.activePage;
+        },
+        (error) => {
+          console.log(
+            'There was an error generating the proper GUID on the server',
+            error,
+          );
+        },
+      );
   }
 
   onSubmit() {
@@ -115,31 +130,25 @@ export class CreateAccountFormComponent implements OnInit {
     this.submitted = true;
 
     if (this.userForm.invalid == true) {
-
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
       return;
-
-    }
-    else {
-
+    } else {
       this.credentials.name = this.userForm.controls.name.value;
       this.credentials.email = this.userForm.controls.email.value;
       this.credentials.password = this.userForm.controls.password.value;
 
-      this.auth.register(this.credentials).subscribe((returnData: any) => {
-
-        this.inputCondition.errorLoad = null;
-        this.copyServerErrors(returnData);
-        if (null == returnData.inputErrorMessage.uploadSuccess) {
-        }
-        else {
-          this.routerService.successCreateAccount(returnData.message);
-        }
-
-      }, error => {
-      });
+      this.auth.register(this.credentials).subscribe(
+        (returnData: any) => {
+          this.inputCondition.errorLoad = null;
+          this.copyServerErrors(returnData);
+          if (null == returnData.inputErrorMessage.uploadSuccess) {
+          } else {
+            this.routerService.successCreateAccount(returnData.message);
+          }
+        },
+        (error) => {},
+      );
     }
   }
-
 }

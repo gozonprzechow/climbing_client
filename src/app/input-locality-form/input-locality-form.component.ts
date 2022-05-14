@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
@@ -10,7 +10,7 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 @Component({
   selector: 'app-input-locality-form',
   templateUrl: './input-locality-form.component.html',
-  styleUrls: ['./input-locality-form.component.css']
+  styleUrls: ['./input-locality-form.component.css'],
 })
 export class InputLocalityFormComponent implements OnInit {
   submitted = false;
@@ -24,23 +24,23 @@ export class InputLocalityFormComponent implements OnInit {
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Vložit lokalitu",
-    en: "Input locality"
+    cz: 'Vložit lokalitu',
+    en: 'Input locality',
   };
   name_txt: string;
   nameTranslation: TextTranslator = {
-    cz: "Jméno",
-    en: "Name"
+    cz: 'Jméno',
+    en: 'Name',
   };
   description_txt: string;
   descriptionTranslation: TextTranslator = {
-    cz: "Popis",
-    en: "Description"
+    cz: 'Popis',
+    en: 'Description',
   };
   store_txt: string;
   storeTranslation: TextTranslator = {
-    cz: "Uložit",
-    en: "Store"
+    cz: 'Uložit',
+    en: 'Store',
   };
 
   constructor(
@@ -49,19 +49,24 @@ export class InputLocalityFormComponent implements OnInit {
     public http: HttpClient,
     public routerService: RouterServices,
     public languageService: LanguageService,
-    public auth: AuthenticationService) {
-    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
+    public auth: AuthenticationService,
+  ) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
     this.name_txt = this.languageService.getNativeLanguageText(this.nameTranslation);
-    this.description_txt = this.languageService.getNativeLanguageText(this.descriptionTranslation);
+    this.description_txt = this.languageService.getNativeLanguageText(
+      this.descriptionTranslation,
+    );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
   }
 
   public invalidName() {
-    return (this.submitted && this.userForm.controls.name.errors != null);
+    return this.submitted && this.userForm.controls.name.errors != null;
   }
 
   public invalidDescription() {
-    return (this.submitted && this.userForm.controls.description.errors != null);
+    return this.submitted && this.userForm.controls.description.errors != null;
   }
 
   copyServerErrors(returnData: any) {
@@ -80,21 +85,27 @@ export class InputLocalityFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
-    this.userForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.maxLength(50)]],
-      description: [''],
-    },
-      { updateOn: "submit" }
+    this.userForm = this.formBuilder.group(
+      {
+        name: ['', [Validators.required, Validators.maxLength(50)]],
+        description: [''],
+      },
+      { updateOn: 'submit' },
     );
 
     let postedBy = this.auth.getLogUserId();
     this.auth.saveActualUserId(postedBy);
-    this.http.get(environment.urlAddress + '/api/v1/user_input/locality/' + postedBy).subscribe((data: any) => {
-      this.activePage = data.activePage;
-      this.allLocality = data.localities;
-    }, error => {
-      this.routerService.notLoginError();
-    });
+    this.http
+      .get(environment.urlAddress + '/api/v1/user_input/locality/' + postedBy)
+      .subscribe(
+        (data: any) => {
+          this.activePage = data.activePage;
+          this.allLocality = data.localities;
+        },
+        (error) => {
+          this.routerService.notLoginError();
+        },
+      );
   }
 
   onSubmit() {
@@ -102,38 +113,38 @@ export class InputLocalityFormComponent implements OnInit {
     this.submitted = true;
 
     if (this.userForm.invalid == true) {
-
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
       return;
-
-    }
-    else {
-      Object.keys(this.userForm.value).forEach(key => {
+    } else {
+      Object.keys(this.userForm.value).forEach((key) => {
         formData.append(key, this.userForm.value[key]);
       });
 
-
       let postedBy = this.auth.getLogUserId();
-      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/locality/' + postedBy, formData).subscribe((returnData: any) => {
+      this.http
+        .post<any>(
+          environment.urlAddress + '/api/v1/user_input/locality/' + postedBy,
+          formData,
+        )
+        .subscribe(
+          (returnData: any) => {
+            this.activePage = returnData.activePage;
+            this.allLocality = returnData.localities;
+            this.inputCondition.errorLoad = null;
+            this.copyServerErrors(returnData);
 
-        this.activePage = returnData.activePage;
-        this.allLocality = returnData.localities;
-        this.inputCondition.errorLoad = null;
-        this.copyServerErrors(returnData);
-
-        if (null == returnData.inputErrorMessage.uploadSuccess) {
-        }
-        else {
-          this.submitted = false;
-          this.userForm.reset();
-        }
-
-      }, error => {
-        this.routerService.notLoginError();
-        this.serverServiceErrors.uploadSuccess = null;
-      });
+            if (null == returnData.inputErrorMessage.uploadSuccess) {
+            } else {
+              this.submitted = false;
+              this.userForm.reset();
+            }
+          },
+          (error) => {
+            this.routerService.notLoginError();
+            this.serverServiceErrors.uploadSuccess = null;
+          },
+        );
     }
   }
-
 }

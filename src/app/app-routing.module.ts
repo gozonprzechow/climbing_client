@@ -20,105 +20,107 @@ import { FirstPageFormComponent } from './first-page-form/first-page-form.compon
 import { UserSettingsFormComponent } from './user-settings-form/user-settings-form.component';
 import { ChatFormComponent } from './chat-form/chat-form.component';
 
-
 const routes: Routes = [
   {
     path: '',
-    component: FirstPageFormComponent
+    component: FirstPageFormComponent,
   },
   {
     path: 'adminHlavni',
-    component: AdminHlavniFormComponent
+    component: AdminHlavniFormComponent,
   },
   {
     path: 'createAccount',
-    component: CreateAccountFormComponent
+    component: CreateAccountFormComponent,
   },
   {
     path: 'createAccount/success',
-    component: SuccesCreateAccountFormComponent
+    component: SuccesCreateAccountFormComponent,
   },
   {
     path: 'createAccount/verified/:uid',
-    component: VerifiedCreateAccountFormComponent
+    component: VerifiedCreateAccountFormComponent,
   },
   {
     path: 'recoverPassword',
-    component: RecoverPasswordFormComponent
+    component: RecoverPasswordFormComponent,
   },
   {
     path: 'resetPassword/:uid',
-    component: ResetPasswordFormComponent
+    component: ResetPasswordFormComponent,
   },
   {
     path: 'login',
-    component: LoginFormComponent
+    component: LoginFormComponent,
   },
   {
     path: 'inputMineral',
-    component: InputMineralFormComponent
+    component: InputMineralFormComponent,
   },
   {
     path: 'modifyMineral',
-    component: MondifyMineralFormComponent
+    component: MondifyMineralFormComponent,
   },
   {
     path: 'inputSub-mineral',
-    component: InputSubMineralFormComponent
+    component: InputSubMineralFormComponent,
   },
   {
     path: 'modifySub-mineral',
-    component: MondifySubMineralFormComponent
+    component: MondifySubMineralFormComponent,
   },
   {
     path: 'inputLocality',
-    component: InputLocalityFormComponent
+    component: InputLocalityFormComponent,
   },
   {
     path: 'modifyLocality',
-    component: ModifyLocalityFormComponent
+    component: ModifyLocalityFormComponent,
   },
   {
     path: 'userSettings',
-    component: UserSettingsFormComponent
+    component: UserSettingsFormComponent,
   },
   {
-    path: 'chat',
-    component: ChatFormComponent
+    path: 'chat/:page/:type',
+    component: ChatFormComponent,
+  },
+  {
+    path: 'chat/:page/:idRecipient/:nameRecipient/:type',
+    component: ChatFormComponent,
   },
   {
     path: 'locality/:uid/:page/:idPostedBy',
-    component: UserLocalityFormComponent
+    component: UserLocalityFormComponent,
   },
   {
     path: 'locality/:uid/:page/:idPostedBy/:image/:slide',
-    component: UserLocalityFormComponent
+    component: UserLocalityFormComponent,
   },
   {
     path: 'localities/:page/:idPostedBy',
-    component: UserMainLocalitiesFormComponent
+    component: UserMainLocalitiesFormComponent,
   },
   {
     path: 'localities/:page/:idPostedBy/:localityNum/:image/:slide',
-    component: UserMainLocalitiesFormComponent
+    component: UserMainLocalitiesFormComponent,
   },
   {
     path: 'otherUsers/:page',
-    component: OtherUsersFormComponent
+    component: OtherUsersFormComponent,
   },
   {
     path: 'otherUsers/:page/:userNum/:image/:slide',
-    component: OtherUsersFormComponent
+    component: OtherUsersFormComponent,
   },
   {
     path: ':page/:image/:slide',
-    component: FirstPageFormComponent
+    component: FirstPageFormComponent,
   },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

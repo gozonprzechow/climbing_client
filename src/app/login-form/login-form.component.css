@@ -1,63 +1,61 @@
 .mainJumbotron {
-    text-align: center
-  }
-  
-  .mainFormClass
-  {
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    color: rgb(160, 160, 160);
-  }
-  
-  .control-label.required:after { 
-    color: #d00;
-    content: "*";
-    position: absolute;
-    margin-left: 5px;
-    top:7px;
-  }
-  
-  .submitContainer {
-    display: table;
-    margin: 0 auto;
-  }
-  
-  .submitButton {
-    width:110px;
-    padding: 8px 0;
-    border: 2px solid rgb(48, 136, 207);
-    text-align: center;
-    border-radius: 5px;
-    background-color: rgb(160, 160, 160);
-    color: black;
-    cursor: pointer;
-  }
-  
-  .submitButton:hover {
-    background-color: rgb(85, 83, 83);
-    color: white;
-  }
-  
-  #successLoadCondition
-  {
-    color: rgb(43, 155, 43);
-  }
+  text-align: center;
+}
 
-  .registerAccount {
-    text-align: center;
-  }
+.mainFormClass {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  color: rgb(160, 160, 160);
+}
 
-  .resendVerifyEmail {
-    text-align: center;
-  }
+.control-label.required:after {
+  color: #d00;
+  content: '*';
+  position: absolute;
+  margin-left: 5px;
+  top: 7px;
+}
 
-  #fakeHrefStyle_id {
-    color: #007bff;
-    cursor: pointer;
-  }
+.submitContainer {
+  display: table;
+  margin: 0 auto;
+}
 
-  #fakeHrefStyle_id:hover {
-    color: #0056b3;
-    text-decoration: underline
-  }
+.submitButton {
+  width: 110px;
+  padding: 8px 0;
+  border: 2px solid rgb(48, 136, 207);
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(160, 160, 160);
+  color: black;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  background-color: rgb(85, 83, 83);
+  color: white;
+}
+
+#successLoadCondition {
+  color: rgb(43, 155, 43);
+}
+
+.registerAccount {
+  text-align: center;
+}
+
+.resendVerifyEmail {
+  text-align: center;
+}
+
+#fakeHrefStyle_id {
+  color: #007bff;
+  cursor: pointer;
+}
+
+#fakeHrefStyle_id:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}

@@ -1,5 +1,4 @@
-.modal-body
-{
+.modal-body {
   background-color: #242020;
   border-color: rgb(177, 185, 189);
   color: rgb(199, 199, 199);
@@ -7,15 +6,13 @@
   text-align: center;
 }
 
-.modal-footer
-{
+.modal-footer {
   background-color: #242020;
   border-color: rgb(177, 185, 189);
   border-top-width: 0px;
 }
 
-.modal-header
-{
+.modal-header {
   background-color: #242020 !important;
   border-color: rgb(177, 185, 189);
   border-bottom-width: 0px;
@@ -29,7 +26,7 @@
 
 /* Style cancle button */
 .btnCancle {
-  width:110px;
+  width: 110px;
   padding: 8px 0;
   border: 3px solid rgb(48, 136, 207) !important;
   text-align: center;
@@ -46,7 +43,7 @@
 }
 
 .btnConfirm {
-  width:110px;
+  width: 110px;
   padding: 8px 0;
   border: 3px solid rgb(48, 136, 207) !important;
   text-align: center;
@@ -67,7 +64,7 @@
 
 /* Style close button */
 .closeStyle {
-  width:45px;
+  width: 45px;
   height: 45px;
   padding: 0px 0;
   border: 3px solid rgb(48, 136, 207) !important;

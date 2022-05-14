@@ -1,64 +1,91 @@
-<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
+<app-main-navbar-menu
+  [allLocality]="allLocality"
+  [activePage]="activePage"
+></app-main-navbar-menu>
+<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
 
 <div class="container">
-
   <div class="mainFormClass">
-
     <div class="registerAccount">
-      <p *ngIf="hideRegisterRouter()" id="registerAccount_id"> {{registerQuestion_txt}} <a
-          id="fakeHrefStyle_id" (click)="routerService.createAccount()">{{register_txt}}</a> </p>
+      <p *ngIf="hideRegisterRouter()" id="registerAccount_id">
+        {{ registerQuestion_txt }}
+        <a id="fakeHrefStyle_id" (click)="routerService.createAccount()">{{
+          register_txt
+        }}</a>
+      </p>
     </div>
 
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <p>{{errorMessage}}</p>
+      <p>{{ errorMessage }}</p>
 
       <div class="form-group" [ngClass]="{ 'has-error': invalidEmail() }">
         <!-- Last Name -->
         <div class="col-sm-12">
           <label for="email" class="control-label required">Email</label>
-          <input type="text" formControlName="email" class="form-control" id="email" name="email" placeholder="email">
+          <input
+            type="text"
+            formControlName="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="email"
+          />
           <p *ngIf="invalidEmail()" id="email_error" class="help-block">
-            {{this.serviceErrors.email || 'Invalid email.'}}</p>
-          <p class="help-block"> {{this.serverServiceErrors.email}}</p>
+            {{ this.serviceErrors.email || 'Invalid email.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.email }}</p>
         </div>
       </div>
 
       <div class="form-group" [ngClass]="{ 'has-error': invalidPassword() }">
         <!-- Last Name -->
         <div class="col-sm-12">
-          <label for="password" class="control-label required">{{password_txt}}</label>
-          <input type="password" formControlName="password" class="form-control" id="password" name="password"
-            placeholder="*********">
+          <label for="password" class="control-label required">{{ password_txt }}</label>
+          <input
+            type="password"
+            formControlName="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="*********"
+          />
           <p *ngIf="invalidPassword()" id="password_error" class="help-block">
-            {{this.serviceErrors.password || 'Invalid password.'}}</p>
-          <p class="help-block"> {{this.serverServiceErrors.password}}</p>
+            {{ this.serviceErrors.password || 'Invalid password.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.password }}</p>
         </div>
       </div>
 
       <div class="submitContainer">
-        <p id="successLoadCondition"> {{this.serverServiceErrors.uploadSuccess}}</p>
+        <p id="successLoadCondition">{{ this.serverServiceErrors.uploadSuccess }}</p>
       </div>
 
       <div class="submitContainer">
-        <p>{{message}}</p>
+        <p>{{ message }}</p>
       </div>
 
       <div *ngIf="userNoVerified()" class="resendVerifyEmail">
-        <p> {{resendQuestion_txt}} <a id="fakeHrefStyle_id"
-            (click)="runResendVerify()">{{resend_txt}}</a> </p>
+        <p>
+          {{ resendQuestion_txt }}
+          <a id="fakeHrefStyle_id" (click)="runResendVerify()">{{ resend_txt }}</a>
+        </p>
       </div>
 
       <div class="form-group has-error">
         <div class="registerAccount">
-          <p *ngIf="userWrongPassword()"> {{recoverQuestion_txt}} <a id="fakeHrefStyle_id"
-              (click)="routerService.recoverPassword()">{{recover_txt}}</a> </p>
+          <p *ngIf="userWrongPassword()">
+            {{ recoverQuestion_txt }}
+            <a id="fakeHrefStyle_id" (click)="routerService.recoverPassword()">{{
+              recover_txt
+            }}</a>
+          </p>
         </div>
         <div class="submitContainer">
-          <p class="help-block"> {{this.inputCondition.errorLoad && this.serverServiceErrors.uploadSuccess}}
+          <p class="help-block">
+            {{ this.inputCondition.errorLoad && this.serverServiceErrors.uploadSuccess }}
           </p>
           <!-- Register Button -->
-          <button type="submit" class="submitButton">{{login_txt}}</button>
+          <button type="submit" class="submitButton">{{ login_txt }}</button>
         </div>
       </div>
     </form>

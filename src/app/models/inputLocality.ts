@@ -1,13 +1,10 @@
-export class InputCondition
-{
-	successLoad: string;
-	errorLoad: string;
+export class InputCondition {
+  successLoad: string;
+  errorLoad: string;
 
-	constructor(obj: any = null)
-	{
-		if(obj != null)
-		{
-			Object.assign(this, obj);
-		}
-	}
+  constructor(obj: any = null) {
+    if (obj != null) {
+      Object.assign(this, obj);
+    }
+  }
 }

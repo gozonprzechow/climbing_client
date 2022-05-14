@@ -1,25 +1,299 @@
-<app-chat-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-chat-navbar-menu>
-<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
+<app-chat-navbar-menu
+  [friends]="friends"
+  (event)="addFriendTrigger($event)"
+></app-chat-navbar-menu>
+<custom-tittle-main [tittleMain]="title"></custom-tittle-main>
 
 <div class="container">
-
-  <div class="containerChat">
-    <div class="containerChat_inputMessage">
-      <div class="containerChat_inputMessageBtn">
-        <div class="row">
-          <div *ngIf="!showAddMessage" class="col">
-            <button type="button" class="btn btnAddMessage" (click)="seeAddMessage()">{{addNew_txt}}</button>
+  <div ngbDropdown>
+    <img
+      id="dropdown02"
+      *ngIf="auth.isLoggedIn()"
+      class="imgFriendDropDown dropdown-toggle"
+      ngbDropdownToggle
+      [src]="img_friend_dropdown"
+      (mouseover)="img_friend_dropdown = '../../assets/skins/drop_down_hover.png'"
+      (mouseout)="img_friend_dropdown = '../../assets/skins/drop_down.png'"
+    />
+    <img
+      *ngIf="ifShowStandardChatSwitch()"
+      class="imgChooseChat"
+      [src]="img_standard_chat"
+      (click)="chooseStandardChat()"
+      (mouseover)="
+        img_standard_chat = '../../assets/skins/insert_standard_collection_hover.png'
+      "
+      (mouseout)="img_standard_chat = '../../assets/skins/insert_standard_collection.png'"
+    />
+    <img
+      *ngIf="ifShowPrizeChatSwitch()"
+      class="imgChooseChat"
+      [src]="img_prize_chat"
+      (click)="choosePriceChat()"
+      (mouseover)="
+        img_prize_chat = '../../assets/skins/insert_prize_collection_hover.png'
+      "
+      (mouseout)="img_prize_chat = '../../assets/skins/insert_prize_collection.png'"
+    />
+    <div
+      ngbDropdownMenu
+      class="dropdownStyle dropdown-menu-right"
+      aria-labelledby="dropdown02"
+    >
+      <div
+        *ngFor="let confirmed_friend of confirmed_friends; let num_in_array = index"
+        class="dropdown-item"
+      >
+        <div class="row dropdownConfirmedFriend">
+          <div
+            class="col-10 routeFriendConversation"
+            (click)="sendMessage(confirmed_friend)"
+          >
+            {{ confirmed_friend.user_name }}
           </div>
-          <div *ngIf="showAddMessage" class="col">
-
-            <button type="button" class="btn btnSubmitMessage" (click)="submitMessage()">{{submit_txt}}</button>
-            <button type="button" class="btn btnCancleAddMessage" (click)="canceAddMessage()">{{cancle_txt}}</button>
-          </div>
-          <div *ngIf="showAddMessage" class="col">
-            <textarea class="inputCommentBox" ref-textarea [(ngModel)]="messageValue" rows="4"></textarea>
+          <div class="col-1">
+            <img
+              id="dropdown02"
+              *ngIf="auth.isLoggedIn()"
+              class="imgDeleteFriend"
+              [src]="img_remove_friend"
+              (click)="openConfirmModal(confirmed_friend.user_id, num_in_array)"
+            />
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div *ngIf="this.chatService.isStandardChat(this.choosen_chat)" class="containerChat">
+    <div class="containerChat_inputMessage">
+      <div class="containerChat_inputMessageBtn">
+        <div class="row">
+          <div *ngIf="!showAddMessage" class="col">
+            <button type="button" class="btn btnAddMessage" (click)="seeAddMessage()">
+              {{ addNew_txt }}
+            </button>
+            <button type="button" class="btn btnDeleteMessages" (click)="deleteMessage()">
+              {{ delete_txt }}
+            </button>
+          </div>
+          <div *ngIf="showAddMessage" class="col">
+            <button type="button" class="btn btnSubmitMessage" (click)="submitMessage()">
+              {{ submit_txt }}
+            </button>
+            <button
+              type="button"
+              class="btn btnCancleAddMessage"
+              (click)="canceAddMessage()"
+            >
+              {{ cancle_txt }}
+            </button>
+          </div>
+          <div *ngIf="showAddMessage" class="col">
+            <textarea
+              class="inputCommentBox"
+              ref-textarea
+              [(ngModel)]="messageValue"
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngFor="let chat_message of chat_messages; let num_in_array = index"
+      class="containerChat_text"
+      [ngClass]="{
+        containerChatSend_text: auth.isIdLogUser(chat_message.messages.posterId)
+      }"
+    >
+      <div class="row">
+        <div class="col-2 chatDeleteMessageColumn">
+          <img
+            *ngIf="
+              !chatService.isDeleteMessageActive(num_in_array, standard_message_work_data)
+            "
+            class="deleteMessageImage"
+            [src]="standard_message_work_data.delete_message_image_array[num_in_array]"
+            (mouseover)="
+              standard_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/delete_message_checkbox_hover.png'
+            "
+            (mouseout)="
+              standard_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/delete_message_checkbox.png'
+            "
+            (click)="
+              standard_message_work_data = chatService.toggleDeleteMessage(
+                chat_message.messages._id,
+                num_in_array,
+                standard_message_work_data
+              )
+            "
+          />
+
+          <img
+            *ngIf="
+              chatService.isDeleteMessageActive(num_in_array, standard_message_work_data)
+            "
+            class="deleteMessageImage"
+            [src]="standard_message_work_data.delete_message_image_array[num_in_array]"
+            (mouseover)="
+              standard_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/confirm_delete_message_checkbox_hover.png'
+            "
+            (mouseout)="
+              standard_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/confirm_delete_message_checkbox.png'
+            "
+            (click)="
+              standard_message_work_data = chatService.toggleDeleteMessage(
+                chat_message.messages._id,
+                num_in_array,
+                standard_message_work_data
+              )
+            "
+          />
+        </div>
+
+        <div class="col-2 chatPosterNameColumn">
+          <div class="chatPosterName">
+            <p>
+              <a
+                *ngIf="!auth.isIdLogUser(chat_message.messages.posterId)"
+                id="fakeHrefStyle_id"
+                (click)="
+                  routeToChatWithUsers(
+                    chat_message.messages.posterName,
+                    chat_message.messages.posterId
+                  )
+                "
+                >{{ chat_message.messages.posterName }}</a
+              >
+              <a
+                *ngIf="!auth.isIdLogUser(chat_message.messages.recipientId)"
+                id="fakeHrefStyle_id"
+                (click)="
+                  routeToChatWithUsers(
+                    chat_message.messages.recipientName,
+                    chat_message.messages.recipientId
+                  )
+                "
+                >{{ chat_message.messages.recipientName }}</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="co-10">
+          <div class="chatText">{{ chat_message.messages.message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="this.chatService.isPriceChat(this.choosen_chat)" class="containerChat">
+    <div
+      *ngFor="let chat_message of this.bind_messages; let num_in_array = index"
+      class="containerChat_text"
+      [ngClass]="{
+        containerChatSend_text: auth.isIdLogUser(chat_message.offerMessages.binderId)
+      }"
+    >
+      <div class="row">
+        <div class="col-2 chatDeleteMessageColumn">
+          <img
+            *ngIf="
+              !chatService.isDeleteMessageActive(num_in_array, binds_message_work_data)
+            "
+            class="deleteMessageImage"
+            [src]="binds_message_work_data.delete_message_image_array[num_in_array]"
+            (mouseover)="
+              binds_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/delete_message_checkbox_hover.png'
+            "
+            (mouseout)="
+              binds_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/delete_message_checkbox.png'
+            "
+            (click)="
+              binds_message_work_data = chatService.toggleDeleteMessage(
+                chat_message.offerMessages._id,
+                num_in_array,
+                binds_message_work_data
+              )
+            "
+          />
+
+          <img
+            *ngIf="
+              chatService.isDeleteMessageActive(num_in_array, binds_message_work_data)
+            "
+            class="deleteMessageImage"
+            [src]="binds_message_work_data.delete_message_image_array[num_in_array]"
+            (mouseover)="
+              binds_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/confirm_delete_message_checkbox_hover.png'
+            "
+            (mouseout)="
+              binds_message_work_data.delete_message_image_array[num_in_array] =
+                '../../assets/skins/confirm_delete_message_checkbox.png'
+            "
+            (click)="
+              binds_message_work_data = chatService.toggleDeleteMessage(
+                chat_message.offerMessages._id,
+                num_in_array,
+                binds_message_work_data
+              )
+            "
+          />
+        </div>
+
+        <div class="col-2 chatPosterNameColumn">
+          <div class="chatPosterName">
+            <div class="imageContainer">
+              <img
+                [attr.src]="
+                  imageService.getImage(chat_message.offerMessages.achatImages[0].imgName, chat_message.offerMessages.achatImages[0].imgPath)
+                "
+                class="imageBind"
+                (click)="openModal(chat_message.offerMessages.achatCollection)"
+              />
+            </div>
+            <p>
+              <a
+                *ngIf="!auth.isIdLogUser(chat_message.offerMessages.binderId)"
+                id="fakeHrefStyle_id"
+                (click)="
+                  routeToChatWithUsers(
+                    chat_message.offerMessages.binderName,
+                    chat_message.offerMessages.binderId
+                  )
+                "
+                >{{ chat_message.offerMessages.binderName }}</a
+              >
+              <a
+                *ngIf="auth.isIdLogUser(chat_message.offerMessages.binderId)"
+                id="fakeHrefStyle_id"
+                (click)="
+                  routeToChatWithUsers(
+                    chat_message.offerMessages.recipientName,
+                    chat_message.offerMessages.recipientId
+                  )
+                "
+                >{{ chat_message.offerMessages.recipientName }}</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="co-10">
+          <div class="chatText">{{ chat_message.offerMessages.message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-paging-buttons
+    *ngIf="this.pagingButtons.ifAnyMorePage()"
+    [buttonCollections]="buttonCollections"
+    (clickPageButtonEvent)="clickPageButton($event)"
+  ></app-paging-buttons>
 </div>

@@ -1,27 +1,24 @@
-.mainFormClass
-{
+.mainFormClass {
   width: 60%;
   margin-left: auto;
   margin-right: auto;
   color: rgb(160, 160, 160);
 }
 
-.legendInsert
-{
+.legendInsert {
   color: rgb(160, 160, 160);
 }
 
-#successLoadCondition
-{
+#successLoadCondition {
   color: rgb(43, 155, 43);
 }
 
-.control-label.required:after { 
+.control-label.required:after {
   color: #d00;
-  content: "*";
+  content: '*';
   position: absolute;
   margin-left: 5px;
-  top:7px;
+  top: 7px;
 }
 
 #img {
@@ -29,7 +26,7 @@
 }
 
 .control-label.image {
-  width:180px;
+  width: 180px;
   padding: 20px 0;
   border: 2px solid rgb(48, 136, 207);
   text-align: center;
@@ -37,8 +34,6 @@
   background-color: rgb(160, 160, 160);
   color: black;
   cursor: pointer;
-
-
 }
 
 label.image:hover {
@@ -57,7 +52,7 @@ label.image:hover {
 }
 
 .submitButton {
-  width:110px;
+  width: 110px;
   padding: 8px 0;
   border: 3px solid rgb(48, 136, 207);
   text-align: center;

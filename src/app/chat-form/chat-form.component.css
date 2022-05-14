@@ -1,86 +1,229 @@
 .mainJumbotron {
-    text-align: center
-  }
+  text-align: center;
+}
 
-  .containerChat {
-    clear:both;
-    border-left: 3px solid #4b4b4b;
-    border-right: 3px solid #4b4b4b;
-    border-bottom: 3px solid #4b4b4b;
-    border-radius: 6px;
-  }
+.containerChat {
+  clear: both;
+  border-left: 3px solid #4b4b4b;
+  border-right: 3px solid #4b4b4b;
+  border-bottom: 3px solid #4b4b4b;
+  border-radius: 6px;
+}
 
-  .containerChat_inputMessage {
-    border: 1px solid #4b4b4b !important;
-    background-color: #626262 !important;
-  }
+.containerChat_inputMessage {
+  border: 1px solid #4b4b4b !important;
+  background-color: #626262 !important;
+}
 
-  .containerChat_inputMessageBtn {
-    margin: 17px;
-  }
+.containerChat_inputMessageBtn {
+  margin: 17px;
+}
 
-  .btnAddMessage {
-    width:110px;
-    padding: 8px 0;
-    border: 3px solid #383a39 !important;
-    text-align: center;
-    border-radius: 5px;
-    background-color: rgb(85, 83, 83) !important;
-    color: white;
-    cursor: pointer;
-  }
-  
-  /* Style on hover colour */
-  .btnAddMessage:hover {
-    background-color: rgb(160, 160, 160) !important;
-    color: black;
-  }
-  
-  .btnSubmitMessage {
-    width:110px;
-    padding: 8px 0;
-    border: 3px solid #383a39 !important;
-    text-align: center;
-    border-radius: 5px;
-    background-color: rgb(85, 83, 83) !important;
-    color: white;
-    cursor: pointer;
-    position: absolute;
-    right: 60%;
-    left: 40%;
-    top: 20px;
-  }
-  
-  /* Style on hover colour */
-  .btnSubmitMessage:hover {
-    background-color: rgb(160, 160, 160) !important;
-    color: black;
-  }
-  
-  .btnCancleAddMessage {
-    width:110px;
-    padding: 8px 0;
-    border: 3px solid #383a39 !important;
-    text-align: center;
-    border-radius: 5px;
-    background-color: rgb(85, 83, 83) !important;
-    color: white;
-    cursor: pointer;
-    position: absolute;
-    right: 60%;
-    left: 40%;
-    bottom: 20px;
-  }
+.btnAddMessage {
+  width: 110px;
+  padding: 8px 0;
+  border: 3px solid #383a39 !important;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(85, 83, 83) !important;
+  margin-right: 20px;
+  color: white;
+  cursor: pointer;
+}
 
-  .inputCommentBox
-  {
-    width:100%;
-    height: 150px;
-    float: right;
-  }
-  
-  /* Style on hover colour */
-  .btnCancleAddMessage:hover {
-    background-color: rgb(160, 160, 160) !important;
-    color: black;
-  }
+.btnDeleteMessages {
+  width: 110px;
+  padding: 8px 0;
+  border: 3px solid #383a39 !important;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(85, 83, 83) !important;
+  color: white;
+  cursor: pointer;
+}
+
+/* Style on hover colour */
+.btnAddMessage:hover {
+  background-color: rgb(160, 160, 160) !important;
+  color: black;
+}
+
+.btnSubmitMessage {
+  width: 110px;
+  padding: 8px 0;
+  border: 3px solid #383a39 !important;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(85, 83, 83) !important;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  right: 60%;
+  left: 40%;
+  top: 20px;
+}
+
+/* Style on hover colour */
+.btnSubmitMessage:hover {
+  background-color: rgb(160, 160, 160) !important;
+  color: black;
+}
+
+.btnCancleAddMessage {
+  width: 110px;
+  padding: 8px 0;
+  border: 3px solid #383a39 !important;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(85, 83, 83) !important;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  right: 60%;
+  left: 40%;
+  bottom: 20px;
+}
+
+.inputCommentBox {
+  width: 100%;
+  height: 150px;
+  float: right;
+}
+
+/* Style on hover colour */
+.btnCancleAddMessage:hover {
+  background-color: rgb(160, 160, 160) !important;
+  color: black;
+}
+
+.containerChat_text {
+  border-top: 3px solid #4b4b4b !important;
+}
+
+.containerChatSend_text {
+  background-color: #1a1616;
+}
+
+.chatText {
+  text-align: left;
+  color: rgb(199, 199, 199);
+  word-break: break-word;
+  margin: 15px;
+}
+
+.chatText-poster {
+  background-color: #131111;
+}
+
+.chatPosterName {
+  text-align: left;
+  font-weight: bold;
+  color: rgb(199, 199, 199);
+  word-break: break-word;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.chatPosterNameColumn {
+  min-width: 150px;
+  max-width: 250px;
+}
+
+.chatDeleteMessageColumn {
+  min-width: 58px;
+  max-width: 58px;
+}
+
+.deleteMessageImage {
+  width: 24px;
+  height: 24px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.imgFriendDropDown {
+  width: 66px;
+  height: 30px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 3px;
+  float: right;
+}
+
+.imgChooseChat {
+  width: 66px;
+  height: 44px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 3px;
+  float: left;
+}
+
+.imgDeleteFriend {
+  width: 30px;
+  height: 30px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 3px;
+  float: right;
+  position: relative;
+  top: -6px; 
+  right: -18px;
+  opacity: 0.4;
+}
+
+.imgDeleteFriend:hover {
+  position: relative;
+  top: -6px; 
+  right: -18px;
+  opacity: 1;
+  /* cursor: pointer !important; */
+}
+
+.dropdownStyle {
+  background-color: rgb(167, 172, 179);
+}
+
+#fakeHrefStyle_id {
+  color: rgb(199, 199, 199);
+  cursor: pointer;
+}
+
+#fakeHrefStyle_id:hover {
+  color: rgb(240, 240, 240);
+  text-decoration: underline;
+}
+
+.routeFriendConversation{
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: normal;
+  margin-bottom: 7px;
+}
+
+.dropdownConfirmedFriend{
+  min-width: 280px !important;
+  margin-bottom: -12px !important;
+}
+
+.imageBind {
+  cursor: pointer;
+  width: 120px;
+  height: 98px;
+  color: rgb(177, 185, 189);
+}

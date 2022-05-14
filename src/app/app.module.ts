@@ -15,6 +15,9 @@ import { RouterServices } from './services/router.services';
 import { PagingButtonsServices } from './services/pagingButtons.service';
 import { MathServices } from './services/math.service';
 import { LanguageService } from './services/language.service';
+import { OfferService } from './services/offerService';
+import { ChatService } from './services/chat.service';
+import { ImageService } from './services/image.service';
 
 import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -39,11 +42,13 @@ import { UserSettingsFormComponent } from './user-settings-form/user-settings-fo
 import { ChatFormComponent } from './chat-form/chat-form.component';
 
 import { ConfirmModalComponent } from './models/confirm-modal/confirm-modal.component';
+import { AddOfferModalComponent } from './models/add-offer-modal/add-offer-modal.component';
 import { MainNavbarMenuComponent } from './models/main-navbar-menu/main-navbar-menu.component';
 import { ChatNavbarMenuComponent } from './models/chat-navbar-menu/chat-navbar-menu.component';
 import { ImageModalComponent } from './models/image-modal/image-modal.component';
 import { TittleMain } from './models/customTittle';
 import { PagingButtonsComponent } from './models/paging-buttons/paging-buttons.component';
+import { DropdownButtonInItemComponent } from './models/dropdown-button-in-item/dropdown-button-in-item.component';
 
 import { ModifyLocalityFormComponent } from './modify-locality-form/modify-locality-form.component';
 import { MondifyMineralFormComponent } from './mondify-mineral-form/mondify-mineral-form.component';
@@ -72,12 +77,14 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     MondifyMineralFormComponent,
     MondifySubMineralFormComponent,
     ConfirmModalComponent,
+    AddOfferModalComponent,
     ModifyLocalityFormComponent,
     FirstPageFormComponent,
     PagingButtonsComponent,
     UserSettingsFormComponent,
     ChatFormComponent,
-    ChatNavbarMenuComponent
+    ChatNavbarMenuComponent,
+    DropdownButtonInItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -88,7 +95,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     BrowserAnimationsModule,
     CarouselModule.forRoot(),
     ModalModule.forRoot(),
-    NgbModule
+    NgbModule,
   ],
   providers: [
     Globals,
@@ -98,12 +105,15 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     ModalDataInjector,
     MathServices,
     LanguageService,
+    OfferService,
+    ChatService,
+    ImageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

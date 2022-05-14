@@ -1,42 +1,38 @@
-.wrapper
-{
+.wrapper {
   /* color: rgb(160, 160, 160); */
   margin-left: auto;
   margin-right: auto;
 }
 
-.mainFormClass
-{
-    color: white;
-    text-align: center;
-    margin-left: 80px;
-    margin-right: 150px;
+.mainFormClass {
+  color: white;
+  text-align: center;
+  margin-left: 80px;
+  margin-right: 150px;
 }
 
-.imageLocality
-{
-    float:left;
-    margin-left: 20px;
-    margin-right: 20px;
-    cursor: pointer;
-    border: 5px;  	
-    border-style: solid;
-    border-color: #4b4b4b;
-    border-radius: 6px;
+.imageLocality {
+  float: left;
+  margin-left: 20px;
+  margin-right: 20px;
+  cursor: pointer;
+  border: 5px;
+  border-style: solid;
+  border-color: #4b4b4b;
+  border-radius: 6px;
 }
 
-ul.list-inline li{
-  float:left;
+ul.list-inline li {
+  float: left;
 }
 
-.enderLine
-{
+.enderLine {
   min-width: 265px;
-  clear:both;
+  clear: both;
   background-color: rgb(177, 185, 189);
 }
 
-.top-right{
+.top-right {
   position: absolute;
   /* top: 0px; */
   right: 17px;
@@ -45,7 +41,7 @@ ul.list-inline li{
   /* cursor: pointer !important; */
 }
 
-.top-right:hover{
+.top-right:hover {
   position: absolute;
   /* top: 0px; */
   right: 17px;
@@ -60,13 +56,13 @@ ul.list-inline li{
   color: rgb(177, 185, 189);
 }
 
-.dropdownStyle{
+.dropdownStyle {
   background-color: rgb(167, 172, 179);
 }
 
 /* Style cancle button */
 .btnCancle {
-  width:110px;
+  width: 110px;
   padding: 8px 0;
   border: 3px solid rgb(48, 136, 207) !important;
   text-align: center;
@@ -83,7 +79,7 @@ ul.list-inline li{
 }
 
 .btnConfirm {
-  width:110px;
+  width: 110px;
   padding: 8px 0;
   border: 3px solid rgb(48, 136, 207) !important;
   text-align: center;
@@ -104,7 +100,7 @@ ul.list-inline li{
 
 /* Style close button */
 .closeStyle {
-  width:45px;
+  width: 45px;
   height: 45px;
   padding: 0px 0;
   border: 3px solid rgb(48, 136, 207) !important;
@@ -123,27 +119,27 @@ ul.list-inline li{
   color: white;
 }
 
-  .modalDeleteBody{
-    text-align: center;
-    color: rgb(177, 185, 189);
-  }
+.modalDeleteBody {
+  text-align: center;
+  color: rgb(177, 185, 189);
+}
 
-  .containerLocalityDescription {
-    margin-top: 15px;
-    margin-bottom: 10px;
-    min-height: 130px;
-    min-width: 265px;
-    border: 3px solid #383a39;
-    background-color: rgb(85, 83, 83);
-    border-radius: 6px;
-  }
+.containerLocalityDescription {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  min-height: 130px;
+  min-width: 265px;
+  border: 3px solid #383a39;
+  background-color: rgb(85, 83, 83);
+  border-radius: 6px;
+}
 
-  .localityDescriptionText {
-    text-align: left;
-    color: rgb(229, 229, 229);
-    word-break: break-word;
-    margin-left: 35px;
-    margin-right: 35px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
+.localityDescriptionText {
+  text-align: left;
+  color: rgb(229, 229, 229);
+  word-break: break-word;
+  margin-left: 35px;
+  margin-right: 35px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

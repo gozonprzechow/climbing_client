@@ -3,11 +3,13 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class RouterServices {
-  constructor(public router: Router) { }
+  constructor(public router: Router) {}
 
   public notLoginError(): void {
     let path = '/login';
-    this.router.navigate([path], { state: { data: { errorMessage: "You are not log in, please log in first" } } });
+    this.router.navigate([path], {
+      state: { data: { errorMessage: 'You are not log in, please log in first' } },
+    });
   }
 
   public login(): void {
@@ -45,9 +47,9 @@ export class RouterServices {
     this.router.navigate([path], {
       state: {
         data: {
-          achatdbCollection: achatdbCollection
-        }
-      }
+          achatdbCollection: achatdbCollection,
+        },
+      },
     });
   }
 
@@ -57,9 +59,9 @@ export class RouterServices {
       state: {
         data: {
           locality: locality,
-          previousRoute: this.router.url
-        }
-      }
+          previousRoute: this.router.url,
+        },
+      },
     });
   }
 
@@ -70,9 +72,9 @@ export class RouterServices {
         data: {
           achatdbCollection: achatdbCollection,
           actualSlide: actualSlide,
-          previousRoute: this.router.url
-        }
-      }
+          previousRoute: this.router.url,
+        },
+      },
     });
   }
 
@@ -82,20 +84,20 @@ export class RouterServices {
       state: {
         data: {
           achatdbCollection: achatdbCollection,
-          previousRoute: this.router.url
-        }
-      }
+          previousRoute: this.router.url,
+        },
+      },
     });
   }
 
   public inputLocality(): void {
     let path = '/inputLocality';
-      this.router.navigate([path]);
+    this.router.navigate([path]);
   }
 
   public adminHlavni(): void {
     let path = '/adminHlavni';
-      this.router.navigate([path]);
+    this.router.navigate([path]);
   }
 
   public returnToPreviousPage(previousRoute): void {
@@ -117,8 +119,19 @@ export class RouterServices {
     this.router.navigate([path]);
   }
 
-  public chat(): void {
-    let path = '/chat';
-    this.router.navigate([path]);
+  public chat(recipient: any, page: number, type: number = 0): void {
+    let path;
+    if (null == recipient) {
+      path = '/chat/' + page + '/' + type;
+    } else {
+      path = '/chat/' + page + '/' + recipient.id + '/' + recipient.name + '/' + type;
+    }
+    this.router.navigate([path], {
+      state: {
+        data: {
+          previousRoute: this.router.url,
+        },
+      },
+    });
   }
 }

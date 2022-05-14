@@ -1,86 +1,178 @@
-<app-main-navbar-menu [allLocality]=allLocality [activePage]=activePage></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]=titleMain_txt></custom-tittle-main>
+<app-main-navbar-menu
+  [allLocality]="allLocality"
+  [activePage]="activePage"
+></app-main-navbar-menu>
+<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
 
-<div class="container" center='block'>
-    <div class="mainFormClass" center='block'>
-        <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
+<div class="container" center="block">
+  <div class="mainFormClass" center="block">
+    <img
+      class="imgSetCollectionInput"
+      [src]="imgSetStandardSrc"
+      (click)="activeStandardCollectionInput()"
+    />
+    <img
+      class="imgSetCollectionInput"
+      [src]="imgSetPrizeSrc"
+      (click)="activePrizeCollectionInput()"
+    />
+    <img
+      class="imgSetCollectionInput"
+      [src]="imgSetAuctionSrc"
+      (click)="activeAuctionCollectionInput()"
+    />
 
-            <div class="form-group" [ngClass]="displayFieldCss('title')">
-                <!-- First Name -->
-                <div class="col-sm-12">
-                    <label for="title" class="control-label required">{{title_txt}}</label>
-                    <input type="text" formControlName="title" class="form-control" id="title" name="title"
-                        placeholder={{title_txt}}>
-                    <p *ngIf="invalidTitle()" id="title_error" class="help-block">
-                        {{'Invalid title.'}}</p>
-                    <p class="help-block"> {{this.serverServiceErrors.title}}</p>
-                </div>
-            </div>
-
-            <div class="form-group" [ngClass]="displayFieldCss('locality')">
-                <!-- First Name -->
-                <div class="col-sm-12">
-                    <label for="locality" class="control-label required">{{locality_txt}}</label>
-                    <select type="text" formControlName="locality" class="form-control" id="locality" name="locality">
-                        <option *ngFor="let locality of allLocality" value={{locality.name}}>{{locality.name}}</option>
-                    </select>
-                    <p *ngIf="invalidLocality()" id="locality_error" class="help-block">
-                        {{'Invalid locality.'}}</p>
-                    <p class="help-block"> {{this.serverServiceErrors.locality}}</p>
-                </div>
-            </div>
-
-            <div class="form-group" [ngClass]="displayFieldCss('comment')">
-                <!-- Last Name -->
-                <div class="col-sm-12">
-                    <label for="comment" class="control-label">{{comment_txt}}</label>
-                    <input type="text" formControlName="comment" class="form-control" id="comment" name="comment"
-                        placeholder={{comment_txt}}>
-                    <p *ngIf="invalidComment()" id="comment_error" class="help-block">
-                        {{'Invalid comment.'}}</p>
-                    <p class="help-block"> {{this.serverServiceErrors.comment}}</p>
-                </div>
-            </div>
-
-            <div class="form-group" [ngClass]="displayFieldCss('date')">
-                <!-- Zip Code-->
-                <div class="col-sm-12">
-                    <label for="date" class="control-label required">{{date_txt}}</label>
-                    <input type="date" formControlName="date" class="form-control" id="date" name="date"
-                        placeholder="#####">
-                    <p *ngIf="invalidDate()" id="date_error" class="help-block">
-                        {{'Invalid date.'}}</p>
-                    <p class="help-block"> {{this.serverServiceErrors.date}}</p>
-                </div>
-            </div>
-
-            <div class="form-group" [ngClass]="displayFieldCss('img')">
-                <!-- Password -->
-                <div class="imageContainer">
-                    <div class="col-sm-12">
-                        <label for="img" class="control-label image" id="imgId">{{this.titleImage}}</label>
-                        <input type="file" class="form-control" id="img" name="img" (change)="onFileSelect($event)">
-                    </div>
-                </div>
-            </div>
-
-            <div class="submitContainer">
-                <p class="help-block"> {{this.serverServiceErrors.img}}</p>
-                <p id="successLoadCondition"> {{this.serverServiceErrors.uploadSuccess}}</p>
-                <p class="help-block">{{this.inputCondition.errorLoad}}</p>
-            </div>
-
-            <div class="form-group has-error">
-                <div class="submitContainer">
-                    <div class="col-sm-12">
-                        <button type="submit" class="submitButton">{{store_txt}}</button>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-        <div class="submitContainer">
-            <img [src]="imgURL" height="200" *ngIf="imgURL">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-group" [ngClass]="displayFieldCss('title')">
+        <!-- First Name -->
+        <div class="col-sm-12">
+          <label for="title" class="control-label required">{{ title_txt }}</label>
+          <input
+            type="text"
+            formControlName="title"
+            class="form-control"
+            id="title"
+            name="title"
+            placeholder="{{ title_txt }}"
+          />
+          <p *ngIf="invalidTitle()" id="title_error" class="help-block">
+            {{ 'Invalid title.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.title }}</p>
         </div>
+      </div>
+
+      <div class="form-group" [ngClass]="displayFieldCss('locality')">
+        <!-- First Name -->
+        <div class="col-sm-12">
+          <label for="locality" class="control-label required">{{ locality_txt }}</label>
+          <select
+            type="text"
+            formControlName="locality"
+            class="form-control"
+            id="locality"
+            name="locality"
+          >
+            <option *ngFor="let locality of allLocality" value="{{ locality.name }}">
+              {{ locality.name }}
+            </option>
+          </select>
+          <p *ngIf="invalidLocality()" id="locality_error" class="help-block">
+            {{ 'Invalid locality.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.locality }}</p>
+        </div>
+      </div>
+
+      <div *ngIf="ifShowPrice()" class="form-group" [ngClass]="displayFieldCss('title')">
+        <!-- First Name -->
+        <div class="col-sm-8 price">
+          <label for="price" class="control-label required">{{ input_price_text }}</label>
+          <input
+            type="number"
+            formControlName="price"
+            class="form-control"
+            id="price"
+            name="price"
+          />
+          <p *ngIf="invalidPrice()" id="price_error" class="help-block">
+            {{ 'Invalid price.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.price }}</p>
+        </div>
+      </div>
+
+      <div *ngIf="ifShowPrice()" class="form-group">
+        <!-- First Name -->
+        <div class="col-sm-4 currency">
+          <select
+            type="text"
+            formControlName="currency"
+            class="form-control"
+            id="currency"
+            name="currency"
+          >
+            <option
+              *ngFor="let currency_item of currency_array"
+              value="{{ currency_item }}"
+            >
+              {{ currency_item }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" [ngClass]="displayFieldCss('comment')">
+        <!-- Last Name -->
+        <div class="col-sm-12">
+          <label for="comment" class="control-label">{{ comment_txt }}</label>
+          <input
+            type="text"
+            formControlName="comment"
+            class="form-control"
+            id="comment"
+            name="comment"
+            placeholder="{{ comment_txt }}"
+          />
+          <p *ngIf="invalidComment()" id="comment_error" class="help-block">
+            {{ 'Invalid comment.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.comment }}</p>
+        </div>
+      </div>
+      <div class="form-group" [ngClass]="displayFieldCss('date')">
+        <!-- Zip Code-->
+        <div class="col-sm-12">
+          <label for="date" class="control-label required">{{ date_txt }}</label>
+          <input
+            type="date"
+            formControlName="date"
+            class="form-control"
+            id="date"
+            name="date"
+            placeholder="#####"
+          />
+          <p *ngIf="invalidDate()" id="date_error" class="help-block">
+            {{ 'Invalid date.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.date }}</p>
+        </div>
+      </div>
+
+      <div class="form-group" [ngClass]="displayFieldCss('img')">
+        <!-- Password -->
+        <div class="imageContainer">
+          <div class="col-sm-12">
+            <label for="img" class="control-label image" id="imgId">{{
+              this.titleImage
+            }}</label>
+            <input
+              type="file"
+              class="form-control"
+              id="img"
+              name="img"
+              (change)="onFileSelect($event)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="submitContainer">
+        <p class="help-block">{{ this.serverServiceErrors.img }}</p>
+        <p id="successLoadCondition">{{ this.serverServiceErrors.uploadSuccess }}</p>
+        <p class="help-block">{{ this.inputCondition.errorLoad }}</p>
+      </div>
+
+      <div class="form-group has-error">
+        <div class="submitContainer">
+          <div class="col-sm-12">
+            <button type="submit" class="submitButton">{{ store_txt }}</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="submitContainer">
+      <img [src]="imgURL" height="200" *ngIf="imgURL" />
     </div>
+  </div>
 </div>

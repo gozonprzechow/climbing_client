@@ -1,5 +1,5 @@
 .pagingButtons {
-  width:45px;
+  width: 45px;
   height: 45px;
   padding: 0px 0;
   border: 3px solid rgb(48, 136, 207) !important;
@@ -13,9 +13,7 @@
 }
 
 .pagingButtons.active {
-
   background-color: rgb(75, 73, 73);
-
 }
 
 /* Style on hover colour */
