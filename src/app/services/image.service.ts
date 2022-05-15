@@ -6,7 +6,6 @@ export class ImageService {
   suffix: string = '_small';
 
   getImage(imgName, imgPath): string {
-    console.log(imgPath);
     return environment.serverUrl + '/' + imgPath + imgName + this.suffix;
   }
 }

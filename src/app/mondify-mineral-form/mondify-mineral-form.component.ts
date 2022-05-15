@@ -111,7 +111,10 @@ export class MondifyMineralFormComponent implements OnInit {
       this.achatdbCollection.date,
       'yyyy-MM-dd',
     );
-    this.imgURL = this.getImageLarge(this.achatdbCollection.imgName);
+    this.imgURL = this.getImageLarge(
+      this.achatdbCollection.imgName,
+      this.achatdbCollection.imgPath,
+    );
 
     this.userForm = this.formBuilder.group(
       {
@@ -210,8 +213,8 @@ export class MondifyMineralFormComponent implements OnInit {
     this.serverServiceErrors.uploadSuccess = null;
   }
 
-  public getImageLarge(imgName): string {
-    return this.prefix + imgName;
+  public getImageLarge(imgName, imgPath): string {
+    return environment.serverUrl + '/' + imgPath + imgName;
   }
 
   onFileSelect(event) {
@@ -290,6 +293,7 @@ export class MondifyMineralFormComponent implements OnInit {
     this.userForm.reset();
     this.resetTitleImage();
     this.imgURL = null;
+    console.log(this.previousRoute);
     this.routerService.returnToPreviousPage(this.previousRoute);
   }
 }
