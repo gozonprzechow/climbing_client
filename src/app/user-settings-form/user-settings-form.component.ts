@@ -11,6 +11,7 @@ import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.com
 import { MathServices, ConvertedBytes } from '../services/math.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-user-settings-form',
@@ -30,6 +31,7 @@ export class UserSettingsFormComponent implements OnInit {
   confirmModalMessage: string;
   confirmModalTitle: string;
   titleImage: string;
+  upload_info: any = {};
   imgURL: any;
 
   modalRef: BsModalRef;
@@ -78,6 +80,11 @@ export class UserSettingsFormComponent implements OnInit {
     cz: 'Uložit změny',
     en: 'Save changes',
   };
+  changesStored_txt: string;
+  changesStoredTranslation: TextTranslator = {
+    cz: 'Nastavení bylo změněno',
+    en: 'Settings was changed',
+  };
 
   constructor(
     public elementRef: ElementRef,
@@ -88,6 +95,7 @@ export class UserSettingsFormComponent implements OnInit {
     public languageService: LanguageService,
     public mathServices: MathServices,
     public http: HttpClient,
+    public imageService: ImageService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -113,18 +121,22 @@ export class UserSettingsFormComponent implements OnInit {
     this.saveChanges_txt = this.languageService.getNativeLanguageText(
       this.saveChangesTranslation,
     );
+    this.changesStored_txt = this.languageService.getNativeLanguageText(
+      this.changesStoredTranslation,
+    );
     this.confirmModalMessage = this.warningDeleteaccount_txt;
     this.confirmModalTitle = this.warningDeleteaccountTitle_txt;
+    this.upload_info.upload_success = false;
   }
 
   invalidEmail() {
     return this.submitted && this.userForm.controls.email.errors != null;
   }
 
-  copyServerErrors(returnData: any) {
-    this.serverServiceErrors.profile_image = returnData.inputErrorMessage.profile_image;
-    this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
-  }
+  // copyServerErrors(returnData: any) {
+  //   this.serverServiceErrors.profile_image = returnData.inputErrorMessage.profile_image;
+  //   this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
+  // }
 
   cleanServerErrors() {
     this.serverServiceErrors.profile_image = null;
@@ -153,6 +165,10 @@ export class UserSettingsFormComponent implements OnInit {
           );
           this.activePage = data.activePage;
           this.allLocality = data.localities;
+          this.imgURL = this.imageService.getStandardImage(
+            this.userInfo.profileImgName,
+            this.userInfo.profileImgPath,
+          );
         },
         (error) => {
           this.routerService.notLoginError();
@@ -189,9 +205,9 @@ export class UserSettingsFormComponent implements OnInit {
   }
 
   onFileSelect(event) {
+    this.upload_info.upload_success = false;
     if (1 == event.target.files.length) {
       const file = event.target.files[0];
-      console.log(file);
       this.userForm.get('img').setValue(file);
       if (17 < file.name.length) {
         this.titleImage = file.name.substr(0, 14) + '...';
@@ -215,6 +231,14 @@ export class UserSettingsFormComponent implements OnInit {
   onSubmit() {
     let formData = new FormData();
     this.submitted = true;
+    this.upload_info.upload_success = false;
+    // console.log(this.userForm.controls.img.value);
+    if (
+      '' === this.userForm.controls.img.value ||
+      null === this.userForm.controls.img.value
+    ) {
+      return;
+    }
 
     if (this.userForm.invalid == true) {
       this.cleanServerErrors();
@@ -225,19 +249,28 @@ export class UserSettingsFormComponent implements OnInit {
         formData.append(key, this.userForm.value[key]);
       });
       this.http
-        .post<any>(
-          environment.urlAddress + '/api/v1/user_input/modifyUserInfo',
-          formData,
-        )
+        .post<any>(environment.urlAddress + '/api/v1/user_input/modifyUserInfo', formData)
         .subscribe(
           (returnData: any) => {
             this.inputCondition.errorLoad = null;
-            this.copyServerErrors(returnData);
-            if (null == returnData.inputErrorMessage.uploadSuccess) {
-            } else {
+            this.upload_info = returnData.upload_info;
+            // this.copyServerErrors(returnData);
+            if (this.upload_info.upload_success === 'true') {
               this.submitted = false;
               this.userForm.get('img').setValue('', { emitEvent: true });
               this.imgURL = null;
+              this.userInfo.profileImgPath = this.upload_info.profileImgPath;
+              this.userInfo.profileImgName = this.upload_info.profileImgName;
+              this.userInfo.imagesSize = this.upload_info.imagesSize;
+              this.convertedBytes = this.mathServices.setUserFriendlyByteUnit(
+                this.userInfo.imagesSize,
+              );
+              this.imgURL = this.imageService.getStandardImage(
+                this.userInfo.profileImgName,
+                this.userInfo.profileImgPath,
+              );
+            } else {
+              this.upload_info.upload_success = false;
             }
           },
           (error) => {

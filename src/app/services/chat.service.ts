@@ -9,6 +9,8 @@ export enum ChatStatus {
 export interface MessagesWorkData {
   delete_message_array: any;
   delete_message_image_array: any;
+  pair_delete_message_array?: any;
+  achatDbCollections_array?: any;
 }
 
 @Injectable()
@@ -81,6 +83,12 @@ export class ChatService {
   ): MessagesWorkData {
     for (let i = 0; i < array_length; i++) {
       messages_work_data.delete_message_array[i] = null;
+      if (messages_work_data.pair_delete_message_array) {
+        messages_work_data.pair_delete_message_array[i] = null;
+      }
+      if (messages_work_data.achatDbCollections_array) {
+        messages_work_data.achatDbCollections_array[i] = null;
+      }
     }
     return messages_work_data;
   }
@@ -100,16 +108,32 @@ export class ChatService {
     message_id,
     num_in_array,
     messages_work_data: MessagesWorkData,
+    message_pair_id?,
+    achatDbCollections_id?,
   ): MessagesWorkData {
     if (messages_work_data.delete_message_array[num_in_array] == null) {
       messages_work_data.delete_message_array[num_in_array] = message_id;
       messages_work_data.delete_message_image_array[num_in_array] =
         '../../assets/skins/confirm_delete_message_checkbox.png';
+      if (message_pair_id) {
+        messages_work_data.pair_delete_message_array[num_in_array] = message_pair_id;
+      }
+      if (achatDbCollections_id) {
+        messages_work_data.achatDbCollections_array[num_in_array] = achatDbCollections_id;
+      }
     } else {
       messages_work_data.delete_message_array[num_in_array] = null;
       messages_work_data.delete_message_image_array[num_in_array] =
         '../../assets/skins/delete_message_checkbox.png';
+      if (message_pair_id) {
+        messages_work_data.pair_delete_message_array[num_in_array] = null;
+      }
+      if (achatDbCollections_id) {
+        messages_work_data.achatDbCollections_array[num_in_array] = null;
+      }
     }
+    // console.log(achatDbCollections_id);
+    // console.log(messages_work_data);
     return messages_work_data;
   }
 

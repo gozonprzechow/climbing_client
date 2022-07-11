@@ -143,7 +143,7 @@ export class AddOfferModalComponent implements OnInit {
               this.list.achat_collection.binds.push(returnData.bind);
               this.list.achat_collection.price = returnData.price;
               // console.log(this.list.achat_collection);
-              console.log(this.list.achat_collection);
+              // console.log(this.list.achat_collection);
               this.bsModalRef.hide();
               this.event.emit({ new_price: returnData.price });
             }

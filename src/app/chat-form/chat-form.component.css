@@ -125,8 +125,8 @@
 }
 
 .chatPosterNameColumn {
-  min-width: 150px;
-  max-width: 250px;
+  min-width: 100px;
+  max-width: 150px !important;
 }
 
 .chatDeleteMessageColumn {
@@ -166,7 +166,7 @@
   cursor: pointer;
   font-size: 24px;
   margin: 3px;
-  float: left;
+  /* float: left; */
 }
 
 .imgDeleteFriend {
@@ -182,14 +182,14 @@
   margin: 3px;
   float: right;
   position: relative;
-  top: -6px; 
+  top: -6px;
   right: -18px;
   opacity: 0.4;
 }
 
 .imgDeleteFriend:hover {
   position: relative;
-  top: -6px; 
+  top: -6px;
   right: -18px;
   opacity: 1;
   /* cursor: pointer !important; */
@@ -209,21 +209,58 @@
   text-decoration: underline;
 }
 
-.routeFriendConversation{
+.routeFriendConversation {
   word-break: break-all;
   word-wrap: break-word;
   white-space: normal;
   margin-bottom: 7px;
 }
 
-.dropdownConfirmedFriend{
+.dropdownConfirmedFriend {
   min-width: 280px !important;
   margin-bottom: -12px !important;
 }
 
 .imageBind {
   cursor: pointer;
-  width: 120px;
-  height: 98px;
+  width: 80px;
+  height: 65px;
   color: rgb(177, 185, 189);
+}
+
+.imageProfile {
+  cursor: pointer;
+  width: 80px;
+  height: 65px;
+  color: rgb(177, 185, 189);
+}
+
+.alertChat {
+  font-weight: bold;
+  font-size: 20px;
+  color: red;
+}
+
+.changingAlertChat {
+  position: absolute;
+  font-weight: bold;
+  font-size: 20px;
+  color: red;
+  top: -10px;
+  right: 1px;
+  float: left;
+}
+
+.chatImageBoxAbsolute {
+  position: absolute;
+  top: 18px;
+  right: 4px;
+}
+
+.changingChatAlertBox {
+  position: relative;
+}
+
+.clearDiv{
+  float: left;
 }

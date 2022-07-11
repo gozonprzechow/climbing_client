@@ -25,16 +25,25 @@
       "
       (mouseout)="img_standard_chat = '../../assets/skins/insert_standard_collection.png'"
     />
-    <img
-      *ngIf="ifShowPrizeChatSwitch()"
-      class="imgChooseChat"
-      [src]="img_prize_chat"
-      (click)="choosePriceChat()"
-      (mouseover)="
-        img_prize_chat = '../../assets/skins/insert_prize_collection_hover.png'
-      "
-      (mouseout)="img_prize_chat = '../../assets/skins/insert_prize_collection.png'"
-    />
+    <div *ngIf="ifShowStandardChatSwitch()" class="chatImageBoxAbsolute">
+      <p *ngIf="alerts.message_alert" class="alertChat">!</p>
+    </div>
+    <div class="clearDiv">
+      <div *ngIf="ifShowPrizeChatSwitch()" class="changingChatAlertBox">
+        <img
+          *ngIf="ifShowPrizeChatSwitch()"
+          class="imgChooseChat"
+          [src]="img_prize_chat"
+          (click)="choosePriceChat()"
+          (mouseover)="
+            img_prize_chat = '../../assets/skins/insert_prize_collection_hover.png'
+          "
+          (mouseout)="img_prize_chat = '../../assets/skins/insert_prize_collection.png'"
+        />
+        <div *ngIf="alerts.price_alert" class="changingAlertChat">$</div>
+        <div *ngIf="alerts.message_alert" class="changingAlertChat">!</div>
+      </div>
+    </div>
     <div
       ngbDropdownMenu
       class="dropdownStyle dropdown-menu-right"
@@ -156,35 +165,42 @@
           />
         </div>
 
-        <div class="col-2 chatPosterNameColumn">
+        <div class="col-1 chatPosterNameColumn">
           <div class="chatPosterName">
+            <div
+              *ngIf="
+                imageService.isImgThere(
+                  chat_message.messages.displayUserProfileDb.profileImgName,
+                  chat_message.messages.displayUserProfileDb.profileImgPath
+                )
+              "
+              class="imageContainer"
+            >
+              <img
+                [attr.src]="
+                  imageService.getImage(
+                    chat_message.messages.displayUserProfileDb.profileImgName,
+                    chat_message.messages.displayUserProfileDb.profileImgPath
+                  )
+                "
+                class="imageProfile"
+              />
+            </div>
             <p>
               <a
-                *ngIf="!auth.isIdLogUser(chat_message.messages.posterId)"
                 id="fakeHrefStyle_id"
                 (click)="
                   routeToChatWithUsers(
-                    chat_message.messages.posterName,
-                    chat_message.messages.posterId
+                    chat_message.messages.displayUserProfileDb.name,
+                    chat_message.messages.displayUserProfileDb._id
                   )
                 "
-                >{{ chat_message.messages.posterName }}</a
-              >
-              <a
-                *ngIf="!auth.isIdLogUser(chat_message.messages.recipientId)"
-                id="fakeHrefStyle_id"
-                (click)="
-                  routeToChatWithUsers(
-                    chat_message.messages.recipientName,
-                    chat_message.messages.recipientId
-                  )
-                "
-                >{{ chat_message.messages.recipientName }}</a
+                >{{ chat_message.messages.displayUserProfileDb.name }}</a
               >
             </p>
           </div>
         </div>
-        <div class="co-10">
+        <div class="co-11">
           <div class="chatText">{{ chat_message.messages.message }}</div>
         </div>
       </div>
@@ -192,6 +208,22 @@
   </div>
 
   <div *ngIf="this.chatService.isPriceChat(this.choosen_chat)" class="containerChat">
+    <div class="containerChat_inputMessage">
+      <div class="containerChat_inputMessageBtn">
+        <div class="row">
+          <div class="col">
+            <button
+              type="button"
+              class="btn btnDeleteMessages"
+              (click)="deleteBindMessage()"
+            >
+              {{ delete_txt }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div
       *ngFor="let chat_message of this.bind_messages; let num_in_array = index"
       class="containerChat_text"
@@ -219,7 +251,9 @@
               binds_message_work_data = chatService.toggleDeleteMessage(
                 chat_message.offerMessages._id,
                 num_in_array,
-                binds_message_work_data
+                binds_message_work_data,
+                chat_message.offerMessages.pairBindId,
+                chat_message.offerMessages.achatDbCollection[0]._id
               )
             "
           />
@@ -242,51 +276,47 @@
               binds_message_work_data = chatService.toggleDeleteMessage(
                 chat_message.offerMessages._id,
                 num_in_array,
-                binds_message_work_data
+                binds_message_work_data,
+                chat_message.offerMessages.pairBindId,
+                chat_message.offerMessages.achatDbCollection[0]._id
               )
             "
           />
         </div>
 
-        <div class="col-2 chatPosterNameColumn">
+        <div class="col-1 chatPosterNameColumn">
           <div class="chatPosterName">
             <div class="imageContainer">
               <img
                 [attr.src]="
-                  imageService.getImage(chat_message.offerMessages.achatImages[0].imgName, chat_message.offerMessages.achatImages[0].imgPath)
+                  imageService.getImage(
+                    chat_message.offerMessages.achatDbCollection[0].imgName,
+                    chat_message.offerMessages.achatDbCollection[0].imgPath
+                  )
                 "
                 class="imageBind"
-                (click)="openModal(chat_message.offerMessages.achatCollection)"
+                (click)="openModal(chat_message.offerMessages.achatDbCollection[0])"
               />
             </div>
             <p>
               <a
-                *ngIf="!auth.isIdLogUser(chat_message.offerMessages.binderId)"
                 id="fakeHrefStyle_id"
                 (click)="
-                  routeToChatWithUsers(
-                    chat_message.offerMessages.binderName,
-                    chat_message.offerMessages.binderId
+                  routeToPriceChatWithUsers(
+                    chat_message.offerMessages.displayUserProfileDb.name,
+                    chat_message.offerMessages.displayUserProfileDb._id
                   )
                 "
-                >{{ chat_message.offerMessages.binderName }}</a
-              >
-              <a
-                *ngIf="auth.isIdLogUser(chat_message.offerMessages.binderId)"
-                id="fakeHrefStyle_id"
-                (click)="
-                  routeToChatWithUsers(
-                    chat_message.offerMessages.recipientName,
-                    chat_message.offerMessages.recipientId
-                  )
-                "
-                >{{ chat_message.offerMessages.recipientName }}</a
+                >{{ chat_message.offerMessages.displayUserProfileDb.name }}</a
               >
             </p>
           </div>
         </div>
-        <div class="co-10">
-          <div class="chatText">{{ chat_message.offerMessages.message }}</div>
+        <div class="co-11">
+          <div class="chatText">
+            price: {{ chat_message.offerMessages.price }}<br />
+            {{ chat_message.offerMessages.message }}
+          </div>
         </div>
       </div>
     </div>

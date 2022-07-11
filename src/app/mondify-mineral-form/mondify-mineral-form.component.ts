@@ -293,7 +293,7 @@ export class MondifyMineralFormComponent implements OnInit {
     this.userForm.reset();
     this.resetTitleImage();
     this.imgURL = null;
-    console.log(this.previousRoute);
+    // console.log(this.previousRoute);
     this.routerService.returnToPreviousPage(this.previousRoute);
   }
 }

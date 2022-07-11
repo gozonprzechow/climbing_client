@@ -20,7 +20,7 @@ export class MainNavbarMenuComponent implements OnInit {
   @Input() activePage: any = {};
   navbarOpen = false;
   showAddComment: boolean = false;
-  message_alert: boolean = false;
+  alerts: any = {};
   show_add_friend_option: boolean = false;
   imgAddSrc: String;
   imgChatSrc: String;
@@ -102,6 +102,8 @@ export class MainNavbarMenuComponent implements OnInit {
     public http: HttpClient,
     public languageService: LanguageService,
   ) {
+    this.alerts.message_alert = false;
+    this.alerts.price_alert = false;
     this.imgSrc = '../../../assets/skins/settings_button.png';
     this.imgChatSrc = '../../../assets/skins/message_button.png';
     this.imgAddSrc = '../../../assets/skins/add_friend_button.png';
@@ -155,7 +157,7 @@ export class MainNavbarMenuComponent implements OnInit {
         .post<any>(environment.urlAddress + '/api/v1/user_input/mainNavbarMenu', formData)
         .subscribe((returnData: any) => {
           this.show_add_friend_option = returnData.show_add_friend_option;
-          this.message_alert = returnData.message_alert;
+          this.alerts = returnData.alerts;
         });
     }
   }
@@ -272,7 +274,7 @@ export class MainNavbarMenuComponent implements OnInit {
     let formData = new FormData();
     formData.append('friend_id', requested_user_id);
     let logUser = this.auth.getLogUserId();
-    console.log(requested_user_id);
+    // console.log(requested_user_id);
     this.http
       .post<any>(
         environment.urlAddress +

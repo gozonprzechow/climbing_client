@@ -100,7 +100,10 @@
               [ngClass]="{ chatButton: navbarOpen }"
             />
             <div class="chatImageBoxAbsolute">
-              <p *ngIf="message_alert" class="alertChat">!</p>
+              <p *ngIf="alerts.message_alert" class="alertChat">!</p>
+            </div>
+            <div class="chatImageBoxAbsolutePrice">
+              <p *ngIf="alerts.price_alert" class="alertChat">$</p>
             </div>
           </div>
         </div>

@@ -8,4 +8,17 @@ export class ImageService {
   getImage(imgName, imgPath): string {
     return environment.serverUrl + '/' + imgPath + imgName + this.suffix;
   }
+
+  getStandardImage(imgName, imgPath): string {
+    return environment.serverUrl + '/' + imgPath + imgName;
+  }
+  isImgThere(imgName, imgPath): Boolean {
+    if (imgName == '' || imgName == 'undefined') {
+      return false;
+    }
+    if (imgPath == '' || imgPath == 'undefined') {
+      return false;
+    }
+    return true;
+  }
 }

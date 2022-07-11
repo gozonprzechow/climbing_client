@@ -30,7 +30,7 @@ export class ChatFormComponent implements OnInit {
     password: '',
   };
 
-  kNumMessageOnPage: number = 4;
+  kNumMessageOnPage: number = 14;
 
   submitted = false;
   showAddMessage: boolean = false;
@@ -44,7 +44,7 @@ export class ChatFormComponent implements OnInit {
   inputCondition: InputCondition = new InputCondition();
   errorMessage: string;
   message: string;
-  messageValue: string;
+  messageValue: string = '';
   title: string;
   my_name: string;
   recipient_id: string;
@@ -60,9 +60,13 @@ export class ChatFormComponent implements OnInit {
   recipient: any = {};
   product: any = {};
   friends: any = [];
+  alerts: any = {};
 
   chat_messages: any = [];
   bind_messages: any = [];
+  pair_bind_messages: any = [];
+  bind_message_achatDbCollection_ids: any = [];
+
   buttonCollections: ButtonCollection[] = [];
   standard_message_work_data: MessagesWorkData = {
     delete_message_array: [],
@@ -70,8 +74,11 @@ export class ChatFormComponent implements OnInit {
   };
   binds_message_work_data: MessagesWorkData = {
     delete_message_array: [],
+    pair_delete_message_array: [],
+    achatDbCollections_array: [],
     delete_message_image_array: [],
   };
+  pair_binds_message_data_worker;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -171,6 +178,8 @@ export class ChatFormComponent implements OnInit {
     public pagingButtons: PagingButtonsServices,
     public imageService: ImageService,
   ) {
+    this.alerts.message_alert = false;
+    this.alerts.price_alert = false;
     this.img_friend_dropdown = '../../assets/skins/drop_down.png';
     this.img_remove_friend = '../../assets/skins/remove_button.png';
 
@@ -178,7 +187,7 @@ export class ChatFormComponent implements OnInit {
       this.kNumMessageOnPage,
       this.standard_message_work_data,
     );
-    this.standard_message_work_data = this.chatService.fillDeleteMessageImageArrayDefault(
+    this.binds_message_work_data = this.chatService.fillDeleteMessageImageArrayDefault(
       this.kNumMessageOnPage,
       this.binds_message_work_data,
     );
@@ -257,7 +266,7 @@ export class ChatFormComponent implements OnInit {
       this.pagingButtons.setActualPage(this.actual_page);
 
       if (this.chatService.isPriceChat(this.choosen_chat)) {
-        console.log('Sem tu');
+        // console.log('Sem tu');
         this.getPriceChatHttp();
       } else {
         this.getStandardChatHttp();
@@ -288,6 +297,7 @@ export class ChatFormComponent implements OnInit {
           this.friends = returnData.friends;
           this.confirmed_friends = returnData.friends.confirmed_friends;
           this.my_name = returnData.user_name;
+          this.alerts = returnData.alerts;
         },
         (error) => {
           console.log(
@@ -320,6 +330,7 @@ export class ChatFormComponent implements OnInit {
           if (returnData.chat_messages) {
             this.chat_messages = returnData.chat_messages;
           }
+          this.alerts = returnData.alerts;
         },
         (error) => {
           console.log(
@@ -350,10 +361,10 @@ export class ChatFormComponent implements OnInit {
           if (returnData.bind_messages) {
             this.bind_messages = returnData.bind_messages;
           }
-          console.log(this.bind_messages);
           this.friends = returnData.friends;
           this.confirmed_friends = returnData.friends.confirmed_friends;
           this.my_name = returnData.user_name;
+          this.alerts = returnData.alerts;
         },
         (error) => {
           console.log(
@@ -386,7 +397,8 @@ export class ChatFormComponent implements OnInit {
           if (returnData.bind_messages) {
             this.bind_messages = returnData.bind_messages;
           }
-          console.log(this.bind_messages);
+          this.alerts = returnData.alerts;
+          // console.log(this.bind_messages);
         },
         (error) => {
           console.log(
@@ -515,6 +527,57 @@ export class ChatFormComponent implements OnInit {
       });
   }
 
+  public deleteBindMessage() {
+    let formData = new FormData();
+    formData.append(
+      'bind_list',
+      JSON.stringify(
+        this.binds_message_work_data.delete_message_array.filter(this.notEmpty),
+      ),
+    );
+    formData.append(
+      'achatDbCollection_list',
+      JSON.stringify(
+        this.binds_message_work_data.achatDbCollections_array.filter(this.notEmpty),
+      ),
+    );
+    formData.append(
+      'pair_bind_list',
+      JSON.stringify(
+        this.binds_message_work_data.pair_delete_message_array.filter(this.notEmpty),
+      ),
+    );
+    formData.append('actual_page', JSON.stringify(this.actual_page));
+    formData.append('recipient_id', this.recipient_id);
+    console.log(this.recipient_id);
+
+    this.http
+      .post<any>(environment.urlAddress + '/api/v1/user_input/deleteBind', formData)
+      .subscribe((returnData: any) => {
+        if (returnData.numberOfPages % this.actual_page === 0 && 0 != this.actual_page) {
+          this.actual_page--;
+        }
+
+        this.updateChatUrl();
+        this.binds_message_work_data =
+          this.chatService.fillDeleteMessageImageArrayDefault(
+            this.kNumMessageOnPage,
+            this.binds_message_work_data,
+          );
+        this.binds_message_work_data = this.chatService.fillDeleteMessageArrayNull(
+          this.kNumMessageOnPage,
+          this.binds_message_work_data,
+        );
+        this.pagingButtons.setNumOfPage(returnData.numberOfPages);
+        this.pagingButtons.setActualPage(this.actual_page);
+        this.buttonCollections = this.pagingButtons.createButtonsField();
+        console.log(returnData);
+        if (returnData.bind_messages) {
+          this.bind_messages = returnData.bind_messages;
+        }
+      });
+  }
+
   public canceAddMessage() {
     this.showAddMessage = false;
   }
@@ -533,6 +596,17 @@ export class ChatFormComponent implements OnInit {
       recipient.id = id;
     }
     this.routerService.chat(recipient, 0);
+  }
+
+  public routeToPriceChatWithUsers(name, id) {
+    let recipient: any = {};
+    if (id == this.auth.getLogUserId()) {
+      recipient = null;
+    } else {
+      recipient.name = name;
+      recipient.id = id;
+    }
+    this.routerService.chat(recipient, 0, 1);
   }
 
   public sendMessage(friend_name) {
@@ -621,35 +695,23 @@ export class ChatFormComponent implements OnInit {
     this.location.go(first_page_url);
   }
 
-  openModal(achatdbCollection_id) {
-    let formData = new FormData();
-    formData.append('achatdbCollection_id', achatdbCollection_id);
-    this.http
-      .post<any>(
-        environment.urlAddress + '/api/v1/user_input/achatDbCollection',
-        formData,
-      )
-      .subscribe((returnData: any) => {
-        if (returnData.achatdbCollection) {
-          let achatdbCollection = returnData.achatdbCollection;
-          const initialState = {
-            list: {
-              achatdbCollection: achatdbCollection,
-              previousUrl: null,
-              numOfItemCollection: '',
-              dontUseUrl: true,
-            },
-          };
+  openModal(achatdbCollection) {
+    const initialState = {
+      list: {
+        achatdbCollection: achatdbCollection,
+        previousUrl: null,
+        numOfItemCollection: '',
+        dontUseUrl: true,
+      },
+    };
 
-          this.modalRef = this.modalService.show(
-            ImageModalComponent,
-            Object.assign(
-              { animated: false },
-              { class: 'mineralImageModal' },
-              { initialState },
-            ),
-          );
-        }
-      });
+    this.modalRef = this.modalService.show(
+      ImageModalComponent,
+      Object.assign(
+        { animated: false },
+        { class: 'mineralImageModal' },
+        { initialState },
+      ),
+    );
   }
 }

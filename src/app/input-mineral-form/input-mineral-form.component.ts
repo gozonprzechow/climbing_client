@@ -260,7 +260,7 @@ export class InputMineralFormComponent implements OnInit {
   onFileSelect(event) {
     if (1 == event.target.files.length) {
       const file = event.target.files[0];
-      console.log(file);
+      // console.log(file);
       this.userForm.get('img').setValue(file);
       if (17 < file.name.length) {
         this.titleImage = file.name.substr(0, 14) + '...';
