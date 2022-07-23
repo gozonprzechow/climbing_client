@@ -36,6 +36,16 @@ export class UserLocalityFormComponent implements OnInit {
 
   buttonCollections: ButtonCollection[] = [];
 
+  toProfile_txt: string;
+  toProfileTranslation: TextTranslator = {
+    cz: 'Na profil',
+    en: 'To profile',
+  };
+  removeFromProfile_txt: string;
+  removeFromProfileTranslation: TextTranslator = {
+    cz: 'Odstranit z profilu',
+    en: 'Remove from profile',
+  };
   modifyMineral_txt: string;
   modifyMineralTranslation: TextTranslator = {
     cz: 'Upravit minerál',
@@ -78,6 +88,13 @@ export class UserLocalityFormComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
+
+    this.toProfile_txt = this.languageService.getNativeLanguageText(
+      this.toProfileTranslation,
+    );
+    this.removeFromProfile_txt = this.languageService.getNativeLanguageText(
+      this.removeFromProfileTranslation,
+    );
     this.modifyMineral_txt = this.languageService.getNativeLanguageText(
       this.modifyMineralTranslation,
     );
@@ -116,12 +133,12 @@ export class UserLocalityFormComponent implements OnInit {
       this.http
         .get(
           environment.urlAddress +
-          '/api/v1/locality/one/' +
-          params.uid +
-          '/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          postedBy,
+            '/api/v1/locality/one/' +
+            params.uid +
+            '/' +
+            this.pagingButtons.getActualPage() +
+            '/' +
+            postedBy,
         )
         .subscribe((data: any) => {
           this.pagingButtons.setNumOfPage(data.numberOfPages);
@@ -235,12 +252,12 @@ export class UserLocalityFormComponent implements OnInit {
       this.http
         .post<any>(
           environment.urlAddress +
-          '/api/v1/locality/one/' +
-          params.uid +
-          '/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          postedBy,
+            '/api/v1/locality/one/' +
+            params.uid +
+            '/' +
+            this.pagingButtons.getActualPage() +
+            '/' +
+            postedBy,
           formData,
         )
         .subscribe((data: any) => {
@@ -257,5 +274,48 @@ export class UserLocalityFormComponent implements OnInit {
           );
         });
     });
+  }
+
+  public toggleProfileMineral(achatdbCollection) {
+    let formData = new FormData();
+
+    formData.append('achatdbCollection', JSON.stringify(this.deleteCollection));
+
+    let postedBy;
+    this.subscriber = this.route.params.subscribe((params) => {
+      if (!params.idPostedBy) {
+        postedBy = this.auth.getLogUserId();
+      } else {
+        postedBy = params.idPostedBy;
+      }
+
+      this.pagingButtons.setActualPageOnDeleteItem(
+        params.page,
+        this.achatdbCollections.length,
+      );
+
+      this.http
+        .post<any>(
+          environment.urlAddress + '/api/v1/locality/toggleProfileMineral/' + postedBy,
+          formData,
+        )
+        .subscribe((data: any) => {
+          this.achatdbCollections = data.achatdbCollections;
+        });
+    });
+  }
+
+  public getDropdownToggleClass(achatdbCollection): String {
+    if (achatdbCollection.mainPage) {
+      return 'top-right btn-secondary dropdown-toggle dropdownToggleProfile';
+    }
+    return 'top-right btn-secondary dropdown-toggle dropdownToggleStandard';
+  }
+
+  public isProfileMineral(achatdbCollection): Boolean {
+    if (achatdbCollection.mainPage) {
+      return true;
+    }
+    return false;
   }
 }

@@ -32,12 +32,24 @@ ul.list-inline li {
   background-color: rgb(177, 185, 189);
 }
 
-.top-right {
+
+.dropdownToggleStandard {
   position: absolute;
   /* top: 0px; */
   right: 17px;
   opacity: 0.5;
   border-radius: 8px;
+  /* cursor: pointer !important; */
+}
+
+.dropdownToggleProfile{
+  position: absolute;
+  /* top: 0px; */
+  right: 17px;
+  opacity: 0.5;
+  border-radius: 8px;
+  border-color: rgb(158, 175, 84);
+  background-color: rgb(255,215,0);
   /* cursor: pointer !important; */
 }
 

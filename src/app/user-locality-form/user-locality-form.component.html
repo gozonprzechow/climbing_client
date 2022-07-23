@@ -23,10 +23,22 @@
                 <button
                   type="button"
                   id="dropdown01"
-                  class="top-right btn-secondary dropdown-toggle"
+                  class="{{ getDropdownToggleClass(achatdbCollection) }}"
                   ngbDropdownToggle
                 ></button>
                 <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown01">
+                  <a
+                    *ngIf="!isProfileMineral(achatdbCollection)"
+                    class="dropdown-item"
+                    (click)="toggleProfileMineral(achatdbCollection)"
+                    >{{ toProfile_txt }}</a
+                  >
+                  <a
+                    *ngIf="isProfileMineral(achatdbCollection)"
+                    class="dropdown-item"
+                    (click)="toggleProfileMineral(achatdbCollection)"
+                    >{{ removeFromProfile_txt }}</a
+                  >
                   <a
                     class="dropdown-item"
                     (click)="routerService.modifyMineral(achatdbCollection)"
