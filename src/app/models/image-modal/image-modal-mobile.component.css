@@ -1,0 +1,21 @@
+.hide_element {
+  display: none;
+}
+
+.btnComments_mobile {
+  float: right;
+}
+
+.btnSubmitComment_mobile {
+  width: 96px;
+  float: left;
+  right: 95%;
+  left: 5%;
+}
+
+.btnCancleAddComment_mobile {
+  width: 96px;
+  float: left;
+  right: 95%;
+  left: 5%;
+}

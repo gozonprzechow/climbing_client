@@ -23,6 +23,8 @@ export class InputSubMineralFormComponent implements OnInit {
   inputCondition: InputCondition = new InputCondition();
   titleImage: string;
 
+  is_submit_in_progress: Boolean = false;
+
   imgURL: any;
   mainImage: any;
   product: any = {};
@@ -47,6 +49,11 @@ export class InputSubMineralFormComponent implements OnInit {
     cz: 'Uložit',
     en: 'Store',
   };
+  submitInProgress_txt: string;
+  submitInProgressTranslation: TextTranslator = {
+    cz: 'Čekej. . .',
+    en: 'Wait. . .',
+  };
 
   constructor(
     public elementRef: ElementRef,
@@ -64,6 +71,9 @@ export class InputSubMineralFormComponent implements OnInit {
     );
     this.chooseImage_txt = this.languageService.getNativeLanguageText(
       this.chooseImageTranslation,
+    );
+    this.submitInProgress_txt = this.languageService.getNativeLanguageText(
+      this.submitInProgressTranslation,
     );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
     this.resetTitleImage();
@@ -155,6 +165,10 @@ export class InputSubMineralFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.is_submit_in_progress) {
+      return;
+    }
+    this.is_submit_in_progress = true;
     let formData = new FormData();
     this.submitted = true;
 
@@ -172,6 +186,7 @@ export class InputSubMineralFormComponent implements OnInit {
         .post<any>(environment.urlAddress + '/api/v1/user_input/subMineral', formData)
         .subscribe(
           (returnData: any) => {
+            this.is_submit_in_progress = false;
             this.inputCondition.errorLoad = returnData.inputErrorMessage.uploadError;
             this.activePage = returnData.activePage;
             this.copyServerErrors(returnData);

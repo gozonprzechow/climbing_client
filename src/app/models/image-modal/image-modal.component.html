@@ -1,4 +1,5 @@
 <div class="modal-header">
+  <app-size-detector class="hide_element"></app-size-detector>
   <h4></h4>
   <h4 *ngIf="imageInformation" class="modal-title">{{ list.achatdbCollection.title }}</h4>
   <div class="btn-group" role="group" aria-label="Basic example">
@@ -138,7 +139,7 @@
         <button
           *ngIf="imageInformation"
           type="button"
-          class="btn btnComments"
+          class={{getCommentBtnClass()}}
           (click)="seeComments(list.achatdbCollection)"
         >
           {{ comments_txt }}
@@ -170,23 +171,23 @@
             </button>
           </div>
 
-          <div *ngIf="showAddComment" class="col">
+          <div *ngIf="showAddComment" class={{getBtnAddComentColumn()}}>
             <button
               type="button"
-              class="btn btnSubmitComment"
+              class={{getSubmitCommentBtnClass()}}
               (click)="submitComment(list.achatdbCollection)"
             >
               {{ submit_txt }}
             </button>
             <button
               type="button"
-              class="btn btnCancleAddComment"
+              class={{getCancleAddCommentBtnClass()}}
               (click)="canceAddComment()"
             >
               {{ cancle_txt }}
             </button>
           </div>
-          <div *ngIf="showAddComment" class="col">
+          <div *ngIf="showAddComment" class={{getInputComentColumn()}}>
             <textarea
               class="inputCommentBox"
               ref-textarea

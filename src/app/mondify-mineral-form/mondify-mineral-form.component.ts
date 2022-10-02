@@ -17,7 +17,6 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 export class MondifyMineralFormComponent implements OnInit {
   submitted = false;
   userForm: FormGroup;
-  prefix: string;
   serviceErrors: any = {};
   activePage: any = {};
   achatdbCollection: any = {};
@@ -76,7 +75,6 @@ export class MondifyMineralFormComponent implements OnInit {
     public languageService: LanguageService,
     public datePipe: DatePipe,
   ) {
-    this.prefix = environment.serverUrl + '/static/uploads/images/';
 
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,

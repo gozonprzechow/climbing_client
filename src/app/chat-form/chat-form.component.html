@@ -2,6 +2,7 @@
   [friends]="friends"
   (event)="addFriendTrigger($event)"
 ></app-chat-navbar-menu>
+<!-- <app-size-detector class="hide_element"></app-size-detector> -->
 <custom-tittle-main [tittleMain]="title"></custom-tittle-main>
 
 <div class="container">
@@ -86,19 +87,19 @@
               {{ delete_txt }}
             </button>
           </div>
-          <div *ngIf="showAddMessage" class="col">
-            <button type="button" class="btn btnSubmitMessage" (click)="submitMessage()">
+          <div *ngIf="showAddMessage" class={{getBtnAddMessageColumn()}}>
+            <button type="button" class={{getSubmitMessageBtnClass()}} (click)="submitMessage()">
               {{ submit_txt }}
             </button>
             <button
               type="button"
-              class="btn btnCancleAddMessage"
+              class={{getCancleAddMessageBtnClass()}}
               (click)="canceAddMessage()"
             >
               {{ cancle_txt }}
             </button>
           </div>
-          <div *ngIf="showAddMessage" class="col">
+          <div *ngIf="showAddMessage" class={{getInputMessageColumn()}}>
             <textarea
               class="inputCommentBox"
               ref-textarea

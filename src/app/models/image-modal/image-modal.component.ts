@@ -11,11 +11,12 @@ import { ConfirmModalComponent } from '../../models/confirm-modal/confirm-modal.
 import { AddOfferModalComponent } from '../../models/add-offer-modal/add-offer-modal.component';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../../services/resize.service';
 
 @Component({
   selector: 'app-image-modal',
   templateUrl: './image-modal.component.html',
-  styleUrls: ['./image-modal.component.css'],
+  styleUrls: ['./image-modal.component.css', './image-modal-mobile.component.css'],
 })
 export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   submitted = false;
@@ -27,6 +28,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   imageInformation: boolean = false;
   newCommentText: string;
   textValue: string;
+  screen_size: SCREEN_SIZE;
 
   numOfItemCollection: string = '';
   actualSlide: number = 0;
@@ -95,6 +97,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     public languageService: LanguageService,
     private location: Location,
     public auth: AuthenticationService,
+    private resizeSvc: ResizeService,
   ) {
     this.comments_txt = this.languageService.getNativeLanguageText(
       this.commentsTranslation,
@@ -117,6 +120,10 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     this.imgSrc = '../../../assets/skins/like_button.png';
     this.imgPriceSrc = '../../../assets/skins/insert_prize_collection.png';
     this.imgAuctionSrc = '../../../assets/skins/insert_auction_collection.png';
+
+    this.resizeSvc.onResize$.subscribe((x) => {
+      this.screen_size = x;
+    });
   }
 
   public subscriber: any;
@@ -130,7 +137,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   }
 
   ngAfterViewChecked() {
-    this.prefix = environment.serverUrl + '/'+ this.list.achatdbCollection.imgPath;
+    this.prefix = environment.serverUrl + '/' + this.list.achatdbCollection.imgPath;
     if (this.list.actualSlide) {
       this.actualSlide = this.list.actualSlide;
       this.list.actualSlide = null;
@@ -430,5 +437,40 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     if (this.list.dontUseUrl !== true) {
       this.location.go(url);
     }
+  }
+
+  public getCommentBtnClass(): string {
+    if (0 === this.screen_size) {
+      return 'btn btnComments btnComments_mobile';
+    }
+    return 'btn btnComments';
+  }
+
+  public getSubmitCommentBtnClass(): string {
+    if (0 === this.screen_size) {
+      return 'btn btnSubmitComment btnSubmitComment_mobile';
+    }
+    return 'btn btnSubmitComment';
+  }
+
+  public getCancleAddCommentBtnClass(): string {
+    if (0 === this.screen_size) {
+      return 'btn btnCancleAddComment btnCancleAddComment_mobile';
+    }
+    return 'btn btnCancleAddComment';
+  }
+
+  public getBtnAddComentColumn(): string {
+    if (0 === this.screen_size || 1 === this.screen_size) {
+      return 'col-5';
+    }
+    return 'col-3';
+  }
+
+  public getInputComentColumn(): string {
+    if (0 === this.screen_size || 1 === this.screen_size) {
+      return 'col-7';
+    }
+    return 'col-9';
   }
 }

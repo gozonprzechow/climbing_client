@@ -143,7 +143,10 @@
         <!-- Password -->
         <div class="imageContainer">
           <div class="col-sm-12">
-            <label for="img" class="control-label image" id="imgId">{{
+            <label *ngIf="!is_submit_in_progress" for="img" class="control-label image" id="imgId">{{
+              this.titleImage
+            }}</label>
+            <label *ngIf="is_submit_in_progress" for="img" class="control-label frozenImage" id="imgId">{{
               this.titleImage
             }}</label>
             <input
@@ -165,8 +168,11 @@
 
       <div class="form-group has-error">
         <div class="submitContainer">
-          <div class="col-sm-12">
+          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
             <button type="submit" class="submitButton">{{ store_txt }}</button>
+          </div>
+          <div *ngIf="is_submit_in_progress" class="col-sm-12">
+            <button type="submit" class="frozenSubmitButton">{{ submitInProgress_txt }}</button>
           </div>
         </div>
       </div>

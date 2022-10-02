@@ -29,6 +29,8 @@ export class CreateAccountFormComponent implements OnInit {
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
 
+  is_submit_in_progress: Boolean = false;
+
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
     cz: 'Vytvořit účet',
@@ -50,6 +52,12 @@ export class CreateAccountFormComponent implements OnInit {
     en: 'Create account',
   };
 
+  submitInProgress_txt: string;
+  submitInProgressTranslation: TextTranslator = {
+    cz: 'Čekej. . .',
+    en: 'Wait. . .',
+  };
+
   constructor(
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
@@ -67,6 +75,9 @@ export class CreateAccountFormComponent implements OnInit {
     );
     this.createAccount_txt = this.languageService.getNativeLanguageText(
       this.createAccountTranslation,
+    );
+    this.submitInProgress_txt = this.languageService.getNativeLanguageText(
+      this.submitInProgressTranslation,
     );
   }
 
@@ -126,6 +137,10 @@ export class CreateAccountFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.is_submit_in_progress) {
+      return;
+    }
+    this.is_submit_in_progress = true;
     let formData = new FormData();
     this.submitted = true;
 
@@ -140,6 +155,7 @@ export class CreateAccountFormComponent implements OnInit {
 
       this.auth.register(this.credentials).subscribe(
         (returnData: any) => {
+          this.is_submit_in_progress = false;
           this.inputCondition.errorLoad = null;
           this.copyServerErrors(returnData);
           if (null == returnData.inputErrorMessage.uploadSuccess) {

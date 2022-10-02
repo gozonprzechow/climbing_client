@@ -2,11 +2,12 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
+
 import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService, TokenPayload } from '../services/authentication.service';
 import { Globals } from '../services/globals.services';
 import { RouterServices } from '../services/router.services';
-import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
@@ -18,11 +19,12 @@ import {
   ButtonCollection,
   PagingButtonsServices,
 } from '../services/pagingButtons.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 
 @Component({
   selector: 'app-chat-form',
   templateUrl: './chat-form.component.html',
-  styleUrls: ['./chat-form.component.css'],
+  styleUrls: ['./chat-form.component.css', './chat-form-mobile.component.css'],
 })
 export class ChatFormComponent implements OnInit {
   credentials: TokenPayload = {
@@ -56,6 +58,7 @@ export class ChatFormComponent implements OnInit {
   choosen_chat: ChatStatus = ChatStatus.kStandard;
 
   modalRef: BsModalRef;
+  screen_size: SCREEN_SIZE;
 
   recipient: any = {};
   product: any = {};
@@ -177,6 +180,7 @@ export class ChatFormComponent implements OnInit {
     private location: Location,
     public pagingButtons: PagingButtonsServices,
     public imageService: ImageService,
+    private resizeSvc: ResizeService,
   ) {
     this.alerts.message_alert = false;
     this.alerts.price_alert = false;
@@ -226,6 +230,10 @@ export class ChatFormComponent implements OnInit {
     this.deleteFriendModalTitle_txt = this.languageService.getNativeLanguageText(
       this.deleteFriendModalTitleTranslation,
     );
+
+    this.resizeSvc.onResize$.subscribe((x) => {
+      this.screen_size = x;
+    });
   }
 
   public subscriber: any;
@@ -713,5 +721,33 @@ export class ChatFormComponent implements OnInit {
         { initialState },
       ),
     );
+  }
+
+  public getSubmitMessageBtnClass(): string {
+    if (0 === this.screen_size) {
+      return 'btn btnSubmitMessage btnSubmitMessage_mobile';
+    }
+    return 'btn btnSubmitMessage';
+  }
+
+  public getCancleAddMessageBtnClass(): string {
+    if (0 === this.screen_size) {
+      return 'btn btnCancleAddMessage btnCancleAddMessage_mobile';
+    }
+    return 'btn btnCancleAddMessage';
+  }
+
+  public getBtnAddMessageColumn(): string {
+    if (0 === this.screen_size || 1 === this.screen_size) {
+      return 'col-5';
+    }
+    return 'col-3';
+  }
+
+  public getInputMessageColumn(): string {
+    if (0 === this.screen_size || 1 === this.screen_size) {
+      return 'col-7';
+    }
+    return 'col-9';
   }
 }

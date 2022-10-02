@@ -5,3 +5,11 @@
 .customTittle {
   margin-top: 10px;
 }
+
+.customTittle_mobile {
+  margin-top: 45px;
+}
+
+.hide_element {
+  display: none;
+}

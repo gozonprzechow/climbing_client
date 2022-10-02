@@ -66,3 +66,9 @@ label.image:hover {
   background-color: rgb(85, 83, 83);
   color: white;
 }
+
+.frozen {
+  background-color: rgb(85, 83, 83);
+  color: white;
+  cursor: default;
+}

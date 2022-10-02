@@ -56,7 +56,12 @@
               {{ this.inputCondition.errorLoad }}
             </p>
             <!-- Register Button -->
-            <button type="submit" class="submitButton">{{ store_txt }}</button>
+            <div *ngIf="!is_submit_in_progress" class="col-sm-12">
+              <button type="submit" class="submitButton">{{ store_txt }}</button>
+            </div>
+            <div *ngIf="is_submit_in_progress" class="col-sm-12">
+              <button type="submit" class="submitButton frozen">{{ submitInProgress_txt }}</button>
+            </div>
           </div>
         </div>
       </div>

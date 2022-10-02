@@ -31,6 +31,8 @@ export class InputMineralFormComponent implements OnInit {
   imgSetAuctionSrc: string;
   input_status: Number = 0;
 
+  is_submit_in_progress: Boolean = false;
+
   imgURL: any;
 
   titleMain_txt: string;
@@ -79,6 +81,12 @@ export class InputMineralFormComponent implements OnInit {
     en: 'Starting price',
   };
 
+  submitInProgress_txt: string;
+  submitInProgressTranslation: TextTranslator = {
+    cz: 'Čekej. . .',
+    en: 'Wait. . .',
+  };
+
   // @ViewChild(FormGroup, {static: false}) child : FormGroup;
 
   constructor(
@@ -111,6 +119,9 @@ export class InputMineralFormComponent implements OnInit {
     this.price_txt = this.languageService.getNativeLanguageText(this.priceTranslation);
     this.startingPrice_txt = this.languageService.getNativeLanguageText(
       this.startingPriceTranslation,
+    );
+    this.submitInProgress_txt = this.languageService.getNativeLanguageText(
+      this.submitInProgressTranslation,
     );
 
     this.currency_array = this.languageService.getAllCurrency();
@@ -282,6 +293,10 @@ export class InputMineralFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.is_submit_in_progress) {
+      return;
+    }
+    this.is_submit_in_progress = true;
     let formData = new FormData();
     this.submitted = true;
 
@@ -309,6 +324,7 @@ export class InputMineralFormComponent implements OnInit {
         )
         .subscribe(
           (returnData: any) => {
+            this.is_submit_in_progress = false;
             this.inputCondition.errorLoad = null;
             this.activePage = returnData.activePage;
             this.copyServerErrors(returnData);

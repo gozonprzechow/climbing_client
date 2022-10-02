@@ -279,10 +279,12 @@ export class UserLocalityFormComponent implements OnInit {
   public toggleProfileMineral(achatdbCollection) {
     let formData = new FormData();
 
-    formData.append('achatdbCollection', JSON.stringify(this.deleteCollection));
+    formData.append('achatdbCollection', JSON.stringify(achatdbCollection));
+    formData.append('actual_page', JSON.stringify(this.activePage));
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
+      formData.append('locality', JSON.stringify(params.uid));
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
       } else {

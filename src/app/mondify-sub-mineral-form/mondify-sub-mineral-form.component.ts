@@ -18,7 +18,6 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 export class MondifySubMineralFormComponent implements OnInit {
   submitted = false;
   userForm: FormGroup;
-  prefix: string;
   serviceErrors: any = {};
   activePage: any = {};
   achatdbCollection: any = {};
@@ -101,7 +100,6 @@ export class MondifySubMineralFormComponent implements OnInit {
       this.modalTitleTranslation,
     );
 
-    this.prefix = environment.serverUrl + '/static/uploads/images/';
     this.confirmModalMessage = this.modalMessage_txt;
     this.confirmModalTitle = this.modalTitle_txt;
   }
@@ -123,6 +121,7 @@ export class MondifySubMineralFormComponent implements OnInit {
 
     this.imgURL = this.getImageLarge(
       this.achatdbCollection.achatImages[this.actualSlide].imgName,
+      this.achatdbCollection.imgPath,
     );
 
     this.userForm = this.formBuilder.group(
@@ -208,8 +207,8 @@ export class MondifySubMineralFormComponent implements OnInit {
     this.serverServiceErrors.uploadSuccess = null;
   }
 
-  public getImageLarge(imgName): string {
-    return this.prefix + imgName;
+  public getImageLarge(imgName, imgPath): string {
+    return environment.serverUrl + '/' + imgPath + imgName;
   }
 
   onFileSelect(event) {

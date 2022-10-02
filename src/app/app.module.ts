@@ -18,6 +18,7 @@ import { LanguageService } from './services/language.service';
 import { OfferService } from './services/offerService';
 import { ChatService } from './services/chat.service';
 import { ImageService } from './services/image.service';
+import { ResizeService } from './services/resize.service';
 
 import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -49,6 +50,7 @@ import { ImageModalComponent } from './models/image-modal/image-modal.component'
 import { TittleMain } from './models/customTittle';
 import { PagingButtonsComponent } from './models/paging-buttons/paging-buttons.component';
 import { DropdownButtonInItemComponent } from './models/dropdown-button-in-item/dropdown-button-in-item.component';
+import { SizeDetectorComponent } from './models/size-detector/size-detector.component';
 
 import { ModifyLocalityFormComponent } from './modify-locality-form/modify-locality-form.component';
 import { MondifyMineralFormComponent } from './mondify-mineral-form/mondify-mineral-form.component';
@@ -85,6 +87,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     ChatFormComponent,
     ChatNavbarMenuComponent,
     DropdownButtonInItemComponent,
+    SizeDetectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,6 +111,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     OfferService,
     ChatService,
     ImageService,
+    ResizeService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

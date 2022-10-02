@@ -1,0 +1,17 @@
+.hide_element {
+    display: none;
+  }
+  
+  .btnSubmitMessage_mobile {
+    width: 96px;
+    float: left;
+    right: 95%;
+    left: 5%;
+  }
+  
+  .btnCancleAddMessage_mobile {
+    width: 96px;
+    float: left;
+    right: 95%;
+    left: 5%;
+  }

@@ -22,6 +22,8 @@ export class InputLocalityFormComponent implements OnInit {
   inputCondition: InputCondition = new InputCondition();
   allLocality: any = [];
 
+  is_submit_in_progress: Boolean = false;
+
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
     cz: 'Vložit lokalitu',
@@ -41,6 +43,11 @@ export class InputLocalityFormComponent implements OnInit {
   storeTranslation: TextTranslator = {
     cz: 'Uložit',
     en: 'Store',
+  };
+  submitInProgress_txt: string;
+  submitInProgressTranslation: TextTranslator = {
+    cz: 'Čekej. . .',
+    en: 'Wait. . .',
   };
 
   constructor(
@@ -109,6 +116,10 @@ export class InputLocalityFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.is_submit_in_progress) {
+      return;
+    }
+    this.is_submit_in_progress = true;
     let formData = new FormData();
     this.submitted = true;
 
@@ -129,6 +140,7 @@ export class InputLocalityFormComponent implements OnInit {
         )
         .subscribe(
           (returnData: any) => {
+            this.is_submit_in_progress = false;
             this.activePage = returnData.activePage;
             this.allLocality = returnData.localities;
             this.inputCondition.errorLoad = null;
