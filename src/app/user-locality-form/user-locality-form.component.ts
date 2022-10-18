@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -15,11 +15,17 @@ import {
 } from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-user-locality-form',
   templateUrl: './user-locality-form.component.html',
-  styleUrls: ['./user-locality-form.component.css'],
+  styleUrls: [
+    './user-locality-form.component.css',
+    './user-locality-form-mobile.component.css',
+    '../models/mobile.css',
+  ],
 })
 export class UserLocalityFormComponent implements OnInit {
   selectLocality: string;
@@ -84,6 +90,8 @@ export class UserLocalityFormComponent implements OnInit {
     public router: Router,
     public globals: Globals,
     public imageService: ImageService,
+    public mobileService: MobileService,
+    public resizeSvc: ResizeService,
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -119,6 +127,8 @@ export class UserLocalityFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth(window.innerWidth);
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
@@ -160,6 +170,13 @@ export class UserLocalityFormComponent implements OnInit {
           }
         });
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth(window.innerWidth);
+    // console.log(this.resizeSvc.getPictureOnPage());
   }
 
   clickPageButton(page: number): void {
@@ -319,5 +336,16 @@ export class UserLocalityFormComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  public getImageLocalityClass(index): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      if (0 === index) {
+        return 'imageLocality imageLocality_firstMobile';
+      } else {
+        return 'imageLocality imageLocality_mobile';
+      }
+    }
+    return 'imageLocality';
   }
 }

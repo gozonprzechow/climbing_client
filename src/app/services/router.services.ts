@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { ResizeService, SCREEN_SIZE } from './resize.service';
 
 @Injectable()
 export class RouterServices {
-  constructor(public router: Router) {}
+  screen_size: SCREEN_SIZE;
+  constructor(public router: Router, private resizeSvc: ResizeService) {}
 
   public notLoginError(): void {
     let path = '/login';
@@ -12,9 +14,15 @@ export class RouterServices {
     });
   }
 
-  public login(): void {
+  public login(screen_size: SCREEN_SIZE = SCREEN_SIZE.XL): void {
     let path = '/login';
-    this.router.navigate([path]);
+    this.router.navigate([path], {
+      state: {
+        data: {
+          screen_size: screen_size,
+        },
+      },
+    });
   }
 
   public inputMineral(): void {
@@ -22,9 +30,16 @@ export class RouterServices {
     this.router.navigate([path]);
   }
 
-  public createAccount(): void {
+  public createAccount(screen_size: SCREEN_SIZE = SCREEN_SIZE.XL): void {
     let path = '/createAccount';
-    this.router.navigate([path]);
+
+    this.router.navigate([path], {
+      state: {
+        data: {
+          screen_size: screen_size,
+        },
+      },
+    });
   }
 
   public successCreateAccount(message: string): void {

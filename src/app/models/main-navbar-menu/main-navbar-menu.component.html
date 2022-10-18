@@ -154,6 +154,14 @@
         >
           {{ logIn_txt }}
         </button>
+        <button
+          *ngIf="!auth.isLoggedIn()"
+          class="btn btn-outline-success my-2 my-sm-0 registerButton"
+          (click)="registerHandler()"
+          [ngClass]="{ logButton: navbarOpen }"
+        >
+          {{ register_txt }}
+        </button>
       </div>
     </div>
     <!-- </div> -->

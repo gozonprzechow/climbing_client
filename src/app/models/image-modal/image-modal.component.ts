@@ -120,10 +120,6 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     this.imgSrc = '../../../assets/skins/like_button.png';
     this.imgPriceSrc = '../../../assets/skins/insert_prize_collection.png';
     this.imgAuctionSrc = '../../../assets/skins/insert_auction_collection.png';
-
-    this.resizeSvc.onResize$.subscribe((x) => {
-      this.screen_size = x;
-    });
   }
 
   public subscriber: any;

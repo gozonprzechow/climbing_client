@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'custom-tittle-main',
   template: `<div></div>
-    <app-size-detector class="hide_element"></app-size-detector>
     <div class="jumbotron bg-secondary">
       <div class="container bg-secondary">
         <div class="mainJumbotron">
@@ -16,12 +16,9 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 })
 export class TittleMain {
   @Input() tittleMain: any = {};
-  screen_size: SCREEN_SIZE;
+  @Input() screen_size: SCREEN_SIZE;
 
   constructor(private resizeSvc: ResizeService) {
-    this.resizeSvc.onResize$.subscribe((x) => {
-      this.screen_size = x;
-    });
   }
 
   public getInputComentColumn(): string {

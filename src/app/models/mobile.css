@@ -1,0 +1,18 @@
+.mainFormClass {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    color: rgb(160, 160, 160);
+  }
+  
+  .mainFormClass_mobile {
+    width: 92%;
+  }
+
+  .submitButton_mobile {
+    width: 130px;
+  }
+
+  .hide_element {
+    display: none;
+  }

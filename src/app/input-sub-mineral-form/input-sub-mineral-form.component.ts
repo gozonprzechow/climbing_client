@@ -175,6 +175,7 @@ export class InputSubMineralFormComponent implements OnInit {
     if (this.userForm.invalid == true) {
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
+      this.is_submit_in_progress = false;
       return;
     } else {
       Object.keys(this.userForm.value).forEach((key) => {

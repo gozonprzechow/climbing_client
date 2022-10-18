@@ -1,12 +1,19 @@
 <app-main-navbar-menu [allLocality]="allLocality" [activePage]="activePage">
 </app-main-navbar-menu>
-<custom-tittle-main [tittleMain]="tittleMain"></custom-tittle-main>
+<custom-tittle-main
+  [tittleMain]="tittleMain"
+  [screen_size]="resizeSvc.getScreenSize()"
+></custom-tittle-main>
 
 <div class="wrapper" center="block">
-  <div class="mainFormClass" center="block">
+  <div
+    [ngStyle]="{
+      width: resizeSvc.getPageWidth() + 'px'
+    }"
+  >
     <div class="wrap">
       <ul class="list-inline cf">
-        <li *ngFor="let achatdbCollection of achatdbCollections">
+        <li *ngFor="let achatdbCollection of achatdbCollections; let i = index">
           <a>
             <div class="imageContainer">
               <img
@@ -16,7 +23,15 @@
                     achatdbCollection.imgPath
                   )
                 "
-                class="imageLocality"
+                class="{{ getImageLocalityClass(i) }}"
+                [ngStyle]="{
+                  width: resizeSvc.getPictureSize() + 'px',
+                  'margin-left':
+                    i % resizeSvc.getPictureOnPage() == 0
+                      ? '0px'
+                      : resizeSvc.getPictureMarginSize() + 'px',
+                  'margin-bottom': resizeSvc.getPictureMarginSize() + 'px'
+                }"
                 (click)="openModal(achatdbCollection)"
               />
               <div *ngIf="auth.isItemYours(achatdbCollection.postedBy)" ngbDropdown>
@@ -58,7 +73,6 @@
                 </div>
               </div>
               <div *ngIf="!auth.isItemYours(achatdbCollection.postedBy)"></div>
-              {{ achatdbCollection.title }}<br /><br />
             </div>
           </a>
         </li>

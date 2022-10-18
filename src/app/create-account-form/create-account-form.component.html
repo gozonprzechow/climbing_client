@@ -2,10 +2,13 @@
   [allLocality]="allLocality"
   [activePage]="activePage"
 ></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
+<custom-tittle-main
+  [tittleMain]="titleMain_txt"
+  [screen_size]="resizeSvc.getScreenSize()"
+></custom-tittle-main>
 
 <div class="container">
-  <div class="mainFormClass">
+  <div class="{{ mobileService.getMainFormClass(resizeSvc.getScreenSize()) }}">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [ngClass]="{ 'has-error': invalidName() }">
         <!-- First Name -->
@@ -74,12 +77,15 @@
             {{ this.inputCondition.errorLoad && this.serverServiceErrors.uploadSuccess }}
           </p>
           <!-- Register Button -->
-          <!-- <button type="submit" class="submitButton">{{ createAccount_txt }}</button> -->
           <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="submitButton">{{ createAccount_txt }}</button>
+            <button type="submit" class="{{ getSubmitBtnClass() }}">
+              {{ createAccount_txt }}
+            </button>
           </div>
           <div *ngIf="is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="submitButton frozen">{{ submitInProgress_txt }}</button>
+            <button type="submit" class="{{ getSubmitFrozenBtnClass() }}">
+              {{ submitInProgress_txt }}
+            </button>
           </div>
         </div>
       </div>

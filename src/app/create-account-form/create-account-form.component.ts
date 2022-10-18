@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
@@ -7,11 +7,13 @@ import { AuthenticationService, TokenPayload } from '../services/authentication.
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-create-account-form',
   templateUrl: './create-account-form.component.html',
-  styleUrls: ['./create-account-form.component.css'],
+  styleUrls: ['./create-account-form.component.css', '../models/mobile.css'],
 })
 export class CreateAccountFormComponent implements OnInit {
   credentials: TokenPayload = {
@@ -59,12 +61,14 @@ export class CreateAccountFormComponent implements OnInit {
   };
 
   constructor(
+    public mobileService: MobileService,
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public auth: AuthenticationService,
     public http: HttpClient,
     public languageService: LanguageService,
     public routerService: RouterServices,
+    public resizeSvc: ResizeService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -109,6 +113,7 @@ export class CreateAccountFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.userForm = this.formBuilder.group(
       {
         name: ['', [Validators.required, Validators.maxLength(50)]],
@@ -136,6 +141,11 @@ export class CreateAccountFormComponent implements OnInit {
       );
   }
 
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+  }
+
   onSubmit() {
     if (this.is_submit_in_progress) {
       return;
@@ -146,6 +156,7 @@ export class CreateAccountFormComponent implements OnInit {
 
     if (this.userForm.invalid == true) {
       this.cleanServerErrors();
+      this.is_submit_in_progress = false;
       this.inputCondition.successLoad = null;
       return;
     } else {
@@ -166,5 +177,19 @@ export class CreateAccountFormComponent implements OnInit {
         (error) => {},
       );
     }
+  }
+
+  public getSubmitBtnClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'submitButton submitButton_mobile';
+    }
+    return 'submitButton';
+  }
+
+  public getSubmitFrozenBtnClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'submitButton submitButton_mobile frozen';
+    }
+    return 'submitButton frozen';
   }
 }

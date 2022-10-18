@@ -230,10 +230,6 @@ export class ChatFormComponent implements OnInit {
     this.deleteFriendModalTitle_txt = this.languageService.getNativeLanguageText(
       this.deleteFriendModalTitleTranslation,
     );
-
-    this.resizeSvc.onResize$.subscribe((x) => {
-      this.screen_size = x;
-    });
   }
 
   public subscriber: any;

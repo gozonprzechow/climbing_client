@@ -2,16 +2,21 @@
   [allLocality]="allLocality"
   [activePage]="activePage"
 ></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
+<custom-tittle-main
+  [tittleMain]="titleMain_txt"
+  [screen_size]="screen_size"
+></custom-tittle-main>
 
 <div class="container">
-  <div class="mainFormClass">
+  <div class="{{ mobileService.getMainFormClass(screen_size) }}">
     <div class="registerAccount">
       <p *ngIf="hideRegisterRouter()" id="registerAccount_id">
         {{ registerQuestion_txt }}
-        <a id="fakeHrefStyle_id" (click)="routerService.createAccount()">{{
-          register_txt
-        }}</a>
+        <a
+          id="fakeHrefStyle_id"
+          (click)="routerService.createAccount(this.screen_size)"
+          >{{ register_txt }}</a
+        >
       </p>
     </div>
 

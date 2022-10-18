@@ -303,6 +303,7 @@ export class InputMineralFormComponent implements OnInit {
     if (this.userForm.invalid == true) {
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
+      this.is_submit_in_progress = false;
       this.routerService.inputMineral();
       return;
     } else {

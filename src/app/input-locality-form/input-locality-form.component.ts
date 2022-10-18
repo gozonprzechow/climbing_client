@@ -125,6 +125,7 @@ export class InputLocalityFormComponent implements OnInit {
 
     if (this.userForm.invalid == true) {
       this.cleanServerErrors();
+      this.is_submit_in_progress = false;
       this.inputCondition.successLoad = null;
       return;
     } else {

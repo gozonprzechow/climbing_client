@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
@@ -7,11 +7,13 @@ import { Globals } from '../services/globals.services';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.css'],
+  styleUrls: ['./login-form.component.css', '../models/mobile.css'],
 })
 export class LoginFormComponent implements OnInit {
   credentials: TokenPayload = {
@@ -31,6 +33,7 @@ export class LoginFormComponent implements OnInit {
   message: string;
 
   product: any = {};
+  screen_size: SCREEN_SIZE;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -86,6 +89,8 @@ export class LoginFormComponent implements OnInit {
     public languageService: LanguageService,
     public http: HttpClient,
     public routerService: RouterServices,
+    private resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -146,10 +151,13 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    if (history.state.data) {
+      this.screen_size = history.state.data.screen_size;
+    }
 
     this.product = history.state;
     if (this.product.data == null) {
-      this.routerService.login();
+      this.routerService.login(this.screen_size);
     } else {
       this.errorMessage = this.product.data.errorMessage;
     }
@@ -178,6 +186,12 @@ export class LoginFormComponent implements OnInit {
           );
         },
       );
+  }
+
+  ngAfterViewInit() {
+    // this.resizeSvc.onResize$.subscribe((x) => {
+    //   this.screen_size = x;
+    // });
   }
 
   runResendVerify() {

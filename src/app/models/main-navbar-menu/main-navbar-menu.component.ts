@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ConfirmModalComponent } from '../../models/confirm-modal/confirm-modal.component';
+import { ResizeService, SCREEN_SIZE } from '../../services/resize.service';
 
 @Component({
   selector: 'app-main-navbar-menu',
@@ -27,6 +28,7 @@ export class MainNavbarMenuComponent implements OnInit {
   imgSrc: String;
   dropdownMenuClass: String = '';
   modalRef: BsModalRef;
+  screen_size: SCREEN_SIZE;
 
   home_txt: string;
   homeTranslation: TextTranslator = {
@@ -83,6 +85,11 @@ export class MainNavbarMenuComponent implements OnInit {
     cz: 'Odhlášení',
     en: 'Log out',
   };
+  register_txt: string;
+  registerTranslation: TextTranslator = {
+    cz: 'Registrace',
+    en: 'Register',
+  };
 
   requestFriendshipModalMessage_txt: string;
   requestFriendshipModalMessageTranslation: TextTranslator = {
@@ -101,6 +108,7 @@ export class MainNavbarMenuComponent implements OnInit {
     public modalService: BsModalService,
     public http: HttpClient,
     public languageService: LanguageService,
+    private resizeSvc: ResizeService,
   ) {
     this.alerts.message_alert = false;
     this.alerts.price_alert = false;
@@ -139,6 +147,7 @@ export class MainNavbarMenuComponent implements OnInit {
 
     this.logIn_txt = this.languageService.getNativeLanguageText(this.logInTranslation);
     this.logOut_txt = this.languageService.getNativeLanguageText(this.logOutTranslation);
+    this.register_txt = this.languageService.getNativeLanguageText(this.registerTranslation);
 
     this.requestFriendshipModalMessage_txt = this.languageService.getNativeLanguageText(
       this.requestFriendshipModalMessageTranslation,
@@ -193,11 +202,15 @@ export class MainNavbarMenuComponent implements OnInit {
 
   public logOutHandler() {
     this.auth.logout();
-    this.routerService.login();
+    this.routerService.login(this.screen_size);
   }
 
   public logInHandler() {
-    this.routerService.login();
+    this.routerService.login(this.screen_size);
+  }
+
+  public registerHandler(){
+    this.routerService.createAccount(this.screen_size);
   }
 
   public ifDisplayAdd(): boolean {
