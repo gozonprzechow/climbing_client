@@ -23,8 +23,6 @@ import { MobileService } from '../services/mobile.service';
   templateUrl: './user-locality-form.component.html',
   styleUrls: [
     './user-locality-form.component.css',
-    './user-locality-form-mobile.component.css',
-    '../models/mobile.css',
   ],
 })
 export class UserLocalityFormComponent implements OnInit {
@@ -128,7 +126,7 @@ export class UserLocalityFormComponent implements OnInit {
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
     this.resizeSvc.refreshScreenSize(window.innerWidth);
-    this.resizeSvc.countImageWidth(window.innerWidth);
+    this.resizeSvc.countImageWidth();
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
@@ -175,7 +173,7 @@ export class UserLocalityFormComponent implements OnInit {
   @HostListener('window:resize', [])
   onResize() {
     this.resizeSvc.refreshScreenSize(window.innerWidth);
-    this.resizeSvc.countImageWidth(window.innerWidth);
+    this.resizeSvc.countImageWidth();
     // console.log(this.resizeSvc.getPictureOnPage());
   }
 
@@ -336,16 +334,5 @@ export class UserLocalityFormComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  public getImageLocalityClass(index): string {
-    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
-      if (0 === index) {
-        return 'imageLocality imageLocality_firstMobile';
-      } else {
-        return 'imageLocality imageLocality_mobile';
-      }
-    }
-    return 'imageLocality';
   }
 }

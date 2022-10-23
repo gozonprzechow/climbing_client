@@ -61,7 +61,6 @@ export class CreateAccountFormComponent implements OnInit {
   };
 
   constructor(
-    public mobileService: MobileService,
     public elementRef: ElementRef,
     public formBuilder: FormBuilder,
     public auth: AuthenticationService,
@@ -69,6 +68,7 @@ export class CreateAccountFormComponent implements OnInit {
     public languageService: LanguageService,
     public routerService: RouterServices,
     public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,

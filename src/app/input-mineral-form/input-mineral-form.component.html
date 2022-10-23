@@ -2,10 +2,13 @@
   [allLocality]="allLocality"
   [activePage]="activePage"
 ></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
+<custom-tittle-main
+  [tittleMain]="titleMain_txt"
+  [screen_size]="resizeSvc.getScreenSize()"
+></custom-tittle-main>
 
 <div class="container" center="block">
-  <div class="mainFormClass" center="block">
+  <div class="{{ mobileService.getMainFormClass(resizeSvc.getScreenSize()) }}">
     <img
       class="imgSetCollectionInput"
       [src]="imgSetStandardSrc"
@@ -143,12 +146,20 @@
         <!-- Password -->
         <div class="imageContainer">
           <div class="col-sm-12">
-            <label *ngIf="!is_submit_in_progress" for="img" class="control-label image" id="imgId">{{
-              this.titleImage
-            }}</label>
-            <label *ngIf="is_submit_in_progress" for="img" class="control-label frozenImage" id="imgId">{{
-              this.titleImage
-            }}</label>
+            <label
+              *ngIf="!is_submit_in_progress"
+              for="img"
+              class="control-label image"
+              id="imgId"
+              >{{ this.titleImage }}</label
+            >
+            <label
+              *ngIf="is_submit_in_progress"
+              for="img"
+              class="control-label frozenImage"
+              id="imgId"
+              >{{ this.titleImage }}</label
+            >
             <input
               type="file"
               class="form-control"
@@ -172,7 +183,9 @@
             <button type="submit" class="submitButton">{{ store_txt }}</button>
           </div>
           <div *ngIf="is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="frozenSubmitButton">{{ submitInProgress_txt }}</button>
+            <button type="submit" class="frozenSubmitButton">
+              {{ submitInProgress_txt }}
+            </button>
           </div>
         </div>
       </div>

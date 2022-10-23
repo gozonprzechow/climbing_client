@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputMineral';
@@ -6,11 +6,13 @@ import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-input-sub-mineral-form',
   templateUrl: './input-sub-mineral-form.component.html',
-  styleUrls: ['./input-sub-mineral-form.component.css'],
+  styleUrls: ['./input-sub-mineral-form.component.css', '../models/mobile.css'],
 })
 export class InputSubMineralFormComponent implements OnInit {
   submitted = false;
@@ -62,6 +64,8 @@ export class InputSubMineralFormComponent implements OnInit {
     public auth: AuthenticationService,
     public languageService: LanguageService,
     public routerService: RouterServices,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -116,6 +120,7 @@ export class InputSubMineralFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.product = history.state;
     if (this.product.data == null) {
       this.routerService.inputMineral();
@@ -140,6 +145,11 @@ export class InputSubMineralFormComponent implements OnInit {
       },
       (error) => {},
     );
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   onFileSelect(event) {

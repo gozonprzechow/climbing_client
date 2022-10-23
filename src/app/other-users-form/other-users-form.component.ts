@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,6 +16,8 @@ import {
 } from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-other-users-form',
@@ -69,6 +71,8 @@ export class OtherUsersFormComponent implements OnInit {
     public chatService: ChatService,
     public pagingButtons: PagingButtonsServices,
     public imageService: ImageService,
+    public mobileService: MobileService,
+    public resizeSvc: ResizeService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -88,6 +92,8 @@ export class OtherUsersFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
 
     this.userForm = this.formBuilder.group({}, { updateOn: 'submit' });
 
@@ -139,6 +145,12 @@ export class OtherUsersFormComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
   }
 
   private reactionOnGetOtherUser(data: any, params: any) {
@@ -273,5 +285,19 @@ export class OtherUsersFormComponent implements OnInit {
           }
         });
     });
+  }
+
+  public getUserDropDownClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'btn-secondary dropdown-toggle top-right top-right_mobile';
+    }
+    return 'btn-secondary dropdown-toggle top-right';
+  }
+
+  public getUserNameClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'userName userName_mobile';
+    }
+    return 'userName';
   }
 }

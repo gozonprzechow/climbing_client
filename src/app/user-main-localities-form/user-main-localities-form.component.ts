@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -15,6 +15,8 @@ import {
 } from '../services/pagingButtons.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-user-main-localities-form',
@@ -70,6 +72,8 @@ export class UserMainLocalitiesFormComponent implements OnInit {
     public languageService: LanguageService,
     public modalService: BsModalService,
     public imageService: ImageService,
+    public mobileService: MobileService,
+    public resizeSvc: ResizeService,
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -103,6 +107,8 @@ export class UserMainLocalitiesFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
@@ -117,10 +123,10 @@ export class UserMainLocalitiesFormComponent implements OnInit {
       this.http
         .get(
           environment.urlAddress +
-          '/api/v1/locality/all/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          postedBy,
+            '/api/v1/locality/all/' +
+            this.pagingButtons.getActualPage() +
+            '/' +
+            postedBy,
         )
         .subscribe((data: any) => {
           this.pagingButtons.setNumOfPage(data.numberOfPages);
@@ -144,6 +150,13 @@ export class UserMainLocalitiesFormComponent implements OnInit {
         });
     });
   }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
+  }
+
   clickPageButton(page: number): void {
     let postedBy = this.auth.getActualUserId();
     if (!postedBy) {
@@ -234,10 +247,10 @@ export class UserMainLocalitiesFormComponent implements OnInit {
       this.http
         .post<any>(
           environment.urlAddress +
-          '/api/v1/user_input/deleteLocality/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          postedBy,
+            '/api/v1/user_input/deleteLocality/' +
+            this.pagingButtons.getActualPage() +
+            '/' +
+            postedBy,
           formData,
         )
         .subscribe((data: any) => {
@@ -249,5 +262,19 @@ export class UserMainLocalitiesFormComponent implements OnInit {
           this.routerService.userLocalities(postedBy, this.pagingButtons.getActualPage());
         });
     });
+  }
+
+  public getLocalityDropDownClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'btn-secondary dropdown-toggle top-right top-right_mobile';
+    }
+    return 'btn-secondary dropdown-toggle top-right';
+  }
+
+  public getLocalityNameClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'localityName localityName_mobile';
+    }
+    return 'localityName';
   }
 }

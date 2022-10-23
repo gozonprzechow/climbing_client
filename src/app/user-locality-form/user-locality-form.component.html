@@ -1,8 +1,11 @@
-<app-main-navbar-menu [allLocality]="allLocality" [activePage]="activePage">
-</app-main-navbar-menu>
+<app-main-navbar-menu
+  [allLocality]="allLocality"
+  [activePage]="activePage"
+></app-main-navbar-menu>
 <custom-tittle-main
   [tittleMain]="tittleMain"
   [screen_size]="resizeSvc.getScreenSize()"
+  [margin_right]="resizeSvc.getPageMarginRight()"
 ></custom-tittle-main>
 
 <div class="wrapper" center="block">
@@ -12,7 +15,7 @@
     }"
   >
     <div class="wrap">
-      <ul class="list-inline cf">
+      <ul class="list-inline">
         <li *ngFor="let achatdbCollection of achatdbCollections; let i = index">
           <a>
             <div class="imageContainer">
@@ -23,9 +26,9 @@
                     achatdbCollection.imgPath
                   )
                 "
-                class="{{ getImageLocalityClass(i) }}"
+                class="imageLocality"
                 [ngStyle]="{
-                  width: resizeSvc.getPictureSize() + 'px',
+                  width: resizeSvc.getPictureWidth() + 'px',
                   'margin-left':
                     i % resizeSvc.getPictureOnPage() == 0
                       ? '0px'

@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -11,11 +11,13 @@ import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.com
 import { MathServices, ConvertedBytes } from '../services/math.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-admin-hlavni-form',
   templateUrl: './admin-hlavni-form.component.html',
-  styleUrls: ['./admin-hlavni-form.component.css'],
+  styleUrls: ['./admin-hlavni-form.component.css', '../models/mobile.css'],
 })
 export class AdminHlavniFormComponent implements OnInit {
   submitted = false;
@@ -77,6 +79,8 @@ export class AdminHlavniFormComponent implements OnInit {
     public mathServices: MathServices,
     public languageService: LanguageService,
     public http: HttpClient,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.deleteAccount_txt = this.languageService.getNativeLanguageText(
       this.eleteAccountTranslation,
@@ -116,6 +120,7 @@ export class AdminHlavniFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.userForm = this.formBuilder.group(
       {
         email: ['', [Validators.required, ValidationService.emailValidator]],
@@ -140,6 +145,11 @@ export class AdminHlavniFormComponent implements OnInit {
           this.routerService.notLoginError();
         },
       );
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   openConfirmModal() {

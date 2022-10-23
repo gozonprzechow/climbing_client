@@ -13,12 +13,7 @@
 
 .imageLocality {
   float: left;
-  /* margin-left: 20px;
-  margin-right: 20px; */
   cursor: pointer;
-  border: 5px;
-  border-style: solid;
-  border-color: #4b4b4b;
   border-radius: 6px;
 }
 

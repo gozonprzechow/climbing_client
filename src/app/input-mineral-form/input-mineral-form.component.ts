@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputMineral';
@@ -6,11 +6,13 @@ import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator, Country } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-input-mineral-form',
   templateUrl: './input-mineral-form.component.html',
-  styleUrls: ['./input-mineral-form.component.css'],
+  styleUrls: ['./input-mineral-form.component.css', '../models/mobile.css'],
 })
 export class InputMineralFormComponent implements OnInit {
   submitted = false;
@@ -96,6 +98,8 @@ export class InputMineralFormComponent implements OnInit {
     public languageService: LanguageService,
     public routerService: RouterServices,
     public auth: AuthenticationService,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.imgSetStandardSrc = '../../../assets/skins/insert_standard_collection_hover.png';
     this.imgSetPrizeSrc = '../../../assets/skins/insert_prize_collection.png';
@@ -131,6 +135,7 @@ export class InputMineralFormComponent implements OnInit {
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
     this.resetTitleImage();
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.userForm = this.formBuilder.group(
       {
         title: [null, [Validators.required, Validators.maxLength(50)]],
@@ -169,6 +174,11 @@ export class InputMineralFormComponent implements OnInit {
           );
         },
       );
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   get price(): FormControl {

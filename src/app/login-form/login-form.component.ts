@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
@@ -33,7 +33,6 @@ export class LoginFormComponent implements OnInit {
   message: string;
 
   product: any = {};
-  screen_size: SCREEN_SIZE;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -89,7 +88,7 @@ export class LoginFormComponent implements OnInit {
     public languageService: LanguageService,
     public http: HttpClient,
     public routerService: RouterServices,
-    private resizeSvc: ResizeService,
+    public resizeSvc: ResizeService,
     public mobileService: MobileService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
@@ -151,16 +150,7 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
-    if (history.state.data) {
-      this.screen_size = history.state.data.screen_size;
-    }
-
-    this.product = history.state;
-    if (this.product.data == null) {
-      this.routerService.login(this.screen_size);
-    } else {
-      this.errorMessage = this.product.data.errorMessage;
-    }
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
 
     this.userForm = this.formBuilder.group(
       {
@@ -188,10 +178,9 @@ export class LoginFormComponent implements OnInit {
       );
   }
 
-  ngAfterViewInit() {
-    // this.resizeSvc.onResize$.subscribe((x) => {
-    //   this.screen_size = x;
-    // });
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   runResendVerify() {

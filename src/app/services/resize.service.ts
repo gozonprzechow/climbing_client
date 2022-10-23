@@ -31,8 +31,12 @@ export class ResizeService {
     return this.screen_size;
   }
 
-  getPictureSize(): number {
+  getPictureWidth(): number {
     return this.picture_size;
+  }
+
+  getPictureHeight(): number {
+    return this.picture_size * (180 / 220);
   }
 
   getPageWidth(): number {
@@ -47,7 +51,11 @@ export class ResizeService {
     return this.picture_on_page;
   }
 
-  public refreshScreenSize(window_size: number): SCREEN_SIZE {
+  getPageMarginRight(): number {
+    return this.page_margin_right;
+  }
+
+  public refreshScreenSize(window_size: number) {
     this.window_size = window_size;
     if (576 > window_size) {
       this.screen_size = SCREEN_SIZE.XS;
@@ -78,15 +86,15 @@ export class ResizeService {
     return this.screen_size;
   }
 
-  public countImageWidth(window_size: number) {
+  public countImageWidth() {
     this.picture_size = this.max_picture_size;
     for (let i = 3; i < 100; i++) {
       this.picture_size =
-        (window_size - this.page_margin_right) / i -
+        (this.window_size - this.page_margin_right) / i -
         this.picture_margin_size * ((i - 1) / i);
 
       this.picture_on_page = Math.round(
-        (window_size - this.page_margin_right + this.picture_margin_size) /
+        (this.window_size - this.page_margin_right + this.picture_margin_size) /
           (this.picture_size + this.picture_margin_size),
       );
 
@@ -94,5 +102,26 @@ export class ResizeService {
         break;
       }
     }
+  }
+
+  public getFirstImageOffset(image_count: number, image_order: number): number {
+    let image_offset: number;
+    image_offset =
+      (this.window_size -
+        this.page_margin_right -
+        (this.picture_size * image_count +
+          image_count * this.picture_margin_size -
+          this.picture_margin_size)) /
+      2;
+    image_offset =
+      image_offset + image_order * (this.picture_size + this.picture_margin_size);
+    return image_offset;
+  }
+
+  public getEndLinerWidth(image_count: number): number {
+    let end_liner_width: number;
+    end_liner_width =
+      this.picture_size * image_count + this.picture_margin_size * (image_count - 1);
+    return end_liner_width;
   }
 }
