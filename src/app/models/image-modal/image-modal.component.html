@@ -46,7 +46,7 @@
         />
       </div>
       <div *ngIf="imageInformation" class="imageComment">
-        <br />{{ list.achatdbCollection.comment }}
+        <br />[{{ getDateFormated(list.achatdbCollection.date) }}] {{ list.achatdbCollection.comment }}
       </div>
     </slide>
     <slide *ngFor="let achatImage of list.achatdbCollection.achatImages">
@@ -58,7 +58,7 @@
         />
       </div>
       <div *ngIf="imageInformation" class="imageComment">
-        <br />{{ achatImage.comment }}
+        <br />[{{ getDateFormated(list.achatdbCollection.date) }}] {{ achatImage.comment }}
       </div>
     </slide>
   </carousel>

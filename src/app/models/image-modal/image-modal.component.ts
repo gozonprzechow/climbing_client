@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { RouterServices } from '../../services/router.services';
@@ -26,6 +27,7 @@ import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './image-modal.component.html',
   styleUrls: ['./image-modal.component.css', './image-modal-mobile.component.css'],
 })
+
 export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   submitted = false;
   userForm: FormGroup;
@@ -106,6 +108,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     public auth: AuthenticationService,
     private resizeSvc: ResizeService,
     public mobileService: MobileService,
+    public datePipe: DatePipe,
   ) {
     this.comments_txt = this.languageService.getNativeLanguageText(
       this.commentsTranslation,
@@ -490,5 +493,10 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
       return true;
     }
     return false;
+  }
+
+  public getDateFormated(vv) {
+    let date = new Date();
+    return this.datePipe.transform(date, 'yyyy-MM-dd');
   }
 }
