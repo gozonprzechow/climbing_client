@@ -138,9 +138,9 @@ export class InputMineralFormComponent implements OnInit {
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.userForm = this.formBuilder.group(
       {
-        title: [null, [Validators.required, Validators.maxLength(50)]],
+        title: ['', [Validators.required, Validators.maxLength(50)]],
         locality: [null, [Validators.required, Validators.maxLength(50)]],
-        comment: [null, [Validators.required, Validators.maxLength(50)]],
+        comment: ['', [Validators.maxLength(300)]],
         date: [null],
         price: [
           null,

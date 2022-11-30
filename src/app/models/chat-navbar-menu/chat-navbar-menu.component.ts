@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  HostListener,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
 import { RouterServices } from '../../services/router.services';
@@ -7,17 +14,17 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ConfirmModalComponent } from '../../models/confirm-modal/confirm-modal.component';
 import { ChatService } from '../../services/chat.service';
+import { SCREEN_SIZE } from '../../services/resize.service';
 
 @Component({
   selector: 'app-chat-navbar-menu',
   templateUrl: './chat-navbar-menu.component.html',
   styleUrls: ['./chat-navbar-menu.component.css'],
-  host: {
-    '(window:resize)': 'onResize($event)',
-  },
 })
-export class ChatNavbarMenuComponent {
+export class ChatNavbarMenuComponent implements OnInit {
   @Input() friends: any = [];
+  @Input() screen_size: SCREEN_SIZE;
+  previous_screen_size: SCREEN_SIZE;
   navbarOpen = false;
   imgAlertSrc: String;
   img_search: String;
@@ -172,6 +179,18 @@ export class ChatNavbarMenuComponent {
       );
   }
 
+  ngOnInit() {
+    this.previous_screen_size = this.screen_size;
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    if (this.previous_screen_size != this.screen_size) {
+      this.navbarOpen = false;
+      this.previous_screen_size = this.screen_size;
+    }
+  }
+
   public searchUser() {
     this.searched_users_collection = [];
     let formData = new FormData();
@@ -207,10 +226,10 @@ export class ChatNavbarMenuComponent {
     return dropdown_alert_class;
   }
 
-  public onResize(event) {
-    this.navbarOpen = false;
-    this.dropdownMenuClass = '';
-  }
+  // public onResize(event) {
+  //   this.navbarOpen = false;
+  //   this.dropdownMenuClass = '';
+  // }
 
   public toggleNavbar() {
     this.navbarOpen = !this.navbarOpen;

@@ -1,17 +1,18 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService } from '../services/authentication.service';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-recover-password-form',
   templateUrl: './recover-password-form.component.html',
-  styleUrls: ['./recover-password-form.component.css']
+  styleUrls: ['./recover-password-form.component.css', '../models/mobile.css'],
 })
-
 export class RecoverPasswordFormComponent implements OnInit {
   submitted = false;
   userForm: FormGroup;
@@ -25,13 +26,13 @@ export class RecoverPasswordFormComponent implements OnInit {
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: "Obnovení hesla",
-    en: "Password recovery"
+    cz: 'Obnovení hesla',
+    en: 'Password recovery',
   };
   recoverPassword_txt: string;
   recoverPasswordTranslation: TextTranslator = {
-    cz: "Obnovit heslo",
-    en: "Recover password"
+    cz: 'Obnovit heslo',
+    en: 'Recover password',
   };
 
   constructor(
@@ -39,13 +40,20 @@ export class RecoverPasswordFormComponent implements OnInit {
     public formBuilder: FormBuilder,
     public auth: AuthenticationService,
     public languageService: LanguageService,
-    public http: HttpClient) {
-    this.titleMain_txt = this.languageService.getNativeLanguageText(this.titleMainTranslation);
-    this.recoverPassword_txt = this.languageService.getNativeLanguageText(this.recoverPasswordTranslation);
+    public http: HttpClient,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
+  ) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
+    this.recoverPassword_txt = this.languageService.getNativeLanguageText(
+      this.recoverPasswordTranslation,
+    );
   }
 
   invalidEmail() {
-    return (this.submitted && this.userForm.controls.email.errors != null);
+    return this.submitted && this.userForm.controls.email.errors != null;
   }
 
   copyServerErrors(returnData: any) {
@@ -60,11 +68,18 @@ export class RecoverPasswordFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
-    this.userForm = this.formBuilder.group({
-      email: ['',],
-    },
-      { updateOn: "submit" }
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.userForm = this.formBuilder.group(
+      {
+        email: [''],
+      },
+      { updateOn: 'submit' },
     );
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   onSubmit() {
@@ -73,35 +88,33 @@ export class RecoverPasswordFormComponent implements OnInit {
     this.submitted = true;
 
     if (this.userForm.invalid == true) {
-
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
       return;
-
-    }
-    else {
-      Object.keys(this.userForm.value).forEach(key => {
+    } else {
+      Object.keys(this.userForm.value).forEach((key) => {
         formData.append(key, this.userForm.value[key]);
       });
 
-      this.http.post<any>(environment.urlAddress + '/api/v1/user_input/recover', formData).subscribe((returnData: any) => {
+      this.http
+        .post<any>(environment.urlAddress + '/api/v1/user_input/recover', formData)
+        .subscribe(
+          (returnData: any) => {
+            this.inputCondition.errorLoad = null;
+            this.copyServerErrors(returnData);
+            this.errorMessage = null;
 
-        this.inputCondition.errorLoad = null;
-        this.copyServerErrors(returnData);
-        this.errorMessage = null;
-
-        if (null == returnData.inputErrorMessage.uploadSuccess) {
-        }
-        else {
-          this.returnMessage = returnData.message;
-          this.submitted = false;
-          this.userForm.reset();
-        }
-
-      }, error => {
-        this.errorMessage = error.error.message;
-      });
+            if (null == returnData.inputErrorMessage.uploadSuccess) {
+            } else {
+              this.returnMessage = returnData.message;
+              this.submitted = false;
+              this.userForm.reset();
+            }
+          },
+          (error) => {
+            this.errorMessage = error.error.message;
+          },
+        );
     }
   }
-
 }

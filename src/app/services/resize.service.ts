@@ -118,6 +118,20 @@ export class ResizeService {
     return image_offset;
   }
 
+  public getImageOffsetOnSize(image_count: number, image_order: number, image_size: number): number {
+    let image_offset: number;
+    image_offset =
+      (this.window_size -
+        this.page_margin_right -
+        (image_size * image_count +
+          image_count * this.picture_margin_size -
+          this.picture_margin_size)) /
+      2;
+    image_offset =
+      image_offset + image_order * (image_size + this.picture_margin_size);
+    return image_offset;
+  }
+
   public getEndLinerWidth(image_count: number): number {
     let end_liner_width: number;
     end_liner_width =

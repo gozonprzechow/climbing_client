@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -9,6 +9,8 @@ import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 import { ImageService } from '../services/image.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-first-page-form',
@@ -37,12 +39,16 @@ export class FirstPageFormComponent implements OnInit {
     public languageService: LanguageService,
     public routerService: RouterServices,
     public imageService: ImageService,
+    public mobileService: MobileService,
+    public resizeSvc: ResizeService,
   ) {}
 
   public subscriber: any;
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
@@ -85,6 +91,12 @@ export class FirstPageFormComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
   }
 
   routeToAnotherUsersLocalities(anotherUserId) {
@@ -138,5 +150,12 @@ export class FirstPageFormComponent implements OnInit {
         { initialState },
       ),
     );
+  }
+
+  public getUserNameClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'userName userName_mobile';
+    }
+    return 'userName';
   }
 }

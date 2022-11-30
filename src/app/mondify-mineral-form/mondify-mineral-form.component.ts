@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
@@ -7,11 +7,13 @@ import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-mondify-mineral-form',
   templateUrl: './mondify-mineral-form.component.html',
-  styleUrls: ['./mondify-mineral-form.component.css'],
+  styleUrls: ['./mondify-mineral-form.component.css', '../models/mobile.css'],
   providers: [DatePipe],
 })
 export class MondifyMineralFormComponent implements OnInit {
@@ -74,8 +76,9 @@ export class MondifyMineralFormComponent implements OnInit {
     public routerService: RouterServices,
     public languageService: LanguageService,
     public datePipe: DatePipe,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
-
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
     );
@@ -95,6 +98,7 @@ export class MondifyMineralFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.resetTitleImage();
 
     this.product = history.state;
@@ -126,7 +130,7 @@ export class MondifyMineralFormComponent implements OnInit {
         ],
         comment: [
           this.achatdbCollection.comment,
-          [Validators.required, Validators.maxLength(50)],
+          [Validators.maxLength(300)],
         ],
         date: [this.achatdbCollection.date],
         img: [null],
@@ -149,6 +153,11 @@ export class MondifyMineralFormComponent implements OnInit {
           );
         },
       );
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   isFieldValid(field: string) {

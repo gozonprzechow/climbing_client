@@ -1,13 +1,15 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-verified-create-account-form',
   templateUrl: './verified-create-account-form.component.html',
-  styleUrls: ['./verified-create-account-form.component.css'],
+  styleUrls: ['./verified-create-account-form.component.css', '../models/mobile.css'],
 })
 export class VerifiedCreateAccountFormComponent implements OnInit {
   submitted = false;
@@ -25,6 +27,8 @@ export class VerifiedCreateAccountFormComponent implements OnInit {
     public formBuilder: FormBuilder,
     public http: HttpClient,
     public route: ActivatedRoute,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.tittleMain = 'Account was verified';
   }
@@ -33,6 +37,7 @@ export class VerifiedCreateAccountFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.subscriber = this.route.params.subscribe((params) => {
       this.http
         .get(environment.urlAddress + '/api/v1/user_input/verify/' + params.uid)
@@ -40,5 +45,10 @@ export class VerifiedCreateAccountFormComponent implements OnInit {
           this.message = data.message;
         });
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 }

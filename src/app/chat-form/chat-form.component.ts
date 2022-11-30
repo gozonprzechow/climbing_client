@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient } from '@angular/common/http';
@@ -20,6 +20,7 @@ import {
   PagingButtonsServices,
 } from '../services/pagingButtons.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-chat-form',
@@ -180,7 +181,8 @@ export class ChatFormComponent implements OnInit {
     private location: Location,
     public pagingButtons: PagingButtonsServices,
     public imageService: ImageService,
-    private resizeSvc: ResizeService,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.alerts.message_alert = false;
     this.alerts.price_alert = false;
@@ -252,6 +254,7 @@ export class ChatFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     let userId = this.auth.getLogUserId();
     this.recipient_id = userId;
 
@@ -276,6 +279,11 @@ export class ChatFormComponent implements OnInit {
         this.getStandardChatHttp();
       }
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   private getStandardChatHttp() {
@@ -720,28 +728,28 @@ export class ChatFormComponent implements OnInit {
   }
 
   public getSubmitMessageBtnClass(): string {
-    if (0 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize()) {
       return 'btn btnSubmitMessage btnSubmitMessage_mobile';
     }
     return 'btn btnSubmitMessage';
   }
 
   public getCancleAddMessageBtnClass(): string {
-    if (0 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize()) {
       return 'btn btnCancleAddMessage btnCancleAddMessage_mobile';
     }
     return 'btn btnCancleAddMessage';
   }
 
   public getBtnAddMessageColumn(): string {
-    if (0 === this.screen_size || 1 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize() || 1 === this.resizeSvc.getScreenSize()) {
       return 'col-5';
     }
     return 'col-3';
   }
 
   public getInputMessageColumn(): string {
-    if (0 === this.screen_size || 1 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize() || 1 === this.resizeSvc.getScreenSize()) {
       return 'col-7';
     }
     return 'col-9';

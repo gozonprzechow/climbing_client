@@ -130,7 +130,7 @@ export class InputSubMineralFormComponent implements OnInit {
 
     this.userForm = this.formBuilder.group(
       {
-        comment: [null, [Validators.required, Validators.maxLength(50)]],
+        comment: ['', [Validators.maxLength(300)]],
         img: [null],
       },
       { updateOn: 'submit' },

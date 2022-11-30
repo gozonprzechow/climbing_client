@@ -1,11 +1,8 @@
-.wrapper {
-  /* color: rgb(160, 160, 160); */
-  margin-left: auto;
-  margin-right: auto;
-}
+
 
 .userDescription {
   text-align: center;
+  clear: both;
 }
 
 .userWrapper {
@@ -20,6 +17,16 @@
   border: 5px;
   position: absolute;
   border-radius: 6px;
+}
+
+.imageProfile{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+  border: 5px;
+  position: absolute;
+  border-radius: 56px;
 }
 
 .enderLine {
@@ -74,5 +81,9 @@
 }
 
 ul.list-inline li {
+  float: left;
+}
+
+.profile-img-wrapper {
   float: left;
 }

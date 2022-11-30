@@ -37,5 +37,5 @@
 
   .right.carousel-control, .left.carousel-control {
     opacity: 0;
-    filter:alpha(opacity=0); /* IE support */
+    filter:alpha(opacity=0);
 }

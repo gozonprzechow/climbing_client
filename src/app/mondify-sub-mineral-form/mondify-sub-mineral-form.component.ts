@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -9,11 +9,13 @@ import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.com
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 @Component({
   selector: 'app-mondify-sub-mineral-form',
   templateUrl: './mondify-sub-mineral-form.component.html',
-  styleUrls: ['./mondify-sub-mineral-form.component.css'],
+  styleUrls: ['./mondify-sub-mineral-form.component.css', '../models/mobile.css'],
 })
 export class MondifySubMineralFormComponent implements OnInit {
   submitted = false;
@@ -81,6 +83,8 @@ export class MondifySubMineralFormComponent implements OnInit {
     public routerService: RouterServices,
     public languageService: LanguageService,
     public auth: AuthenticationService,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -106,6 +110,7 @@ export class MondifySubMineralFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.resetTitleImage();
 
     this.product = history.state;
@@ -128,7 +133,7 @@ export class MondifySubMineralFormComponent implements OnInit {
       {
         comment: [
           this.achatdbCollection.achatImages[this.actualSlide].comment,
-          [Validators.required, Validators.maxLength(50)],
+          [Validators.maxLength(300)],
         ],
         img: [null],
       },
@@ -145,6 +150,11 @@ export class MondifySubMineralFormComponent implements OnInit {
         },
         (error) => {},
       );
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   openConfirmModal() {

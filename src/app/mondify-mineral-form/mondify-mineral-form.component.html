@@ -2,10 +2,13 @@
   [allLocality]="allLocality"
   [activePage]="activePage"
 ></app-main-navbar-menu>
-<custom-tittle-main [tittleMain]="titleMain_txt"></custom-tittle-main>
+<custom-tittle-main
+  [tittleMain]="titleMain_txt"
+  [screen_size]="resizeSvc.getScreenSize()"
+></custom-tittle-main>
 
-<div class="container" center="block">
-  <div class="mainFormClass" center="block">
+<div class="container">
+  <div class="{{ mobileService.getMainFormClass(resizeSvc.getScreenSize()) }}">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="form-group" [ngClass]="displayFieldCss('title')">
         <!-- First Name -->
@@ -120,7 +123,7 @@
       </div>
     </form>
     <div class="submitContainer">
-      <img [src]="imgURL" height="200" *ngIf="imgURL" />
+      <img [src]="imgURL" width="250" *ngIf="imgURL" />
     </div>
   </div>
 </div>

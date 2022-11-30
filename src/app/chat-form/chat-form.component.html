@@ -1,8 +1,12 @@
 <app-chat-navbar-menu
   [friends]="friends"
+  [screen_size]="resizeSvc.getScreenSize()"
   (event)="addFriendTrigger($event)"
 ></app-chat-navbar-menu>
-<custom-tittle-main [tittleMain]="title"></custom-tittle-main>
+<custom-tittle-main
+  [tittleMain]="title"
+  [screen_size]="resizeSvc.getScreenSize()"
+></custom-tittle-main>
 
 <div class="container">
   <div ngbDropdown>
@@ -86,19 +90,23 @@
               {{ delete_txt }}
             </button>
           </div>
-          <div *ngIf="showAddMessage" class={{getBtnAddMessageColumn()}}>
-            <button type="button" class={{getSubmitMessageBtnClass()}} (click)="submitMessage()">
+          <div *ngIf="showAddMessage" class="{{ getBtnAddMessageColumn() }}">
+            <button
+              type="button"
+              class="{{ getSubmitMessageBtnClass() }}"
+              (click)="submitMessage()"
+            >
               {{ submit_txt }}
             </button>
             <button
               type="button"
-              class={{getCancleAddMessageBtnClass()}}
+              class="{{ getCancleAddMessageBtnClass() }}"
               (click)="canceAddMessage()"
             >
               {{ cancle_txt }}
             </button>
           </div>
-          <div *ngIf="showAddMessage" class={{getInputMessageColumn()}}>
+          <div *ngIf="showAddMessage" class="{{ getInputMessageColumn() }}">
             <textarea
               class="inputCommentBox"
               ref-textarea

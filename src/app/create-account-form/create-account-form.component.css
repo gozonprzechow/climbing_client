@@ -44,3 +44,7 @@
 #successLoadCondition {
   color: rgb(43, 155, 43);
 }
+
+.center-text{
+  text-align: center;
+}

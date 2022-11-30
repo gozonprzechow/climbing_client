@@ -32,6 +32,7 @@ export class CreateAccountFormComponent implements OnInit {
   inputCondition: InputCondition = new InputCondition();
 
   is_submit_in_progress: Boolean = false;
+  create_account_message: string = "";
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -170,6 +171,7 @@ export class CreateAccountFormComponent implements OnInit {
           this.inputCondition.errorLoad = null;
           this.copyServerErrors(returnData);
           if (null == returnData.inputErrorMessage.uploadSuccess) {
+            this.create_account_message = returnData.message;
           } else {
             this.routerService.successCreateAccount(returnData.message);
           }

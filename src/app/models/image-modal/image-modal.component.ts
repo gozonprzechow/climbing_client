@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  OnDestroy,
+  AfterViewChecked,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,6 +18,8 @@ import { AddOfferModalComponent } from '../../models/add-offer-modal/add-offer-m
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../../services/language.service';
 import { ResizeService, SCREEN_SIZE } from '../../services/resize.service';
+import { MobileService } from '../../services/mobile.service';
+import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-image-modal',
@@ -28,7 +36,6 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   imageInformation: boolean = false;
   newCommentText: string;
   textValue: string;
-  screen_size: SCREEN_SIZE;
 
   numOfItemCollection: string = '';
   actualSlide: number = 0;
@@ -98,6 +105,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     private location: Location,
     public auth: AuthenticationService,
     private resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.comments_txt = this.languageService.getNativeLanguageText(
       this.commentsTranslation,
@@ -124,7 +132,14 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
 
   public subscriber: any;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
+  }
 
   ngOnDestroy() {
     if (this.previousUrl) {
@@ -436,37 +451,44 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   }
 
   public getCommentBtnClass(): string {
-    if (0 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize()) {
       return 'btn btnComments btnComments_mobile';
     }
     return 'btn btnComments';
   }
 
   public getSubmitCommentBtnClass(): string {
-    if (0 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize()) {
       return 'btn btnSubmitComment btnSubmitComment_mobile';
     }
     return 'btn btnSubmitComment';
   }
 
   public getCancleAddCommentBtnClass(): string {
-    if (0 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize()) {
       return 'btn btnCancleAddComment btnCancleAddComment_mobile';
     }
     return 'btn btnCancleAddComment';
   }
 
   public getBtnAddComentColumn(): string {
-    if (0 === this.screen_size || 1 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize() || 1 === this.resizeSvc.getScreenSize()) {
       return 'col-5';
     }
     return 'col-3';
   }
 
   public getInputComentColumn(): string {
-    if (0 === this.screen_size || 1 === this.screen_size) {
+    if (0 === this.resizeSvc.getScreenSize() || 1 === this.resizeSvc.getScreenSize()) {
       return 'col-7';
     }
     return 'col-9';
+  }
+
+  public ifShowIndicators(): Boolean {
+    if (this.imageInformation) {
+      return true;
+    }
+    return false;
   }
 }

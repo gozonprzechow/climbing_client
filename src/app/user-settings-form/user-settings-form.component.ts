@@ -1,7 +1,9 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, HostListener, OnInit, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
+import { MobileService } from '../services/mobile.service';
 
 import { InputCondition } from '../models/inputLocality';
 import { ValidationService } from '../models/validation';
@@ -16,7 +18,7 @@ import { ImageService } from '../services/image.service';
 @Component({
   selector: 'app-user-settings-form',
   templateUrl: './user-settings-form.component.html',
-  styleUrls: ['./user-settings-form.component.css'],
+  styleUrls: ['./user-settings-form.component.css', '../models/mobile.css'],
 })
 export class UserSettingsFormComponent implements OnInit {
   submitted = false;
@@ -32,7 +34,9 @@ export class UserSettingsFormComponent implements OnInit {
   confirmModalTitle: string;
   titleImage: string;
   upload_info: any = {};
+  delete_info: any = {};
   imgURL: any;
+  actual_profile_img: string;
 
   modalRef: BsModalRef;
   convertedBytes: ConvertedBytes = {
@@ -70,6 +74,16 @@ export class UserSettingsFormComponent implements OnInit {
     cz: 'Opravdu chcete smazat účet?',
     en: 'Really want delete account?',
   };
+  warningDeleteProfileImageTitle_txt: string;
+  warningDeleteProfileImageTitleTranslation: TextTranslator = {
+    cz: 'Smazat profilovou fotku',
+    en: 'Delete profile image',
+  };
+  warningDeleteProfileImage_txt: string;
+  warningDeleteProfileImageTranslation: TextTranslator = {
+    cz: 'Opravdu chcete smazat profilovou fotku?',
+    en: 'Really want delete profile image?',
+  };
   profilePhotoLabel_txt: string;
   profilePhotoLabelTranslation: TextTranslator = {
     cz: 'Přidat fotku',
@@ -96,6 +110,8 @@ export class UserSettingsFormComponent implements OnInit {
     public mathServices: MathServices,
     public http: HttpClient,
     public imageService: ImageService,
+    public resizeSvc: ResizeService,
+    public mobileService: MobileService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -115,6 +131,14 @@ export class UserSettingsFormComponent implements OnInit {
     this.warningDeleteaccount_txt = this.languageService.getNativeLanguageText(
       this.warningDeleteaccountTranslation,
     );
+
+    this.warningDeleteProfileImageTitle_txt = this.languageService.getNativeLanguageText(
+      this.warningDeleteProfileImageTitleTranslation,
+    );
+    this.warningDeleteProfileImage_txt = this.languageService.getNativeLanguageText(
+      this.warningDeleteProfileImageTranslation,
+    );
+
     this.profilePhotoLabel_txt = this.languageService.getNativeLanguageText(
       this.profilePhotoLabelTranslation,
     );
@@ -145,6 +169,7 @@ export class UserSettingsFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.userForm = this.formBuilder.group(
       {
         // email: ['', [Validators.required, ValidationService.emailValidator]],
@@ -165,15 +190,25 @@ export class UserSettingsFormComponent implements OnInit {
           );
           this.activePage = data.activePage;
           this.allLocality = data.localities;
-          this.imgURL = this.imageService.getStandardImage(
-            this.userInfo.profileImgName,
-            this.userInfo.profileImgPath,
-          );
+          if (this.userInfo.profileImgName) {
+            this.imgURL = this.imageService.getStandardImage(
+              this.userInfo.profileImgName,
+              this.userInfo.profileImgPath,
+            );
+          } else {
+            this.imgURL = null;
+          }
+          this.actual_profile_img = this.imgURL;
         },
         (error) => {
           this.routerService.notLoginError();
         },
       );
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.resizeSvc.refreshScreenSize(window.innerWidth);
   }
 
   openConfirmModal() {
@@ -258,17 +293,21 @@ export class UserSettingsFormComponent implements OnInit {
             if (this.upload_info.upload_success === 'true') {
               this.submitted = false;
               this.userForm.get('img').setValue('', { emitEvent: true });
-              this.imgURL = null;
               this.userInfo.profileImgPath = this.upload_info.profileImgPath;
               this.userInfo.profileImgName = this.upload_info.profileImgName;
               this.userInfo.imagesSize = this.upload_info.imagesSize;
               this.convertedBytes = this.mathServices.setUserFriendlyByteUnit(
                 this.userInfo.imagesSize,
               );
-              this.imgURL = this.imageService.getStandardImage(
-                this.userInfo.profileImgName,
-                this.userInfo.profileImgPath,
-              );
+              if (this.imgURL) {
+                this.imgURL = this.imageService.getStandardImage(
+                  this.userInfo.profileImgName,
+                  this.userInfo.profileImgPath,
+                );
+              } else {
+                this.imgURL = null;
+              }
+              this.actual_profile_img = this.imgURL;
             } else {
               this.upload_info.upload_success = false;
             }
@@ -279,5 +318,68 @@ export class UserSettingsFormComponent implements OnInit {
           },
         );
     }
+  }
+
+  public discardProfileImage() {
+    if (this.actual_profile_img === this.imgURL) {
+      this.openConfirmDeleteProfileImageModal();
+    } else {
+      this.imgURL = this.actual_profile_img;
+    }
+  }
+
+  openConfirmDeleteProfileImageModal() {
+    const initialState = {
+      list: {
+        confirmModalMessage: this.warningDeleteProfileImage_txt,
+        confirmModalTitle: this.warningDeleteProfileImageTitle_txt,
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.modalRef = this.modalService.show(
+      ConfirmModalComponent,
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
+    );
+    this.modalRef.content.event.subscribe((res) => {
+      this.postDeleteProfileImage();
+    });
+  }
+
+  private postDeleteProfileImage() {
+    let formData = new FormData();
+    this.delete_info.delete_success = false;
+    this.cleanServerErrors();
+    this.inputCondition.successLoad = null;
+    this.upload_info.upload_success = false;
+
+    this.http
+      .post<any>(
+        environment.urlAddress + '/api/v1/user_input/deleteProfileImage',
+        formData,
+      )
+      .subscribe(
+        (returnData: any) => {
+          this.delete_info = returnData.delete_info;
+          // this.copyServerErrors(returnData);
+          if (this.delete_info.delete_success === 'true') {
+            this.userForm.get('img').setValue('', { emitEvent: true });
+            this.imgURL = null;
+            this.userInfo.profileImgPath = '';
+            this.userInfo.profileImgName = '';
+            this.userInfo.imagesSize = this.delete_info.imagesSize;
+            this.convertedBytes = this.mathServices.setUserFriendlyByteUnit(
+              this.userInfo.imagesSize,
+            );
+            this.actual_profile_img = this.imgURL;
+          } else {
+            this.delete_info.delete_success = false;
+          }
+        },
+        (error) => {
+          this.routerService.notLoginError();
+          this.serverServiceErrors.uploadSuccess = null;
+        },
+      );
   }
 }

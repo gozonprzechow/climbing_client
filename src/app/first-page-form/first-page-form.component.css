@@ -17,14 +17,13 @@
   margin-right: auto;
   cursor: pointer;
   border: 5px;
-  border-style: solid;
-  border-color: #4b4b4b;
+  position: absolute;
   border-radius: 6px;
 }
 
 .enderLine {
-  min-width: 240px;
-  background-color: rgb(177, 185, 189);
+  clear: both;
+  background-color: rgb(90, 92, 93);
 }
 
 .top-right {
@@ -49,11 +48,20 @@
   margin-top: 45px;
 }
 
+.userDescription {
+  text-align: center;
+}
+
 .userName {
   color: rgb(177, 185, 189) !important;
   font-weight: bold;
   font-size: 24px;
   cursor: pointer;
+  display: inline;
+}
+
+.userName_mobile {
+  font-size: 20px;
 }
 
 .userName:hover {
@@ -66,4 +74,8 @@
   position: relative;
   text-align: center;
   color: rgb(177, 185, 189);
+}
+
+ul.list-inline li {
+  float: left;
 }
