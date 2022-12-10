@@ -70,10 +70,13 @@ export class FirstPageFormComponent implements OnInit {
 
           if (params.image && params.slide) {
             let previousUrl = './';
-            const achatdbCollection =
-              this.otherUsersCollections[0].achatdbCollections.find(
-                ({ _id }) => _id === params.image,
-              );
+            let achatdbCollection = this.findById(
+              this.otherUsersCollections,
+              params.image,
+            );
+            if (achatdbCollection === undefined) {
+              return;
+            }
             this.openModalOnImage(
               achatdbCollection,
               params.slide,
@@ -91,6 +94,17 @@ export class FirstPageFormComponent implements OnInit {
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  private findById(other_users_collection, id) {
+    for (var other_user of other_users_collection) {
+      for (var achatDbCollection of other_user.achatdbCollections) {
+        if (achatDbCollection._id === id) {
+          return achatDbCollection;
+        }
+      }
+    }
+    return undefined;
   }
 
   @HostListener('window:resize', [])

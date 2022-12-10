@@ -21,9 +21,7 @@ import { MobileService } from '../services/mobile.service';
 @Component({
   selector: 'app-user-locality-form',
   templateUrl: './user-locality-form.component.html',
-  styleUrls: [
-    './user-locality-form.component.css',
-  ],
+  styleUrls: ['./user-locality-form.component.css'],
 })
 export class UserLocalityFormComponent implements OnInit {
   selectLocality: string;
@@ -161,13 +159,23 @@ export class UserLocalityFormComponent implements OnInit {
           if (params.image && params.slide) {
             let previousUrl =
               'locality/' + params.uid + '/' + params.page + '/' + params.idPostedBy;
-            const achatdbCollection = this.achatdbCollections.find(
-              ({ _id }) => _id === params.image,
-            );
+            let achatdbCollection = this.findById(this.achatdbCollections, params.image);
+            if (achatdbCollection === undefined) {
+              return;
+            }
             this.openModalOnImage(achatdbCollection, params.slide, previousUrl);
           }
         });
     });
+  }
+
+  private findById(achatdbCollections, id) {
+    for (var achatDbCollection of achatdbCollections) {
+      if (achatDbCollection._id === id) {
+        return achatDbCollection;
+      }
+    }
+    return undefined;
   }
 
   @HostListener('window:resize', [])
@@ -331,6 +339,20 @@ export class UserLocalityFormComponent implements OnInit {
 
   public isProfileMineral(achatdbCollection): Boolean {
     if (achatdbCollection.mainPage) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifPrice(status) {
+    if (1 == status) {
+      return true;
+    }
+    return false;
+  }
+
+  public ifAuction(status) {
+    if (2 == status) {
       return true;
     }
     return false;

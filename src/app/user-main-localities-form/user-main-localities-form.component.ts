@@ -137,9 +137,10 @@ export class UserMainLocalitiesFormComponent implements OnInit {
 
           if (params.image && params.slide) {
             let previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
-            const achatdbCollection = this.localityCollections[
-              params.localityNum
-            ].achatdbCollections.find(({ _id }) => _id === params.image);
+            let achatdbCollection = this.findById(this.localityCollections, params.image);
+            if (achatdbCollection === undefined) {
+              return;
+            }
             this.openModalOnImage(
               achatdbCollection,
               params.slide,
@@ -149,6 +150,17 @@ export class UserMainLocalitiesFormComponent implements OnInit {
           }
         });
     });
+  }
+
+  private findById(localityCollections, id) {
+    for (var localityCollection of localityCollections) {
+      for (var achatDbCollection of localityCollection.achatdbCollections) {
+        if (achatDbCollection._id === id) {
+          return achatDbCollection;
+        }
+      }
+    }
+    return undefined;
   }
 
   @HostListener('window:resize', [])

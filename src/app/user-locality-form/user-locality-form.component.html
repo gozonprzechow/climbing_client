@@ -75,6 +75,30 @@
                   >
                 </div>
               </div>
+              <img
+                *ngIf="ifPrice(achatdbCollection.status)"
+                  class="bot-left"
+                  src="../../../assets/skins/tag_price_img.png
+                  "
+                  [ngStyle]="{
+                    'left':
+                      i % resizeSvc.getPictureOnPage() == 0
+                        ? '0px'
+                        : resizeSvc.getPictureMarginSize() + 'px'
+                  }"
+                />
+                <img
+                *ngIf="ifAuction(achatdbCollection.status)"
+                  class="bot-left"
+                  src="../../../assets/skins/tag_bind_img.png
+                  "
+                  [ngStyle]="{
+                    'left':
+                      i % resizeSvc.getPictureOnPage() == 0
+                        ? '0px'
+                        : resizeSvc.getPictureMarginSize() + 'px'
+                  }"
+                />
               <div *ngIf="!auth.isItemYours(achatdbCollection.postedBy)"></div>
             </div>
           </a>

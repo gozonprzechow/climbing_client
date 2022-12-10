@@ -495,8 +495,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     return false;
   }
 
-  public getDateFormated(vv) {
-    let date = new Date();
+  public getDateFormated(date) {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
   }
 }

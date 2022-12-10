@@ -57,6 +57,19 @@ ul.list-inline li {
   /* cursor: pointer !important; */
 }
 
+.bot-left {
+  position: absolute;
+  /* height: 35px; */
+  /* bottom: 0px; */
+  left: 0px;
+  opacity: 1;
+  /* cursor: pointer !important; */
+  -webkit-clip-path: polygon(0 0, 0 30px, 0px 30px, 30px 0);
+  clip-path: polygon(0 0, 0 30px, 0px 30px, 30px 0);
+  /* -webkit-clip-path: polygon(0 0, 0 35px, 35px 10px, 35px 0);
+  clip-path: polygon(0 0, 0 35px, 35px 10px, 35px 0); */
+}
+
 .imageContainer {
   position: relative;
   text-align: center;
