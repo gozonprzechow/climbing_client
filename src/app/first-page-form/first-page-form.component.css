@@ -79,3 +79,26 @@
 ul.list-inline li {
   float: left;
 }
+
+.containerPageDescription {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  min-height: 130px;
+  min-width: 265px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 3px solid #383a39;
+  background-color: rgb(85, 83, 83);
+  border-radius: 6px;
+}
+
+.pageDescriptionText {
+  text-align: left;
+  color: rgb(229, 229, 229);
+  word-break: break-word;
+  margin-left: 35px;
+  font-size: 21px;
+  margin-right: 35px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

@@ -71,5 +71,13 @@
         />
       </div>
     </div>
+    <div
+      class="containerPageDescription"
+      [ngStyle]="{
+        width: resizeSvc.getEndLinerWidth(3) + 'px'
+      }"
+    >
+      <div class="pageDescriptionText">{{ pageDescription_txt }}</div>
+    </div>
   </div>
 </div>

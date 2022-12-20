@@ -25,6 +25,11 @@ export class FirstPageFormComponent implements OnInit {
     cz: 'Sbírky minerálů',
     en: 'Mineral collections',
   };
+  pageDescription_txt: string;
+  pageDescriptionTranslation: TextTranslator = {
+    cz: 'Zde si můžete založit vitrínu kde můžete své kameny vystavovat nebo i dražit a prodávat.',
+    en: 'Here you can set up a showcase where you can display your minerals or even auction and sell them.',
+  };
   otherUsersCollections: any = [];
 
   modalRef: BsModalRef;
@@ -41,7 +46,14 @@ export class FirstPageFormComponent implements OnInit {
     public imageService: ImageService,
     public mobileService: MobileService,
     public resizeSvc: ResizeService,
-  ) {}
+  ) {
+    this.titleMain_txt = this.languageService.getNativeLanguageText(
+      this.titleMainTranslation,
+    );
+    this.pageDescription_txt = this.languageService.getNativeLanguageText(
+      this.pageDescriptionTranslation,
+    );
+  }
 
   public subscriber: any;
 
