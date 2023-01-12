@@ -19,7 +19,7 @@
         *ngFor="let otherUsersCollection of otherUsersCollections; let i = index"
         class="localityWrapper"
       >
-        <div class="userDescription">
+        <!-- <div class="userDescription">
           <a
             class="{{ getUserNameClass() }}"
             (click)="
@@ -27,7 +27,7 @@
             "
             >{{ otherUsersCollection.otherUser.name }}<br /><br
           /></a>
-        </div>
+        </div> -->
         <ul
           class="list-inline"
           [ngStyle]="{
@@ -58,17 +58,58 @@
                       j
                     ) + 'px'
                 }"
+                alt="{{ achatdbCollection.title }}"
+                title="{{ achatdbCollection.title }}"
                 (click)="openModal(achatdbCollection, j)"
               />
+              <div
+                class="imageLocality"
+                [ngStyle]="{
+                  width: resizeSvc.getPictureWidth() + 'px',
+                  left:
+                    resizeSvc.getFirstImageOffset(
+                      otherUsersCollection.achatdbCollections.length,
+                      j
+                    ) + 'px'
+                }"
+                (click)="openModal(achatdbCollection, j)"
+              ></div>
             </div>
           </li>
         </ul>
-        <hr
-          class="enderLine"
+
+        <ul
+          class="list-inline"
           [ngStyle]="{
-            width: resizeSvc.getEndLinerWidth(3) + 'px'
+            'min-height': '14' + 'px'
           }"
-        />
+        >
+          <li
+            *ngFor="
+              let achatdbCollection of otherUsersCollection.achatdbCollections;
+              let j = index
+            "
+          >
+            <div *ngIf="achatdbCollection" class="imageContainer">
+              <div
+                class="imageLocality"
+                [ngStyle]="{
+                  width: resizeSvc.getPictureWidth() + 'px',
+                  left:
+                    resizeSvc.getFirstImageOffset(
+                      otherUsersCollection.achatdbCollections.length,
+                      j
+                    ) + 'px'
+                }"
+                (click)="openModal(achatdbCollection, j)"
+              >
+                {{ achatdbCollection.title }}
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <p class="enderLine"></p>
       </div>
     </div>
     <div

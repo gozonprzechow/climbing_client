@@ -6,11 +6,11 @@ export class ImageService {
   suffix: string = '_small';
 
   getImage(imgName, imgPath): string {
-    return environment.serverUrl + '/' + imgPath + imgName + this.suffix;
+    return environment.serverUrl + '/' + imgPath + imgName + this.suffix + ".jpg";
   }
 
   getStandardImage(imgName, imgPath): string {
-    return environment.serverUrl + '/' + imgPath + imgName;
+    return environment.serverUrl + '/' + imgPath + imgName + ".jpg";
   }
   isImgThere(imgName, imgPath): Boolean {
     if (imgName == '' || imgName == 'undefined') {

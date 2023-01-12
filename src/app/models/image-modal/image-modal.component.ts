@@ -236,7 +236,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   }
 
   public getImageLarge(imgName): string {
-    return this.prefix + imgName;
+    return this.prefix + imgName + ".jpg";
   }
 
   public editImage(achatdbCollection) {
