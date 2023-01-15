@@ -36,7 +36,6 @@
                   'margin-bottom': resizeSvc.getPictureMarginSize() + 'px'
                 }"
                 alt="{{ achatdbCollection.title }}"
-                title="{{ achatdbCollection.title }}"
                 (click)="openModal(achatdbCollection)"
               />
               <div *ngIf="auth.isItemYours(achatdbCollection.postedBy)" ngbDropdown>

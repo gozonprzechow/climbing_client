@@ -8,5 +8,6 @@ Disallow: /*.json$
 Disallow: /*_buildManifest.js$
 Disallow: /*_middlewareManifest.js$
 Disallow: /*_ssgManifest.js$
+Disallow: /*/api/v1/*
 
 Sitemap: https://sutrak.net/sitemap.xml

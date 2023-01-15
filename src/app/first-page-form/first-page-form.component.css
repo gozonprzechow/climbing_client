@@ -80,6 +80,13 @@ ul.list-inline li {
   float: left;
 }
 
+.pageDescriptionImage {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  /* float: left; */
+}
+
 .containerPageDescription {
   margin-top: 15px;
   margin-bottom: 10px;
@@ -96,9 +103,23 @@ ul.list-inline li {
   text-align: left;
   color: rgb(229, 229, 229);
   word-break: break-word;
-  margin-left: 35px;
   font-size: 21px;
-  margin-right: 35px;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin: 8px;
+}
+
+.right {
+  float: left;
+}
+
+.clearFloating {
+  clear: both;
+  color: rgb(229, 229, 229);
+}
+
+.mobileTextSize {
+  font-size: 15px;
+}
+
+.smallTextSize {
+  font-size: 18px;
 }

@@ -21,13 +21,14 @@ export class FirstPageFormComponent implements OnInit {
   allLocality: any = [];
   activePage: any = {};
   titleMain_txt: string;
+  page_description_img: string = '../../../assets/image/achat.jpg';
   titleMainTranslation: TextTranslator = {
     cz: 'Sbírky minerálů',
     en: 'Mineral collections',
   };
   pageDescription_txt: string;
   pageDescriptionTranslation: TextTranslator = {
-    cz: 'Zde si můžete založit vitrínu minerálů, kde můžete své kameny vystavovat nebo i dražit a prodávat.',
+    cz: 'Zde si můžete založit vitrínu minerálů, kde můžete své kameny vystavovat, nebo i dražit a prodávat.',
     en: 'Here you can set up a showcase where you can display your minerals or even auction and sell them.',
   };
   otherUsersCollections: any = [];
@@ -183,5 +184,35 @@ export class FirstPageFormComponent implements OnInit {
       return 'userName userName_mobile';
     }
     return 'userName';
+  }
+
+  public getDescriptionImageWidth() {
+    if (
+      SCREEN_SIZE.LG === this.resizeSvc.getScreenSize() ||
+      SCREEN_SIZE.XL === this.resizeSvc.getScreenSize()
+    ) {
+      return 2.5 * this.resizeSvc.getPictureWidth();
+    }
+    return 1.7 * this.resizeSvc.getPictureWidth();
+  }
+
+  public getDescriptionImageTextSizeClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'pageDescriptionText mobileTextSize';
+    }
+    if (SCREEN_SIZE.SM === this.resizeSvc.getScreenSize()) {
+      return 'pageDescriptionText smallTextSize';
+    }
+    return 'pageDescriptionText';
+  }
+
+  public getDescriptionContainerWidth() {
+    if (
+      SCREEN_SIZE.LG === this.resizeSvc.getScreenSize() ||
+      SCREEN_SIZE.XL === this.resizeSvc.getScreenSize()
+    ) {
+      return this.resizeSvc.getEndLinerWidth(3) * 1.45;
+    }
+    return this.resizeSvc.getEndLinerWidth(3);
   }
 }

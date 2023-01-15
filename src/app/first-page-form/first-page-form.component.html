@@ -10,24 +10,40 @@
 
 <div class="wrapper" center="block">
   <div
-    [ngStyle]="{
-      width: resizeSvc.getPageWidth() + 'px'
-    }"
   >
+    <img
+      [src]="page_description_img"
+      alt="Mechový achát kamenolom Doubravice"
+      class="pageDescriptionImage"
+      [ngStyle]="{
+        'max-width': getDescriptionContainerWidth() + 'px'
+      }"
+    />
+    <div
+      class="containerPageDescription"
+      [ngStyle]="{
+        width: getDescriptionContainerWidth() + 'px'
+      }"
+    >
+      <div class="{{ getDescriptionImageTextSizeClass() }}">
+        {{ pageDescription_txt }}
+      </div>
+      <div class="clearFloating"></div>
+    </div>
     <div class="wrap">
       <div
         *ngFor="let otherUsersCollection of otherUsersCollections; let i = index"
         class="localityWrapper"
       >
-        <!-- <div class="userDescription">
+        <div class="userDescription">
           <a
             class="{{ getUserNameClass() }}"
             (click)="
               routeToAnotherUsersLocalities(otherUsersCollection.otherUser.postedBy)
             "
-            >{{ otherUsersCollection.otherUser.name }}<br /><br
-          /></a>
-        </div> -->
+            >{{ otherUsersCollection.otherUser.name }}
+          </a>
+        </div>
         <ul
           class="list-inline"
           [ngStyle]="{
@@ -59,7 +75,6 @@
                     ) + 'px'
                 }"
                 alt="{{ achatdbCollection.title }}"
-                title="{{ achatdbCollection.title }}"
                 (click)="openModal(achatdbCollection, j)"
               />
               <div
@@ -111,14 +126,6 @@
 
         <p class="enderLine"></p>
       </div>
-    </div>
-    <div
-      class="containerPageDescription"
-      [ngStyle]="{
-        width: resizeSvc.getEndLinerWidth(3) + 'px'
-      }"
-    >
-      <div class="pageDescriptionText">{{ pageDescription_txt }}</div>
     </div>
   </div>
 </div>
