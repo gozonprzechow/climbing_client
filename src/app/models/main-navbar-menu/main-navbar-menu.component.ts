@@ -180,10 +180,10 @@ export class MainNavbarMenuComponent implements OnInit {
     this.navbarOpen = !this.navbarOpen;
   }
 
-  public routeToYourLocalities() {
-    let yourId = this.auth.getLogUserId();
-    this.auth.saveActualUserId(yourId);
-    this.routerService.userLocalities(yourId, 0);
+  public routeToHome() {
+    // let yourId = this.auth.getLogUserId();
+    // this.auth.saveActualUserId(yourId);
+    this.routerService.home();
   }
 
   public routeToOtherUsers() {
@@ -225,13 +225,13 @@ export class MainNavbarMenuComponent implements OnInit {
   }
 
   public ifDisplayHome(): boolean {
-    if (!this.auth.isLoggedIn()) {
+    if (this.auth.isLoggedIn()) {
       return false;
     }
 
-    if (this.auth.getActualUserId() == this.auth.getLogUserId()) {
-      return false;
-    }
+    // if (this.auth.getActualUserId() == this.auth.getLogUserId()) {
+    //   return false;
+    // }
 
     return true;
   }

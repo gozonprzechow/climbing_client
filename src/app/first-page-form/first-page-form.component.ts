@@ -28,8 +28,8 @@ export class FirstPageFormComponent implements OnInit {
   };
   pageDescription_txt: string;
   pageDescriptionTranslation: TextTranslator = {
-    cz: 'Zde si můžete založit vitrínu minerálů, kde můžete své kameny vystavovat, nebo i dražit a prodávat.',
-    en: 'Here you can set up a showcase where you can display your minerals or even auction and sell them.',
+    cz: 'Zde si můžete založit sbírku minerálů, kde můžete své kameny vystavovat, nebo i dražit a prodávat.',
+    en: 'Here you can set up a collection of minerals where you can display your minerals or even auction and sell them.',
   };
   otherUsersCollections: any = [];
 

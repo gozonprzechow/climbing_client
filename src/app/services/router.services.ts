@@ -149,4 +149,9 @@ export class RouterServices {
       },
     });
   }
+
+  public home(): void{
+    let path = '/';
+    this.router.navigate([path]);
+  }
 }

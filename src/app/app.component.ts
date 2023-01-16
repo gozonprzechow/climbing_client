@@ -19,7 +19,7 @@ export class AppComponent {
   private last_url: string = '';
 
   constructor(private location: Location, private router: Router) {
-    history.pushState(null, '');
+    // history.pushState(null, '');
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
@@ -34,11 +34,11 @@ export class AppComponent {
         if ('popstate' === this.local_event) {
           if (0 < this.custom_history.length) {
             let pop_history = this.custom_history.pop();
-            this.location.go(pop_history);
-            this.router.navigate([pop_history]);
+            // this.location.go(pop_history);
+            // this.router.navigate([pop_history]);
           } else {
-            this.location.go('/');
-            this.router.navigate(['/']);
+            // this.location.go('/');
+            // this.router.navigate(['/']);
           }
         }
       }
@@ -46,12 +46,12 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    history.pushState(null, '');
+    // history.pushState(null, '');
 
     fromEvent(window, 'popstate')
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((_) => {
-        history.pushState(null, '');
+        // history.pushState(null, '');
         this.reloadCurrentRoute();
       });
   }
@@ -62,12 +62,14 @@ export class AppComponent {
   }
 
   reloadCurrentRoute() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      history.pushState(null, '');
-      if (0 < this.custom_history.length) {
-        let pop_history = this.custom_history.pop();
-        this.router.navigate([pop_history]);
-      }
-    });
+    // if (0 < this.custom_history.length) {
+    //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    //     history.pushState(null, '');
+    //     if (0 < this.custom_history.length) {
+    //       let pop_history = this.custom_history.pop();
+    //       this.router.navigate([pop_history]);
+    //     }
+    //   });
+    // }
   }
 }

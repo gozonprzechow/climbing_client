@@ -14,15 +14,15 @@
       [ngClass]="{ show: navbarOpen, collapseFrame: navbarOpen }"
     >
       <ul class="navbar-nav mr-auto">
-        <li *ngIf="ifDisplayHome()" class="nav-item">
+        <li *ngIf="ifDisplayHome()" class="{{ activePage.homePage }}">
           <a
             class="nav-link"
-            (click)="routeToYourLocalities()"
+            (click)="routeToHome()"
             [ngClass]="{ navbarTogglerActive: navbarOpen }"
             >{{ home_txt }}</a
           >
         </li>
-        <li *ngIf="ifDisplayLocalities()" class="{{ activePage.homePage }}">
+        <li *ngIf="ifDisplayLocalities()" class="{{ activePage.userLocality }}">
           <a
             class="nav-link"
             (click)="routeToUserLocalities()"

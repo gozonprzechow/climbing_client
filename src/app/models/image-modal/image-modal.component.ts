@@ -449,7 +449,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
 
   private changeUrl(url) {
     if (this.list.dontUseUrl !== true) {
-      this.location.go(url);
+      this.location.replaceState(url);
     }
   }
 
