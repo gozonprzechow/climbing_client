@@ -38,6 +38,7 @@ export class MondifySubMineralFormComponent implements OnInit {
   confirmModalTitle: string;
 
   modalRef: BsModalRef;
+  is_submit_in_progress: Boolean = false;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -74,6 +75,11 @@ export class MondifySubMineralFormComponent implements OnInit {
     cz: 'Smazat pod-minerál',
     en: 'Delete sub-image',
   };
+  submitInProgress_txt: string;
+  submitInProgressTranslation: TextTranslator = {
+    cz: 'Čekej. . .',
+    en: 'Wait. . .',
+  };
 
   constructor(
     public elementRef: ElementRef,
@@ -102,6 +108,9 @@ export class MondifySubMineralFormComponent implements OnInit {
     );
     this.modalTitle_txt = this.languageService.getNativeLanguageText(
       this.modalTitleTranslation,
+    );
+    this.submitInProgress_txt = this.languageService.getNativeLanguageText(
+      this.submitInProgressTranslation,
     );
 
     this.confirmModalMessage = this.modalMessage_txt;
@@ -218,7 +227,7 @@ export class MondifySubMineralFormComponent implements OnInit {
   }
 
   public getImageLarge(imgName, imgPath): string {
-    return environment.serverUrl + '/' + imgPath + imgName;
+    return environment.serverUrl + '/' + imgPath + imgName + '.jpg';
   }
 
   onFileSelect(event) {
@@ -258,10 +267,15 @@ export class MondifySubMineralFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.is_submit_in_progress) {
+      return;
+    }
+    this.is_submit_in_progress = true;
     let formData = new FormData();
     this.submitted = true;
 
     if (this.userForm.invalid == true) {
+      this.is_submit_in_progress = false;
       this.invalidFormAction();
       return;
     } else {
@@ -274,6 +288,7 @@ export class MondifySubMineralFormComponent implements OnInit {
         )
         .subscribe(
           (returnData: any) => {
+            this.is_submit_in_progress = false;
             this.copyReturnData(returnData);
             if (null == returnData.inputErrorMessage.uploadSuccess) {
             } else {

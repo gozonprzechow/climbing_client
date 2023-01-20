@@ -36,6 +36,17 @@
   cursor: pointer;
 }
 
+.control-label.frozenImage {
+  width: 180px;
+  padding: 20px 0;
+  border: 2px solid rgb(48, 136, 207);
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(160, 160, 160);
+  color: black;
+  cursor: default;
+}
+
 label.image:hover {
   background-color: rgb(85, 83, 83);
   color: white;
@@ -65,6 +76,17 @@ label.image:hover {
 .submitButton:hover {
   background-color: rgb(85, 83, 83);
   color: white;
+}
+
+.frozenSubmitButton {
+  width: 110px;
+  padding: 8px 0;
+  border: 3px solid rgb(48, 136, 207);
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(85, 83, 83);
+  color: white;
+  cursor: default;
 }
 
 .deleteSubImageButton {

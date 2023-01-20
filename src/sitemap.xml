@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
 
   <url>
     <loc>https://sutrak.net/</loc>
-    <lastmod>2023-01-13T19:15:38+00:00</lastmod>
+    <image:image>
+      <image:loc>https://sutrak.net/assets/image/achat.jpg</image:loc>
+    </image:image>
+    <lastmod>2023-01-19</lastmod>
   </url>
   <url>
     <loc>https://sutrak.net/locality/H%C5%99%C3%ADdelec/0/6300dbd8b15369c441dd400d</loc>
-    <lastmod>2023-01-12T19:15:38+00:00</lastmod>
+    <lastmod>2023-01-19</lastmod>
   </url>
   <url>
     <loc>https://sutrak.net/locality/Doubravice%20-%20ach%C3%A1ty/0/6300dbd8b15369c441dd400d</loc>
-    <lastmod>2023-01-12T19:15:38+00:00</lastmod>
+    <lastmod>2023-01-19</lastmod>
   </url>
   <url>
     <loc>https://sutrak.net/locality/Doubravice%20-%20ostatn%C3%AD/0/6300dbd8b15369c441dd400d</loc>
-    <lastmod>2023-01-12T19:15:38+00:00</lastmod>
+    <lastmod>2023-01-19</lastmod>
   </url>
   <url>
     <loc>https://sutrak.net/locality/Koz%C3%A1kov/0/6300dbd8b15369c441dd400d</loc>
-    <lastmod>2023-01-12T19:15:38+00:00</lastmod>
+    <lastmod>2023-01-19</lastmod>
   </url>
   <url>
     <loc>https://sutrak.net/locality/Lom%20hv%C4%9Bzda/0/6300dbd8b15369c441dd400d</loc>
-    <lastmod>2023-01-12T19:15:38+00:00</lastmod>
+    <lastmod>2023-01-19</lastmod>
   </url>
   <url>
     <loc>https://sutrak.net/locality/Sup%C3%AD%20vrch/0/6300dbd8b15369c441dd400d</loc>
-    <lastmod>2023-01-12T19:15:38+00:00</lastmod>
+    <lastmod>2023-01-19</lastmod>
   </url>
   <url>
     <loc>https://sutrak.net/locality/Furkapass/0/6300dbd8b15369c441dd400d</loc>
-    <lastmod>2023-01-12T19:15:38+00:00</lastmod>
+    <lastmod>2023-01-19</lastmod>
   </url>
 
 </urlset>

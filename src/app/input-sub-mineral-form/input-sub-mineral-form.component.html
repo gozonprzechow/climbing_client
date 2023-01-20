@@ -32,7 +32,7 @@
       <div class="form-group" [ngClass]="displayFieldCss('img')">
         <!-- Password -->
         <div class="imageContainer">
-          <div class="col-sm-12">
+          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
             <label for="img" class="control-label image" id="imgId">{{
               this.titleImage
             }}</label>
@@ -43,7 +43,12 @@
               name="img"
               (change)="onFileSelect($event)"
             />
-            <p class="help-block">{{ this.serverServiceErrors.img }}</p>
+          </div>
+
+          <div *ngIf="is_submit_in_progress" class="col-sm-12">
+            <label for="img" class="control-label frozenImage" id="imgId">{{
+              this.titleImage
+            }}</label>
           </div>
         </div>
       </div>
@@ -63,7 +68,7 @@
               <button type="submit" class="submitButton">{{ store_txt }}</button>
             </div>
             <div *ngIf="is_submit_in_progress" class="col-sm-12">
-              <button type="submit" class="submitButton frozen">
+              <button type="submit" class="frozenSubmitButton">
                 {{ submitInProgress_txt }}
               </button>
             </div>

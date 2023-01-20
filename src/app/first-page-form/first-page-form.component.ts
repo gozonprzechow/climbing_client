@@ -206,6 +206,16 @@ export class FirstPageFormComponent implements OnInit {
     return 'pageDescriptionText';
   }
 
+  public getDescriptionMainImageTextSizeClass(): string {
+    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
+      return 'imageDescriptionText ultraSmallTextSize';
+    }
+    if (SCREEN_SIZE.SM === this.resizeSvc.getScreenSize()) {
+      return 'imageDescriptionText mobileTextSize';
+    }
+    return 'imageDescriptionText smallTextSize';
+  }
+
   public getDescriptionContainerWidth() {
     if (
       SCREEN_SIZE.LG === this.resizeSvc.getScreenSize() ||

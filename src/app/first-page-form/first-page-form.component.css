@@ -88,7 +88,7 @@ ul.list-inline li {
 }
 
 .containerPageDescription {
-  margin-top: 15px;
+  margin-top: 22px;
   margin-bottom: 10px;
   min-height: 130px;
   min-width: 265px;
@@ -97,6 +97,19 @@ ul.list-inline li {
   border: 3px solid #383a39;
   background-color: rgb(85, 83, 83);
   border-radius: 6px;
+}
+
+.containerMainImageDescription {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #242020;
+}
+
+.imageDescriptionText {
+  text-align: center;
+  color :rgb(172, 172, 172);
+  word-break: break-word;
+  margin: 4px;
 }
 
 .pageDescriptionText {
@@ -114,6 +127,10 @@ ul.list-inline li {
 .clearFloating {
   clear: both;
   color: rgb(229, 229, 229);
+}
+
+.ultraSmallTextSize {
+  font-size: 13px;
 }
 
 .mobileTextSize {

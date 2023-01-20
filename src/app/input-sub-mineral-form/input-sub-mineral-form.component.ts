@@ -207,8 +207,9 @@ export class InputSubMineralFormComponent implements OnInit {
               this.submitted = false;
               this.userForm.get('img').setValue('', { emitEvent: true });
               this.userForm.reset();
+              this.userForm.get('comment').setValue('');
               this.resetTitleImage();
-              this.imgURL = null;
+              this.imgURL = "";
             }
           },
           (error) => {

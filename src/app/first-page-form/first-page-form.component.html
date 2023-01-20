@@ -9,16 +9,18 @@
 ></custom-tittle-main>
 
 <div class="wrapper" center="block">
-  <div
-  >
+  <div>
     <img
       [src]="page_description_img"
-      alt="Mechový achát kamenolom Doubravice"
+      alt="Achát - Doubravice"
       class="pageDescriptionImage"
       [ngStyle]="{
         'max-width': getDescriptionContainerWidth() + 'px'
       }"
     />
+    <div class="{{ getDescriptionMainImageTextSizeClass() }}">
+      Bílo-červený achát prorostlý mechem z lomu Doubravice.
+    </div>
     <div
       class="containerPageDescription"
       [ngStyle]="{
@@ -28,7 +30,6 @@
       <div class="{{ getDescriptionImageTextSizeClass() }}">
         {{ pageDescription_txt }}
       </div>
-      <div class="clearFloating"></div>
     </div>
     <div class="wrap">
       <div
@@ -71,7 +72,8 @@
                   left:
                     resizeSvc.getFirstImageOffset(
                       otherUsersCollection.achatdbCollections.length,
-                      j, false
+                      j,
+                      false
                     ) + 'px'
                 }"
                 alt="{{ achatdbCollection.title }}"
@@ -84,7 +86,8 @@
                   left:
                     resizeSvc.getFirstImageOffset(
                       otherUsersCollection.achatdbCollections.length,
-                      j, false
+                      j,
+                      false
                     ) + 'px'
                 }"
                 (click)="openModal(achatdbCollection, j)"
@@ -113,7 +116,8 @@
                   left:
                     resizeSvc.getFirstImageOffset(
                       otherUsersCollection.achatdbCollections.length,
-                      j, false
+                      j,
+                      false
                     ) + 'px'
                 }"
                 (click)="openModal(achatdbCollection, j)"
