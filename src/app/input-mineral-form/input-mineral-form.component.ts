@@ -57,6 +57,11 @@ export class InputMineralFormComponent implements OnInit {
     cz: 'Komentář',
     en: 'Comment',
   };
+  priority_txt: string;
+  priorityTranslation: TextTranslator = {
+    cz: 'Priorita <0, 1000>',
+    en: 'Priority <0, 1000>',
+  };
   date_txt: string;
   dateTranslation: TextTranslator = {
     cz: 'Datum',
@@ -115,6 +120,9 @@ export class InputMineralFormComponent implements OnInit {
     this.comment_txt = this.languageService.getNativeLanguageText(
       this.commentTranslation,
     );
+    this.priority_txt = this.languageService.getNativeLanguageText(
+      this.priorityTranslation,
+    );
     this.date_txt = this.languageService.getNativeLanguageText(this.dateTranslation);
     this.chooseImage_txt = this.languageService.getNativeLanguageText(
       this.chooseImageTranslation,
@@ -141,6 +149,7 @@ export class InputMineralFormComponent implements OnInit {
         title: ['', [Validators.required, Validators.maxLength(50)]],
         locality: [null, [Validators.required, Validators.maxLength(50)]],
         comment: ['', [Validators.maxLength(300)]],
+        priority: [1, [Validators.maxLength(100), Validators.pattern('^[0-9]+$')]],
         date: [null],
         price: [
           null,
@@ -250,6 +259,10 @@ export class InputMineralFormComponent implements OnInit {
 
   invalidComment() {
     return this.submitted && this.userForm.controls.comment.errors != null;
+  }
+
+  invalidPriority() {
+    return this.submitted && this.userForm.controls.priority.errors != null;
   }
 
   invalidDate() {

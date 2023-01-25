@@ -54,6 +54,11 @@ export class MondifyMineralFormComponent implements OnInit {
     cz: 'Komentář',
     en: 'Comment',
   };
+  priority_txt: string;
+  priorityTranslation: TextTranslator = {
+    cz: 'Priorita <0, 1000>',
+    en: 'Priority <0, 1000>',
+  };
   date_txt: string;
   dateTranslation: TextTranslator = {
     cz: 'Datum',
@@ -95,6 +100,9 @@ export class MondifyMineralFormComponent implements OnInit {
     );
     this.comment_txt = this.languageService.getNativeLanguageText(
       this.commentTranslation,
+    );
+    this.priority_txt = this.languageService.getNativeLanguageText(
+      this.priorityTranslation,
     );
     this.date_txt = this.languageService.getNativeLanguageText(this.dateTranslation);
     this.chooseImage_txt = this.languageService.getNativeLanguageText(
@@ -139,6 +147,7 @@ export class MondifyMineralFormComponent implements OnInit {
           [Validators.required, Validators.maxLength(50)],
         ],
         comment: [this.achatdbCollection.comment, [Validators.maxLength(300)]],
+        priority: [this.achatdbCollection.priority, [Validators.maxLength(100), Validators.pattern('^[0-9]+$')]],
         date: [this.achatdbCollection.date],
         img: [null],
       },
@@ -199,6 +208,10 @@ export class MondifyMineralFormComponent implements OnInit {
 
   invalidComment() {
     return this.submitted && this.userForm.controls.comment.errors != null;
+  }
+
+  invalidPriority() {
+    return this.submitted && this.userForm.controls.priority.errors != null;
   }
 
   invalidDate() {
