@@ -52,8 +52,16 @@ export class RouterServices {
     this.router.navigate([path]);
   }
 
-  public userLocality(localityName: string, userId: string, page: number): void {
+  public userLocality(
+    localityName: string,
+    userId: string,
+    page: number,
+    image_id: any = null,
+  ): void {
     let path = '/locality/' + localityName + '/' + page + '/' + userId;
+    if (null !== image_id) {
+      path = path + '/' + image_id + '/0';
+    }
     this.router.navigate([path]);
   }
 
@@ -150,7 +158,7 @@ export class RouterServices {
     });
   }
 
-  public home(): void{
+  public home(): void {
     let path = '/';
     this.router.navigate([path]);
   }

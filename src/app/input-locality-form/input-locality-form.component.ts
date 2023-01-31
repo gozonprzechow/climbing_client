@@ -41,6 +41,11 @@ export class InputLocalityFormComponent implements OnInit {
     cz: 'Popis',
     en: 'Description',
   };
+  priority_txt: string;
+  priorityTranslation: TextTranslator = {
+    cz: 'Priorita <0, 1000>',
+    en: 'Priority <0, 1000>',
+  };
   store_txt: string;
   storeTranslation: TextTranslator = {
     cz: 'Uložit',
@@ -69,6 +74,9 @@ export class InputLocalityFormComponent implements OnInit {
     this.description_txt = this.languageService.getNativeLanguageText(
       this.descriptionTranslation,
     );
+    this.priority_txt = this.languageService.getNativeLanguageText(
+      this.priorityTranslation,
+    );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
   }
 
@@ -78,6 +86,10 @@ export class InputLocalityFormComponent implements OnInit {
 
   public invalidDescription() {
     return this.submitted && this.userForm.controls.description.errors != null;
+  }
+
+  public invalidPriority() {
+    return this.submitted && this.userForm.controls.priority.errors != null;
   }
 
   copyServerErrors(returnData: any) {
@@ -101,6 +113,7 @@ export class InputLocalityFormComponent implements OnInit {
       {
         name: ['', [Validators.required, Validators.maxLength(50)]],
         description: [''],
+        priority: [1, [Validators.maxLength(100), Validators.pattern('^[0-9]+$')]],
       },
       { updateOn: 'submit' },
     );

@@ -51,6 +51,24 @@
         </div>
       </div>
 
+      <div class="form-group" [ngClass]="{ 'has-error': invalidPriority() }">
+        <!-- Last Name -->
+        <div class="col-sm-12">
+          <label for="priority" class="control-label">{{ priority_txt }}</label>
+          <input
+            type="number"
+            formControlName="priority"
+            class="form-control"
+            id="priority"
+            name="priority"
+          />
+          <p *ngIf="invalidPriority()" id="priority_error" class="help-block">
+            {{ 'Invalid priority.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.priority }}</p>
+        </div>
+      </div>
+
       <div class="submitContainer">
         <p id="successLoadCondition">{{ this.serverServiceErrors.uploadSuccess }}</p>
       </div>

@@ -361,6 +361,15 @@ export class InputMineralFormComponent implements OnInit {
               this.userForm.get('price').setValue('', { emitEvent: true });
               this.userForm.get('comment').setValue('', { emitEvent: true });
               this.userForm.get('date').setValue('', { emitEvent: true });
+              let image_route_info = returnData.image_route_info;
+              if (image_route_info) {
+                this.routerService.userLocality(
+                  image_route_info.locality,
+                  image_route_info.postedBy,
+                  image_route_info.page_of_image,
+                  image_route_info.image_id,
+                );
+              }
               this.resetTitleImage();
               this.imgURL = null;
             }
