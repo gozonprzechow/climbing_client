@@ -363,7 +363,7 @@ export class InputMineralFormComponent implements OnInit {
               this.userForm.get('date').setValue('', { emitEvent: true });
               let image_route_info = returnData.image_route_info;
               if (image_route_info) {
-                this.routerService.userLocality(
+                this.routerService.userLocalityDirectMineral(
                   image_route_info.locality,
                   image_route_info.postedBy,
                   image_route_info.page_of_image,

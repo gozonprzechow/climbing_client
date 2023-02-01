@@ -292,7 +292,17 @@ export class MondifySubMineralFormComponent implements OnInit {
             this.copyReturnData(returnData);
             if (null == returnData.inputErrorMessage.uploadSuccess) {
             } else {
-              this.setDataOnUploadSuccess();
+              let sub_image_route_info = returnData.sub_image_route_info;
+              if (sub_image_route_info) {
+                this.routerService.userLocalityDirectSubMineral(
+                  sub_image_route_info.locality,
+                  sub_image_route_info.postedBy,
+                  sub_image_route_info.page_of_image,
+                  sub_image_route_info.image_id,
+                  sub_image_route_info.sub_image_position,
+                );
+              }
+              // this.setDataOnUploadSuccess();
             }
           },
           (error) => {

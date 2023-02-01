@@ -147,7 +147,10 @@ export class MondifyMineralFormComponent implements OnInit {
           [Validators.required, Validators.maxLength(50)],
         ],
         comment: [this.achatdbCollection.comment, [Validators.maxLength(300)]],
-        priority: [this.achatdbCollection.priority, [Validators.maxLength(100), Validators.pattern('^[0-9]+$')]],
+        priority: [
+          this.achatdbCollection.priority,
+          [Validators.maxLength(100), Validators.pattern('^[0-9]+$')],
+        ],
         date: [this.achatdbCollection.date],
         img: [null],
       },
@@ -289,7 +292,16 @@ export class MondifyMineralFormComponent implements OnInit {
             this.copyReturnData(returnData);
             if (null == returnData.inputErrorMessage.uploadSuccess) {
             } else {
-              this.setDataOnUploadSuccess();
+              let image_route_info = returnData.image_route_info;
+              if (image_route_info) {
+                this.routerService.userLocalityDirectMineral(
+                  image_route_info.locality,
+                  image_route_info.postedBy,
+                  image_route_info.page_of_image,
+                  image_route_info.image_id,
+                );
+              }
+              // this.setDataOnUploadSuccess();
             }
           },
           (error) => {

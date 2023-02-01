@@ -52,16 +52,42 @@ export class RouterServices {
     this.router.navigate([path]);
   }
 
-  public userLocality(
+  public userLocality(localityName: string, userId: string, page: number): void {
+    let path = '/locality/' + localityName + '/' + page + '/' + userId;
+    this.router.navigate([path]);
+  }
+
+  public userLocalityDirectMineral(
     localityName: string,
     userId: string,
     page: number,
-    image_id: any = null,
+    image_id: string,
   ): void {
-    let path = '/locality/' + localityName + '/' + page + '/' + userId;
-    if (null !== image_id) {
-      path = path + '/' + image_id + '/0';
-    }
+    let path =
+      '/locality/' + localityName + '/' + page + '/' + userId + '/' + image_id + '/0';
+
+    this.router.navigate([path]);
+  }
+
+  public userLocalityDirectSubMineral(
+    localityName: string,
+    userId: string,
+    page: number,
+    image_id: string,
+    sub_mineral: number,
+  ): void {
+    let path =
+      '/locality/' +
+      localityName +
+      '/' +
+      page +
+      '/' +
+      userId +
+      '/' +
+      image_id +
+      '/' +
+      sub_mineral;
+
     this.router.navigate([path]);
   }
 
