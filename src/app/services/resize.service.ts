@@ -55,6 +55,10 @@ export class ResizeService {
     return this.page_margin_right;
   }
 
+  countImageHeightByWidth(width: number): number {
+    return width * (180 / 220);
+  }
+
   public refreshScreenSize(window_size: number) {
     this.window_size = window_size;
     if (576 > window_size) {
@@ -108,7 +112,9 @@ export class ResizeService {
     image_count: number,
     image_order: number,
     is_left_bar: boolean = true,
+    picture_on_row: number = 3,
   ): number {
+    image_order = image_order % picture_on_row;
     let image_offset: number;
     let local_window_size: number;
     if (is_left_bar) {
@@ -125,6 +131,13 @@ export class ResizeService {
     image_offset =
       image_offset + image_order * (this.picture_size + this.picture_margin_size);
     return image_offset;
+  }
+
+  public getFirstImageOffsetTop(image_order: number, picture_on_row: number = 3): number {
+    let image_row: number = Math.floor(image_order / picture_on_row);
+    let image_offset_top: number =
+      image_row * (this.picture_size * (180 / 220) + this.picture_margin_size);
+    return image_offset_top;
   }
 
   public getImageOffsetOnSize(

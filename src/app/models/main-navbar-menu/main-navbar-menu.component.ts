@@ -147,7 +147,9 @@ export class MainNavbarMenuComponent implements OnInit {
 
     this.logIn_txt = this.languageService.getNativeLanguageText(this.logInTranslation);
     this.logOut_txt = this.languageService.getNativeLanguageText(this.logOutTranslation);
-    this.register_txt = this.languageService.getNativeLanguageText(this.registerTranslation);
+    this.register_txt = this.languageService.getNativeLanguageText(
+      this.registerTranslation,
+    );
 
     this.requestFriendshipModalMessage_txt = this.languageService.getNativeLanguageText(
       this.requestFriendshipModalMessageTranslation,
@@ -181,9 +183,13 @@ export class MainNavbarMenuComponent implements OnInit {
   }
 
   public routeToHome() {
-    // let yourId = this.auth.getLogUserId();
-    // this.auth.saveActualUserId(yourId);
     this.routerService.home();
+  }
+
+  public routeToMyHome() {
+    let your_id = this.auth.getLogUserId();
+    this.auth.saveActualUserId(your_id);
+    this.routerService.userLocalities(your_id, 0);
   }
 
   public routeToOtherUsers() {
@@ -209,7 +215,7 @@ export class MainNavbarMenuComponent implements OnInit {
     this.routerService.login(this.screen_size);
   }
 
-  public registerHandler(){
+  public registerHandler() {
     this.routerService.createAccount(this.screen_size);
   }
 
@@ -234,6 +240,22 @@ export class MainNavbarMenuComponent implements OnInit {
     // }
 
     return true;
+  }
+
+  public ifDisplayMyHome(): boolean {
+    if (!this.auth.isLoggedIn()) {
+      return false;
+    }
+
+    if (this.auth.getLogUserId() != this.auth.getActualUserId()) {
+      return true;
+    }
+
+    // if (this.auth.getActualUserId() == this.auth.getLogUserId()) {
+    //   return false;
+    // }
+
+    return false;
   }
 
   public ifDisplayLocality(): boolean {

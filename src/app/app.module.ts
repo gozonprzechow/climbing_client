@@ -21,6 +21,8 @@ import { ChatService } from './services/chat.service';
 import { ImageService } from './services/image.service';
 import { ResizeService } from './services/resize.service';
 import { MobileService } from './services/mobile.service';
+import { FileDragNDrop } from './services/file.drag.n.drop';
+import { InputMineralService } from './services/input.mineral.service';
 
 import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -88,6 +90,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     ChatFormComponent,
     ChatNavbarMenuComponent,
     DropdownButtonInItemComponent,
+    FileDragNDrop,
   ],
   imports: [
     BrowserModule,
@@ -114,6 +117,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     ChatService,
     ImageService,
     MobileService,
+    InputMineralService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

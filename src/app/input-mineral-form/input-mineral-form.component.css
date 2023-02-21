@@ -38,9 +38,13 @@
 }
 
 .control-label.image {
-  width: 180px;
-  padding: 20px 0;
+  width: 150px;
+  padding: 15px 0;
   border: 2px solid rgb(48, 136, 207);
+  display: block;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
   border-radius: 5px;
   background-color: rgb(160, 160, 160);
@@ -54,9 +58,13 @@ label.image:hover {
 }
 
 .control-label.frozenImage {
-  width: 180px;
-  padding: 20px 0;
+  width: 150px;
+  padding: 15px 0;
   border: 2px solid rgb(48, 136, 207);
+  display: block;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
   border-radius: 5px;
   background-color: rgb(160, 160, 160);
@@ -64,9 +72,26 @@ label.image:hover {
   cursor: default;
 }
 
-.imageContainer {
+/* .imageContainer {
+  height: 200px;
   display: table;
-  margin: 0 auto;
+  width: 100%;
+  background-color: #eee;
+  border: dotted 1px #aaa;
+} */
+.imageContainer {
+  position: relative;
+  color: rgb(177, 185, 189);
+}
+
+.dropzone {
+  height: 200px;
+  /* display: table; */
+  /* width: 100%; */
+  background-color: #eee;
+  border: dotted 1px #aaa;
+  /* display: table;
+  margin: 0 auto; */
 }
 
 .submitContainer {
@@ -99,4 +124,46 @@ label.image:hover {
   background-color: rgb(85, 83, 83);
   color: white;
   cursor: default;
+}
+
+.imageMineral {
+  border-style: solid;
+  position: absolute;
+  border-radius: 6px;
+}
+
+.imageTopRight {
+  width: 27px;
+  height: 27px;
+  padding: 0px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  margin: 0px;
+  position: absolute;
+}
+
+.removeStyle {
+  border: 3px solid rgb(48, 136, 207) !important;
+  background-color: rgb(160, 160, 160) !important;
+  cursor: pointer;
+  color: black;
+  opacity: 0.8;
+}
+
+.removeStyle:hover{
+  opacity: 1;
+}
+
+.passStyle {
+  border: 3px solid rgb(28, 141, 0) !important;
+  background-color: rgb(103, 168, 95) !important;
+  color: rgb(28, 141, 0) !important;
+}
+
+.faultStyle {
+  border: 3px solid rgb(187, 41, 5) !important;
+  background-color: rgb(179, 96, 96) !important;
+  color: rgb(187, 41, 5) !important;
 }

@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator, Country } from '../services/language.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
+import { InputMineralService, ImageInfo } from '../services/input.mineral.service';
 
 @Component({
   selector: 'app-input-mineral-form',
@@ -27,15 +28,20 @@ export class InputMineralFormComponent implements OnInit {
   input_price_text: string;
   currency: string;
   currency_array: string[];
+  mainImage: any;
+  shadow_upload_success: string;
 
   imgSetStandardSrc: string;
   imgSetPrizeSrc: string;
   imgSetAuctionSrc: string;
   input_status: Number = 0;
 
-  is_submit_in_progress: Boolean = false;
+  is_submit_in_progress: boolean = false;
 
-  imgURL: any;
+  selectedFiles: FileList;
+  previews: string[] = [];
+  loading_in_progress: boolean = false;
+  route_after_submit_information: any;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -105,6 +111,7 @@ export class InputMineralFormComponent implements OnInit {
     public auth: AuthenticationService,
     public resizeSvc: ResizeService,
     public mobileService: MobileService,
+    public input_mineral_service: InputMineralService,
   ) {
     this.imgSetStandardSrc = '../../../assets/skins/insert_standard_collection_hover.png';
     this.imgSetPrizeSrc = '../../../assets/skins/insert_prize_collection.png';
@@ -144,6 +151,7 @@ export class InputMineralFormComponent implements OnInit {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
     this.resetTitleImage();
     this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
     this.userForm = this.formBuilder.group(
       {
         title: ['', [Validators.required, Validators.maxLength(50)]],
@@ -188,6 +196,7 @@ export class InputMineralFormComponent implements OnInit {
   @HostListener('window:resize', [])
   onResize() {
     this.resizeSvc.refreshScreenSize(window.innerWidth);
+    this.resizeSvc.countImageWidth();
   }
 
   get price(): FormControl {
@@ -279,7 +288,7 @@ export class InputMineralFormComponent implements OnInit {
     this.serverServiceErrors.comment = returnData.inputErrorMessage.comment;
     this.serverServiceErrors.date = returnData.inputErrorMessage.date;
     this.serverServiceErrors.img = returnData.inputErrorMessage.img;
-    this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
+    this.shadow_upload_success = returnData.inputErrorMessage.uploadSuccess;
   }
 
   cleanServerErrors() {
@@ -289,38 +298,59 @@ export class InputMineralFormComponent implements OnInit {
     this.serverServiceErrors.date = null;
     this.serverServiceErrors.img = null;
     this.serverServiceErrors.uploadSuccess = null;
+    this.shadow_upload_success = null;
   }
 
-  onFileSelect(event) {
-    if (1 == event.target.files.length) {
-      const file = event.target.files[0];
-      // console.log(file);
-      this.userForm.get('img').setValue(file);
-      if (17 < file.name.length) {
-        this.titleImage = file.name.substr(0, 14) + '...';
-      } else {
-        this.titleImage = file.name;
-      }
-      event.srcElement.value = '';
+  async readAsync(file_in_array: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(this.selectedFiles[file_in_array]);
+      reader.onload = (e: any) => {
+        resolve(e.target.result);
+      };
+      reader.onerror = () => {
+        reject(new Error('Unable to read..'));
+      };
+    });
+  }
 
-      if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (_event) => {
-          this.imgURL = reader.result as string;
-        };
-      } else {
-        this.imgURL = null;
+  async onFileSelect(event) {
+    if (0 < event.length) {
+      this.selectedFiles = event;
+      this.input_mineral_service.clearImageInfo();
+      this.loading_in_progress = true;
+
+      this.previews = [];
+      if (this.selectedFiles && this.selectedFiles[0]) {
+        const numberOfFiles = this.selectedFiles.length;
+        for (let i = 0; i < numberOfFiles; i++) {
+          this.previews[i] = await this.readAsync(i);
+          if (i === 0) {
+            this.input_mineral_service.addImage(
+              i,
+              this.previews[i],
+              true,
+              this.selectedFiles[i],
+            );
+          } else {
+            this.input_mineral_service.addImage(
+              i,
+              this.previews[i],
+              false,
+              this.selectedFiles[i],
+            );
+          }
+        }
+        this.loading_in_progress = false;
       }
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.is_submit_in_progress) {
       return;
     }
     this.is_submit_in_progress = true;
-    let formData = new FormData();
     this.submitted = true;
 
     if (this.userForm.invalid == true) {
@@ -330,55 +360,119 @@ export class InputMineralFormComponent implements OnInit {
       this.routerService.inputMineral();
       return;
     } else {
-      if (0 == this.input_status) {
-        this.userForm.value['price'] = 1;
-        this.userForm.value['currency'] = 0;
+      if (await this.postInputMineral()) {
+        await this.postSubImages();
+        setTimeout(() => {
+          this.is_submit_in_progress = false;
+          this.routerService.userLocalityDirectMineral(
+            this.route_after_submit_information.locality,
+            this.route_after_submit_information.postedBy,
+            this.route_after_submit_information.page_of_image,
+            this.route_after_submit_information.image_id,
+          );
+        }, 1500);
       }
-      Object.keys(this.userForm.value).forEach((key) => {
-        formData.append(key, this.userForm.value[key]);
-      });
-      formData.append('mainImage', '');
-      formData.append('status', this.input_status.toString());
+    }
+  }
 
-      let postedBy = this.auth.getLogUserId();
-      this.http
+  private async postInputMineral(): Promise<boolean> {
+    let input_main_mineral_success: boolean = true;
+    if (this.input_mineral_service.getImagesInfo().length <= 0) {
+      input_main_mineral_success = false;
+      return new Promise<boolean>((resolve) => {
+        resolve(input_main_mineral_success);
+      });
+    }
+    let main_image_position_in_images: number = 0;
+    let main_image_info: ImageInfo = this.input_mineral_service.getImagesInfo()[0];
+    for (let i = 0; i < this.input_mineral_service.getImagesInfo().length; i++) {
+      if (this.input_mineral_service.getImagesInfo()[i].is_front_image) {
+        main_image_info = this.input_mineral_service.getImagesInfo()[i];
+        main_image_position_in_images = i;
+        break;
+      }
+    }
+    console.log(main_image_info);
+    let formData = new FormData();
+    if (0 == this.input_status) {
+      this.userForm.value['price'] = 1;
+      this.userForm.value['currency'] = 0;
+    }
+    formData.append('title', this.userForm.value['title']);
+    formData.append('locality', this.userForm.value['locality']);
+    formData.append('comment', this.userForm.value['comment']);
+    formData.append('priority', this.userForm.value['priority']);
+    formData.append('date', this.userForm.value['date']);
+    formData.append('price', this.userForm.value['price']);
+    formData.append('currency', this.userForm.value['currency']);
+    formData.append('img', main_image_info.file);
+    formData.append('mainImage', '');
+    formData.append('status', this.input_status.toString());
+
+    let postedBy = this.auth.getLogUserId();
+    let returnData;
+    try {
+      returnData = await this.http
         .post<any>(
           environment.urlAddress + '/api/v1/user_input/mineral/' + postedBy,
           formData,
         )
-        .subscribe(
-          (returnData: any) => {
-            this.is_submit_in_progress = false;
-            this.inputCondition.errorLoad = null;
-            this.activePage = returnData.activePage;
-            this.copyServerErrors(returnData);
-            this.allLocality = returnData.localities;
-            if (null == returnData.inputErrorMessage.uploadSuccess) {
-            } else {
-              this.submitted = false;
-              this.userForm.get('img').setValue('', { emitEvent: true });
-              this.userForm.get('title').setValue('', { emitEvent: true });
-              this.userForm.get('price').setValue('', { emitEvent: true });
-              this.userForm.get('comment').setValue('', { emitEvent: true });
-              this.userForm.get('date').setValue('', { emitEvent: true });
-              let image_route_info = returnData.image_route_info;
-              if (image_route_info) {
-                this.routerService.userLocalityDirectMineral(
-                  image_route_info.locality,
-                  image_route_info.postedBy,
-                  image_route_info.page_of_image,
-                  image_route_info.image_id,
-                );
-              }
-              this.resetTitleImage();
-              this.imgURL = null;
-            }
-          },
-          (error) => {
-            this.routerService.notLoginError();
-            this.serverServiceErrors.uploadSuccess = null;
-          },
-        );
+        .toPromise();
+      this.inputCondition.errorLoad = null;
+      this.activePage = returnData.activePage;
+      this.copyServerErrors(returnData);
+      this.allLocality = returnData.localities;
+      if (null == returnData.inputErrorMessage.uploadSuccess) {
+        input_main_mineral_success = false;
+        this.input_mineral_service.setUploadResult(main_image_position_in_images, false);
+      } else {
+        this.route_after_submit_information = returnData.image_route_info;
+        this.mainImage = this.route_after_submit_information.image_id;
+        this.input_mineral_service.setUploadResult(main_image_position_in_images, true);
+      }
+    } catch (error) {
+      this.serverServiceErrors.uploadSuccess = null;
+      this.shadow_upload_success = null;
+      input_main_mineral_success = false;
+      this.input_mineral_service.setUploadResult(main_image_position_in_images, false);
     }
+    this.input_mineral_service.setImageUpload(main_image_position_in_images);
+    return new Promise<boolean>((resolve) => {
+      resolve(input_main_mineral_success);
+    });
+  }
+
+  public async postSubImages(): Promise<void> {
+    if (this.input_mineral_service.getImagesInfo().length <= 1) {
+      return new Promise((resolve) => resolve());
+    }
+
+    for (let i = 0; i < this.input_mineral_service.getImagesInfo().length; i++) {
+      if (!this.input_mineral_service.getImagesInfo()[i].is_front_image) {
+        let formData = new FormData();
+        formData.append('comment', '');
+        formData.append('img', this.input_mineral_service.getImagesInfo()[i].file);
+        formData.append('mainImage', this.mainImage);
+
+        let returnData;
+        try {
+          returnData = await this.http
+            .post<any>(environment.urlAddress + '/api/v1/user_input/subMineral', formData)
+            .toPromise();
+          this.inputCondition.errorLoad = returnData.inputErrorMessage.uploadError;
+          this.copyServerErrors(returnData);
+          if (null == returnData.inputErrorMessage.uploadSuccess) {
+            this.input_mineral_service.setUploadResult(i, false);
+          } else {
+            this.input_mineral_service.setUploadResult(i, true);
+          }
+        } catch (error) {
+          this.input_mineral_service.setUploadResult(i, false);
+        }
+        this.input_mineral_service.setImageUpload(i);
+      }
+    }
+    this.serverServiceErrors.uploadSuccess = this.shadow_upload_success;
+    return new Promise((resolve) => resolve());
   }
 }

@@ -157,6 +157,10 @@ export class MondifyMineralFormComponent implements OnInit {
       { updateOn: 'submit' },
     );
 
+    if (!this.userForm.get('priority').value) {
+      this.userForm.get('priority').setValue(1);
+    }
+
     let postedBy = this.auth.getLogUserId();
     this.http
       .get(environment.urlAddress + '/api/v1/user_input/modifyMineral/' + postedBy)
@@ -229,6 +233,7 @@ export class MondifyMineralFormComponent implements OnInit {
     this.serverServiceErrors.title = returnData.inputErrorMessage.title;
     this.serverServiceErrors.locality = returnData.inputErrorMessage.locality;
     this.serverServiceErrors.comment = returnData.inputErrorMessage.comment;
+    this.serverServiceErrors.priority = returnData.inputErrorMessage.priority;
     this.serverServiceErrors.date = returnData.inputErrorMessage.date;
     this.serverServiceErrors.img = returnData.inputErrorMessage.img;
     this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
@@ -238,6 +243,7 @@ export class MondifyMineralFormComponent implements OnInit {
     this.serverServiceErrors.title = null;
     this.serverServiceErrors.locality = null;
     this.serverServiceErrors.comment = null;
+    this.serverServiceErrors.priority = null;
     this.serverServiceErrors.date = null;
     this.serverServiceErrors.img = null;
     this.serverServiceErrors.uploadSuccess = null;

@@ -22,6 +22,14 @@
             >{{ home_txt }}</a
           >
         </li>
+        <li *ngIf="ifDisplayMyHome()" class="{{ activePage.homePage }}">
+          <a
+            class="nav-link"
+            (click)="routeToMyHome()"
+            [ngClass]="{ navbarTogglerActive: navbarOpen }"
+            >{{ home_txt }}</a
+          >
+        </li>
         <li *ngIf="ifDisplayLocalities()" class="{{ activePage.userLocality }}">
           <a
             class="nav-link"

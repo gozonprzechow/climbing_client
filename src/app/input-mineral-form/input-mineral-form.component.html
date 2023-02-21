@@ -163,8 +163,8 @@
 
       <div class="form-group" [ngClass]="displayFieldCss('img')">
         <!-- Password -->
-        <div class="imageContainer">
-          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
+        <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileSelect($event)">
+          <div *ngIf="!is_submit_in_progress">
             <label for="img" class="control-label image" id="imgId">{{
               this.titleImage
             }}</label>
@@ -173,11 +173,12 @@
               class="form-control"
               id="img"
               name="img"
-              (change)="onFileSelect($event)"
+              (change)="onFileSelect($event.target.files)"
+              multiple
             />
           </div>
 
-          <div *ngIf="is_submit_in_progress" class="col-sm-12">
+          <div *ngIf="is_submit_in_progress">
             <label for="img" class="control-label frozenImage" id="imgId">{{
               this.titleImage
             }}</label>
@@ -204,8 +205,68 @@
         </div>
       </div>
     </form>
-    <div class="submitContainer">
-      <img [src]="imgURL" height="200" *ngIf="imgURL" />
-    </div>
+    <!-- <div class="submitContainer">
+      <img *ngFor="let preview of previews" [src]="preview" height="200" />
+    </div> -->
   </div>
+</div>
+<div
+  *ngFor="let image_info of input_mineral_service.getImagesInfo(); let j = index"
+  class="imageContainer"
+>
+  <img
+    [src]="image_info.image_url"
+    class="imageMineral"
+    [ngStyle]="{
+      'margin-top': resizeSvc.getPictureMarginSize() + 'px',
+      width: resizeSvc.getPictureWidth() + 'px',
+      height: resizeSvc.getPictureHeight() + 'px',
+      left: resizeSvc.getFirstImageOffset(3, j, false) + 'px',
+      top: resizeSvc.getFirstImageOffsetTop(j) + 'px',
+      cursor: input_mineral_service.getImageCursor(is_submit_in_progress),
+      opacity: input_mineral_service.getImageOpacity(is_submit_in_progress),
+      'border-width': input_mineral_service.getImageBorderSize(j),
+      'border-color': input_mineral_service.getImageBorderColour(j)
+    }"
+    (click)="input_mineral_service.setNewFrontImage(j)"
+  />
+  <button
+    *ngIf="input_mineral_service.ifShowRemoveImgBtn(j, is_submit_in_progress)"
+    type="button"
+    class="btn imageTopRight removeStyle"
+    [ngStyle]="{
+      'margin-top': resizeSvc.getPictureMarginSize() + 'px',
+      left: resizeSvc.getFirstImageOffset(3, j, false) + 'px',
+      top: resizeSvc.getFirstImageOffsetTop(j) + 'px'
+    }"
+    (click)="input_mineral_service.removeImage(j)"
+  >
+    &times;
+  </button>
+
+  <button
+    *ngIf="input_mineral_service.ifShowSuccessImgUploadBtn(j)"
+    type="button"
+    class="btn imageTopRight passStyle"
+    [ngStyle]="{
+      'margin-top': resizeSvc.getPictureMarginSize() + 'px',
+      left: resizeSvc.getFirstImageOffset(3, j, false) + 'px',
+      top: resizeSvc.getFirstImageOffsetTop(j) + 'px'
+    }"
+  >
+    &#10003;
+  </button>
+
+  <button
+    *ngIf="input_mineral_service.ifShowFailImgUploadBtn(j)"
+    type="button"
+    class="btn imageTopRight faultStyle"
+    [ngStyle]="{
+      'margin-top': resizeSvc.getPictureMarginSize() + 'px',
+      left: resizeSvc.getFirstImageOffset(3, j, false) + 'px',
+      top: resizeSvc.getFirstImageOffsetTop(j) + 'px'
+    }"
+  >
+    &times;
+  </button>
 </div>
