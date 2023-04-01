@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
@@ -19,7 +19,7 @@ import { MobileService } from '../services/mobile.service';
 })
 export class MondifySubMineralFormComponent implements OnInit {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serviceErrors: any = {};
   activePage: any = {};
   achatdbCollection: any = {};
@@ -83,7 +83,7 @@ export class MondifySubMineralFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public modalService: BsModalService,
     public routerService: RouterServices,

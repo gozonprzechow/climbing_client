@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputMineral';
 import { AuthenticationService } from '../services/authentication.service';
@@ -17,7 +17,7 @@ import { InputMineralService, ImageInfo } from '../services/input.mineral.servic
 })
 export class InputMineralFormComponent implements OnInit {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serviceErrors: any = {};
   activePage: any = {};
   allLocality: any = [];
@@ -104,7 +104,7 @@ export class InputMineralFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public languageService: LanguageService,
     public routerService: RouterServices,
@@ -202,8 +202,8 @@ export class InputMineralFormComponent implements OnInit {
     this.resizeSvc.countImageWidth();
   }
 
-  get price(): FormControl {
-    return this.userForm.controls.price as FormControl;
+  get price(): UntypedFormControl {
+    return this.userForm.controls.price as UntypedFormControl;
   }
 
   activeStandardCollectionInput() {

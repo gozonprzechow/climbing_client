@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
@@ -21,7 +21,7 @@ import { MobileService } from '../services/mobile.service';
 })
 export class AdminHlavniFormComponent implements OnInit {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serviceErrors: any = {};
   serverServiceErrors: any = {};
   successLoadCondition: string;
@@ -72,7 +72,7 @@ export class AdminHlavniFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public auth: AuthenticationService,
     public modalService: BsModalService,
     public routerService: RouterServices,

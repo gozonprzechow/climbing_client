@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
 import { ValidationService } from '../models/validation';
@@ -23,7 +23,7 @@ export class CreateAccountFormComponent implements OnInit {
   };
 
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serviceErrors: any = {};
   serverServiceErrors: any = {};
   activePage: any = {};
@@ -63,7 +63,7 @@ export class CreateAccountFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public auth: AuthenticationService,
     public http: HttpClient,
     public languageService: LanguageService,

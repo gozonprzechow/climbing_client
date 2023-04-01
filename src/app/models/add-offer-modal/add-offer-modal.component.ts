@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../../services/language.service';
 import { OfferService } from '../../services/offerService';
@@ -19,7 +19,7 @@ export class AddOfferModalComponent implements OnInit {
   actualSlide: number = 0;
   list: any = {};
   public event: EventEmitter<any> = new EventEmitter();
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serviceErrors: any = {};
   serverServiceErrors: any = {};
 
@@ -54,7 +54,7 @@ export class AddOfferModalComponent implements OnInit {
   constructor(
     public http: HttpClient,
     public bsModalRef: BsModalRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public auth: AuthenticationService,
     public routerService: RouterServices,
     public languageService: LanguageService,

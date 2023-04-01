@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
@@ -22,7 +22,7 @@ import { ImageService } from '../services/image.service';
 })
 export class UserSettingsFormComponent implements OnInit {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
@@ -102,7 +102,7 @@ export class UserSettingsFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public auth: AuthenticationService,
     public modalService: BsModalService,
     public routerService: RouterServices,

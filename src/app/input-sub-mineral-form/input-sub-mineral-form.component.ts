@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputMineral';
 import { AuthenticationService } from '../services/authentication.service';
@@ -16,7 +16,7 @@ import { MobileService } from '../services/mobile.service';
 })
 export class InputSubMineralFormComponent implements OnInit {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serviceErrors: any = {};
   activePage: any = {};
   allLocality: any = [];
@@ -59,7 +59,7 @@ export class InputSubMineralFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public auth: AuthenticationService,
     public languageService: LanguageService,

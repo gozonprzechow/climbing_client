@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -28,7 +28,7 @@ export class OtherUsersFormComponent implements OnInit {
   allLocality: any = [];
   activePage: any = {};
   otherUsersCollections: any = [];
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
 
   modalRef: BsModalRef;
 
@@ -60,7 +60,7 @@ export class OtherUsersFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public router: Router,
     public route: ActivatedRoute,

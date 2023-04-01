@@ -5,7 +5,7 @@ import {
   OnDestroy,
   AfterViewChecked,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -30,7 +30,7 @@ import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 
 export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   prefix: string;
   carrouselCollection: any = {};
   showComments: boolean = false;
@@ -96,7 +96,7 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
   };
 
   constructor(
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public routerService: RouterServices,
     public bsModalRef: BsModalRef,

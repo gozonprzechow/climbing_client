@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
@@ -17,7 +17,7 @@ import { MobileService } from '../services/mobile.service';
 })
 export class ModifyLocalityFormComponent implements OnInit {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   guid: string;
   activePage: any = {};
   serviceErrors: any = {};
@@ -60,7 +60,7 @@ export class ModifyLocalityFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public modalService: BsModalService,
     public routerService: RouterServices,

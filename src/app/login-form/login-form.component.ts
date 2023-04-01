@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService, TokenPayload } from '../services/authentication.service';
@@ -22,7 +22,7 @@ export class LoginFormComponent implements OnInit {
   };
 
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   serviceErrors: any = {};
   serverServiceErrors: any = {};
   activePage: any = {};
@@ -82,7 +82,7 @@ export class LoginFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public globals: Globals,
     public auth: AuthenticationService,
     public languageService: LanguageService,

@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
 import { AuthenticationService } from '../services/authentication.service';
@@ -16,7 +16,7 @@ import { MobileService } from '../services/mobile.service';
 })
 export class InputLocalityFormComponent implements OnInit {
   submitted = false;
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   activePage: any = {};
   serviceErrors: any = {};
   serverServiceErrors: any = {};
@@ -59,7 +59,7 @@ export class InputLocalityFormComponent implements OnInit {
 
   constructor(
     public elementRef: ElementRef,
-    public formBuilder: FormBuilder,
+    public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public routerService: RouterServices,
     public languageService: LanguageService,
