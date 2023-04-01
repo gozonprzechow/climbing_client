@@ -130,8 +130,10 @@ export class UserLocalityFormComponent implements OnInit {
     this.subscriber = this.route.params.subscribe((params) => {
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
+        this.auth.saveActualUserId(postedBy);
       } else {
         postedBy = params.idPostedBy;
+        this.auth.saveActualUserId(postedBy);
       }
 
       this.pagingButtons.setActualPage(params.page);

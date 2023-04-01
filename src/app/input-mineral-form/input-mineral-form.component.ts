@@ -149,6 +149,9 @@ export class InputMineralFormComponent implements OnInit {
 
   ngOnInit() {
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
+    this.input_mineral_service.clearImageInfo();
+    this.previews.length = 0;
+    this.loading_in_progress = false;
     this.resetTitleImage();
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.resizeSvc.countImageWidth();
@@ -364,6 +367,9 @@ export class InputMineralFormComponent implements OnInit {
         await this.postSubImages();
         setTimeout(() => {
           this.is_submit_in_progress = false;
+          this.input_mineral_service.clearImageInfo();
+          this.previews.length = 0;
+          this.loading_in_progress = false;
           this.routerService.userLocalityDirectMineral(
             this.route_after_submit_information.locality,
             this.route_after_submit_information.postedBy,

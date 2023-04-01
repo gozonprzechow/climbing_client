@@ -79,51 +79,6 @@
                 alt="{{ achatdbCollection.title }}"
                 (click)="openModal(achatdbCollection, j)"
               />
-              <div
-                class="imageLocality"
-                [ngStyle]="{
-                  width: resizeSvc.getPictureWidth() + 'px',
-                  left:
-                    resizeSvc.getFirstImageOffset(
-                      otherUsersCollection.achatdbCollections.length,
-                      j,
-                      false
-                    ) + 'px'
-                }"
-                (click)="openModal(achatdbCollection, j)"
-              ></div>
-            </div>
-          </li>
-        </ul>
-
-        <ul
-          class="list-inline"
-          [ngStyle]="{
-            'min-height': '14' + 'px'
-          }"
-        >
-          <li
-            *ngFor="
-              let achatdbCollection of otherUsersCollection.achatdbCollections;
-              let j = index
-            "
-          >
-            <div *ngIf="achatdbCollection" class="imageContainer">
-              <div
-                class="imageLocality"
-                [ngStyle]="{
-                  width: resizeSvc.getPictureWidth() + 'px',
-                  left:
-                    resizeSvc.getFirstImageOffset(
-                      otherUsersCollection.achatdbCollections.length,
-                      j,
-                      false
-                    ) + 'px'
-                }"
-                (click)="openModal(achatdbCollection, j)"
-              >
-                {{ achatdbCollection.title }}
-              </div>
             </div>
           </li>
         </ul>

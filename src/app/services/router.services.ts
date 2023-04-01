@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResizeService, SCREEN_SIZE } from './resize.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Injectable()
 export class RouterServices {
   screen_size: SCREEN_SIZE;
-  constructor(public router: Router, private resizeSvc: ResizeService) {}
+  constructor(
+    public router: Router,
+    public auth: AuthenticationService,
+    private resizeSvc: ResizeService,
+  ) {}
 
   public notLoginError(): void {
     let path = '/login';
@@ -49,10 +54,12 @@ export class RouterServices {
 
   public userLocalities(userId: string, page: number): void {
     let path = '/localities/' + page + '/' + userId;
+    this.auth.saveActualUserId(userId);
     this.router.navigate([path]);
   }
 
   public userLocality(localityName: string, userId: string, page: number): void {
+    this.auth.saveActualUserId(userId);
     let path = '/locality/' + localityName + '/' + page + '/' + userId;
     this.router.navigate([path]);
   }
@@ -185,7 +192,6 @@ export class RouterServices {
   }
 
   public home(): void {
-    let path = '/';
-    this.router.navigate([path]);
+    window.location.href = 'https://sutrak.net';
   }
 }
