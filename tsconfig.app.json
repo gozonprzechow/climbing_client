@@ -13,9 +13,6 @@
   "include": [
     "src/**/*.d.ts"
   ],
-  // "angularCompilerOptions": {
-  //   "enableIvy": true
-  // },
   "exclude": [
     "src/test.ts",
     "src/**/*.spec.ts"
