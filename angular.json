@@ -13,8 +13,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "baseHref" : "/g1/",
-            "deployUrl": "/g1/",
+            // "baseHref": "/g1/",
+            // "deployUrl": "/g1/",
             "outputPath": "dist/sutrak_net_angular",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -92,6 +92,19 @@
               "src/styles.css"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
