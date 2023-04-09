@@ -398,7 +398,7 @@ export class InputMineralFormComponent implements OnInit {
         break;
       }
     }
-    console.log(main_image_info);
+    // console.log(main_image_info);
     let formData = new FormData();
     if (0 == this.input_status) {
       this.userForm.value['price'] = 1;

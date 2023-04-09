@@ -293,10 +293,10 @@ export class ChatNavbarMenuComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-          '/api/v1/user_input/confirmFriendship/' +
-          logUser +
-          '/' +
-          frienship_requester.user_id,
+        '/api/v1/user_input/confirmFriendship/' +
+        logUser +
+        '/' +
+        frienship_requester.user_id,
         formData,
       )
       .subscribe((returnData: any) => {
@@ -352,10 +352,10 @@ export class ChatNavbarMenuComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-          '/api/v1/user_input/requestFriendship/' +
-          logUser +
-          '/' +
-          user.postedBy,
+        '/api/v1/user_input/requestFriendship/' +
+        logUser +
+        '/' +
+        user.postedBy,
         formData,
       )
       .subscribe((data: any) => {

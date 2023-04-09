@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+// import { tap } from 'rxjs/operators';
 
 export interface UserDetails {
   _id: string;
@@ -79,6 +80,7 @@ export class AuthenticationService {
     } else {
       return false;
     }
+    return true;
   }
 
   public getLogUserId(): any {
@@ -123,7 +125,7 @@ export class AuthenticationService {
     }
 
     const request = base.pipe(
-      map((data: TokenResponse) => {
+      tap((data: TokenResponse) => {
         if (data.token) {
           this.saveToken(data.token);
         }

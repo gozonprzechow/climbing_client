@@ -290,10 +290,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .get(
         environment.urlAddress +
-          '/api/v1/user_input/chat/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          this.recipient_id,
+        '/api/v1/user_input/chat/' +
+        this.pagingButtons.getActualPage() +
+        '/' +
+        this.recipient_id,
       )
       .subscribe(
         (returnData: any) => {
@@ -325,10 +325,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-          '/api/v1/user_input/chat/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          this.recipient_id,
+        '/api/v1/user_input/chat/' +
+        this.pagingButtons.getActualPage() +
+        '/' +
+        this.recipient_id,
         formData,
       )
       .subscribe(
@@ -357,10 +357,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .get(
         environment.urlAddress +
-          '/api/v1/user_input/priceChat/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          this.recipient_id,
+        '/api/v1/user_input/priceChat/' +
+        this.pagingButtons.getActualPage() +
+        '/' +
+        this.recipient_id,
       )
       .subscribe(
         (returnData: any) => {
@@ -392,10 +392,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-          '/api/v1/user_input/priceChat/' +
-          this.pagingButtons.getActualPage() +
-          '/' +
-          this.recipient_id,
+        '/api/v1/user_input/priceChat/' +
+        this.pagingButtons.getActualPage() +
+        '/' +
+        this.recipient_id,
         formData,
       )
       .subscribe(
@@ -449,7 +449,7 @@ export class ChatFormComponent implements OnInit {
     }
   }
 
-  public toggleDeleteMessage(message_id, num_in_array) {}
+  public toggleDeleteMessage(message_id, num_in_array) { }
 
   public isDeleteMessageActive(num_in_array) {
     return true;
@@ -471,10 +471,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-          '/api/v1/user_input/chatInputMessage/' +
-          userId +
-          '/' +
-          this.recipient_id,
+        '/api/v1/user_input/chatInputMessage/' +
+        userId +
+        '/' +
+        this.recipient_id,
         formData,
       )
       .subscribe((returnData: any) => {
@@ -561,7 +561,7 @@ export class ChatFormComponent implements OnInit {
     );
     formData.append('actual_page', JSON.stringify(this.actual_page));
     formData.append('recipient_id', this.recipient_id);
-    console.log(this.recipient_id);
+    // console.log(this.recipient_id);
 
     this.http
       .post<any>(environment.urlAddress + '/api/v1/user_input/deleteBind', formData)
@@ -583,7 +583,7 @@ export class ChatFormComponent implements OnInit {
         this.pagingButtons.setNumOfPage(returnData.numberOfPages);
         this.pagingButtons.setActualPage(this.actual_page);
         this.buttonCollections = this.pagingButtons.createButtonsField();
-        console.log(returnData);
+        // console.log(returnData);
         if (returnData.bind_messages) {
           this.bind_messages = returnData.bind_messages;
         }

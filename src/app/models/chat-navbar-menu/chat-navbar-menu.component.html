@@ -13,7 +13,7 @@
       id="navbarsExampleDefault"
       [ngClass]="{ show: navbarOpen, collapseFrame: navbarOpen }"
     >
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <img
           *ngIf="auth.isLoggedIn()"
           class="backArrowImage"
@@ -27,24 +27,26 @@
 
       <div ngbDropdown>
         <!-- First Name -->
-        <input
-          type="text"
-          class="searchUser"
-          id="search_user"
-          name="search_user"
-          [(ngModel)]="search_user"
-          placeholder="Search user"
-          [ngClass]="{ phoneModeInputSearchedUser: navbarOpen }"
-        />
-        <img
-          *ngIf="auth.isLoggedIn()"
-          class="alertImage"
-          ngbDropdownToggle
-          [src]="img_search"
-          (mouseover)="img_search = '../../../assets/skins/search_button_hover.png'"
-          (mouseout)="img_search = '../../../assets/skins/search_button.png'"
-          (click)="searchUser()"
-        />
+        <form class="d-flex" role="search">
+          <input
+            type="text"
+            class="form-control me-2 searchUser"
+            id="search_user"
+            name="search_user"
+            [(ngModel)]="search_user"
+            placeholder="Search user"
+            [ngClass]="{ phoneModeInputSearchedUser: navbarOpen }"
+          />
+          <img
+            *ngIf="auth.isLoggedIn()"
+            class="alertImage"
+            ngbDropdownToggle
+            [src]="img_search"
+            (mouseover)="img_search = '../../../assets/skins/search_button_hover.png'"
+            (mouseout)="img_search = '../../../assets/skins/search_button.png'"
+            (click)="searchUser()"
+          />
+        </form>
         <div
           ngbDropdownMenu
           class="dropdownStyle dropdown-menu-right"
@@ -79,9 +81,7 @@
               class="row dropdownFriendshipRequest"
               (click)="dropdownRouteChat(searched_user)"
             >
-              <div
-                class="col-10 confirmFriendshipRequest"
-              >
+              <div class="col-10 confirmFriendshipRequest">
                 {{ searched_user.name }}
               </div>
             </div>

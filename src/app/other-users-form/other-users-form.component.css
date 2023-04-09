@@ -64,6 +64,7 @@
   font-size: 24px;
   cursor: pointer;
   display: inline;
+  text-decoration: none;
 }
 
 .userName_mobile {

@@ -1,13 +1,13 @@
 <div class="containerOfNav">
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #242020">
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #242020">
     <a class="navbar-brand" href="#"></a>
-    <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" data-bs-toggle="collapse">
       <span class="navbar-toggler-icon"></span>
     </button>
     <!-- <div class="containerNavbar"> -->
     <div class="collapse navbar-collapse" id="navbarsExampleDefault"
       [ngClass]="{ show: navbarOpen, collapseFrame: navbarOpen }">
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li *ngIf="ifDisplayHome()" class="{{ activePage.homePage }}">
           <a class="nav-link" (click)="routeToHome()" [ngClass]="{ navbarTogglerActive: navbarOpen }">{{ home_txt }}</a>
         </li>
@@ -44,59 +44,57 @@
             otherUsers_txt }}</a>
         </li>
       </ul>
-      <div class="test">
-        <div ngbDropdown>
-          <div *ngIf="ifDisplayAddFriend()" class="chatImageBox">
-            <div class="chatImageBoxRelative">
-              <img class="addFriendImage" [src]="imgAddSrc"
-                (mouseover)="imgAddSrc = '../../../assets/skins/add_friend_button_hover.png'"
-                (mouseout)="imgAddSrc = '../../../assets/skins/add_friend_button.png'"
-                (click)="openAddFriendshipModal()" [ngClass]="{ chatButton: navbarOpen }" />
-            </div>
+      <div ngbDropdown>
+        <div *ngIf="ifDisplayAddFriend()" class="chatImageBox">
+          <div class="chatImageBoxRelative">
+            <img class="addFriendImage" [src]="imgAddSrc"
+              (mouseover)="imgAddSrc = '../../../assets/skins/add_friend_button_hover.png'"
+              (mouseout)="imgAddSrc = '../../../assets/skins/add_friend_button.png'" (click)="openAddFriendshipModal()"
+              [ngClass]="{ chatButton: navbarOpen }" />
           </div>
-
-          <div class="chatImageBox">
-            <div class="chatImageBoxRelative">
-              <img *ngIf="auth.isLoggedIn()" class="chatImage" [src]="imgChatSrc"
-                (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
-                (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
-                (click)="routerService.chat(null, 0)" [ngClass]="{ chatButton: navbarOpen }" />
-              <div class="chatImageBoxAbsolute">
-                <p *ngIf="alerts.message_alert" class="alertChat">!</p>
-              </div>
-              <div class="chatImageBoxAbsolutePrice">
-                <p *ngIf="alerts.price_alert" class="alertChat">$</p>
-              </div>
-            </div>
-          </div>
-
-          <img *ngIf="auth.isLoggedIn()" class="settingsImage dropdown-toggle" ngbDropdownToggle [src]="imgSrc"
-            (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
-            (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
-            [ngClass]="{ settingsButton: navbarOpen }" />
-          <div *ngIf="auth.isLoggedIn()" ngbDropdownMenu class="{{ getDropdownMenuClass(navbarOpen) }} dropdownStyle"
-            aria-labelledby="dropdown03" [ngClass]="{ settingsButtonDropdown: navbarOpen }">
-            <a *ngIf="this.auth.isLoggedIn()" class="dropdown-item" (click)="routerService.userSettings()">{{
-              userSettings_txt }}
-            </a>
-            <a *ngIf="this.auth.isUserAdmin()" class="dropdown-item" (click)="routerService.adminHlavni()">{{
-              adminPage_txt }}
-            </a>
-          </div>
-
-          <button *ngIf="auth.isLoggedIn()" class="btn btnLogin" (click)="logOutHandler()"
-            [ngClass]="{ logButton: navbarOpen }">
-            {{ logOut_txt }}
-          </button>
-          <button *ngIf="!auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0" (click)="logInHandler()"
-            [ngClass]="{ logButton: navbarOpen }">
-            {{ logIn_txt }}
-          </button>
-          <button *ngIf="!auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0 registerButton"
-            (click)="registerHandler()" [ngClass]="{ logButton: navbarOpen }">
-            {{ register_txt }}
-          </button>
         </div>
+
+        <div class="chatImageBox">
+          <div class="chatImageBoxRelative">
+            <img *ngIf="auth.isLoggedIn()" class="chatImage" [src]="imgChatSrc"
+              (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
+              (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'" (click)="routerService.chat(null, 0)"
+              [ngClass]="{ chatButton: navbarOpen }" />
+            <div class="chatImageBoxAbsolute">
+              <p *ngIf="alerts.message_alert" class="alertChat">!</p>
+            </div>
+            <div class="chatImageBoxAbsolutePrice">
+              <p *ngIf="alerts.price_alert" class="alertChat">$</p>
+            </div>
+          </div>
+        </div>
+
+        <img *ngIf="auth.isLoggedIn()" class="settingsImage dropdown-toggle" ngbDropdownToggle [src]="imgSrc"
+          (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
+          (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
+          [ngClass]="{ settingsButton: navbarOpen }" />
+        <div *ngIf="auth.isLoggedIn()" ngbDropdownMenu class="{{ getDropdownMenuClass(navbarOpen) }} dropdownStyle"
+          aria-labelledby="dropdown03" [ngClass]="{ settingsButtonDropdown: navbarOpen }">
+          <a *ngIf="this.auth.isLoggedIn()" class="dropdown-item" (click)="routerService.userSettings()">{{
+            userSettings_txt }}
+          </a>
+          <a *ngIf="this.auth.isUserAdmin()" class="dropdown-item" (click)="routerService.adminHlavni()">{{
+            adminPage_txt }}
+          </a>
+        </div>
+
+        <button *ngIf="auth.isLoggedIn()" class="btn btnLogin" (click)="logOutHandler()"
+          [ngClass]="{ logButton: navbarOpen }">
+          {{ logOut_txt }}
+        </button>
+        <button *ngIf="!auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0" (click)="logInHandler()"
+          [ngClass]="{ logButton: navbarOpen }">
+          {{ logIn_txt }}
+        </button>
+        <button *ngIf="!auth.isLoggedIn()" class="btn btn-outline-success my-2 my-sm-0 registerButton"
+          (click)="registerHandler()" [ngClass]="{ logButton: navbarOpen }">
+          {{ register_txt }}
+        </button>
       </div>
     </div>
     <!-- </div> -->
