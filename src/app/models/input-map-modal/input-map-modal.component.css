@@ -1,0 +1,102 @@
+.modal-body {
+  background-color: #242020;
+  border-color: rgb(177, 185, 189);
+  color: rgb(199, 199, 199);
+  border-bottom-width: 0px;
+  text-align: center;
+}
+
+.modal-footer {
+  background-color: #242020;
+  border-color: rgb(177, 185, 189);
+  border-top-width: 0px;
+}
+
+.modal-header {
+  background-color: #242020 !important;
+  border-color: rgb(177, 185, 189);
+  border-bottom-width: 0px;
+  color: rgb(199, 199, 199);
+  /* text-align: center; */
+}
+
+.confirmModalMessage {
+  display: inline;
+}
+
+/* Style cancle button */
+.btnCancle {
+  width: 110px;
+  padding: 8px 0;
+  border: 3px solid rgb(48, 136, 207) !important;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(160, 160, 160) !important;
+  color: black;
+  cursor: pointer;
+}
+
+/* Style on hover colour */
+.btnCancle:hover {
+  background-color: rgb(85, 83, 83) !important;
+  color: white;
+}
+
+.btnConfirm {
+  width: 110px;
+  padding: 8px 0;
+  border: 3px solid rgb(48, 136, 207) !important;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(160, 160, 160) !important;
+  color: black;
+  cursor: pointer;
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+}
+
+/* Style on hover colour */
+.btnConfirm:hover {
+  background-color: rgb(85, 83, 83) !important;
+  color: white;
+}
+
+/* Style close button */
+.closeStyle {
+  width: 45px;
+  height: 45px;
+  padding: 0px 0;
+  border: 3px solid rgb(48, 136, 207) !important;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(160, 160, 160) !important;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin: 0px;
+}
+
+/* Style on hover colour */
+.closeStyle:hover {
+  background-color: rgb(85, 83, 83) !important;
+  color: white;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 30px;
+}
+
+.map-frame {
+  border: 2px solid black;
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+}

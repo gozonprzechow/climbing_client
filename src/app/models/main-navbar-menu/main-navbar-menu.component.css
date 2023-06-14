@@ -45,6 +45,11 @@
   /* margin-top: 7px; */
 }
 
+.mapButton {
+  margin-bottom: 9px;
+  /* margin-top: 7px; */
+}
+
 .settingsButtonDropdown {
   margin-left: 10px;
   margin-bottom: 9px;
@@ -84,6 +89,19 @@
 
 .chatImage {
   width: 60px;
+  height: 38px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  margin-right: 4px;
+}
+
+.mapImage {
+  width: 38px;
   height: 38px;
   padding: 0px 0;
   border: 1px solid #28a745 !important;

@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">{{ list.modalTitle }}</h4>
+  <button
+    type="button"
+    class="btn closeStyle"
+    aria-label="Close"
+    (click)="bsModalRef.hide()"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div
+  class="modal-body"
+  [ngStyle]="{
+    height: getModalBodyHeight() + 'px'
+  }"
+>
+  <div class="map-container">
+    <div class="map-frame">
+      <div id="map"></div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="float-left">
+    <button type="button" class="btn btnConfirm" (click)="triggerConfirmEvent()">
+      Ok
+    </button>
+  </div>
+  <button type="button" class="btn btnCancle" (click)="bsModalRef.hide()">Cancle</button>
+</div>

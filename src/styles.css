@@ -1,10 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 .nav-link {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .dropdown-item {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .mineralImageModal {
@@ -15,8 +15,16 @@
   border-radius: 8px; */
 }
 
- .modal-dialog .modal-content{
-  border: 3px solid  rgb(177, 185, 189);
+.inputLocationModal {
+  /* width: fit-content !important; */
+  max-width: 95% !important;
+  max-height: 95%;
+  /* border: 3px solid  rgb(177, 185, 189);
+  border-radius: 8px; */
+}
+
+.modal-dialog .modal-content {
+  border: 3px solid rgb(177, 185, 189);
   border-radius: 8px;
 }
 
@@ -26,16 +34,17 @@
 
 .carousel-item img {
   width: auto;
-  margin: auto; 
+  margin: auto;
   display: block;
 }
 
-  .carousel:focus{
-    border: none !important;
-    outline: none !important;
-  }
+.carousel:focus {
+  border: none !important;
+  outline: none !important;
+}
 
-  .right.carousel-control, .left.carousel-control {
-    opacity: 0.15;
-    filter:alpha(opacity=0);
+.right.carousel-control,
+.left.carousel-control {
+  opacity: 0.15;
+  filter: alpha(opacity=0);
 }

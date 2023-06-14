@@ -194,4 +194,9 @@ export class RouterServices {
   public home(): void {
     window.location.href = 'https://sutrak.net';
   }
+
+  public userMap(): void {
+    let path = '/userMap';
+    this.router.navigate([path]);
+  }
 }

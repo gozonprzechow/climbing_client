@@ -1,4 +1,14 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ElementRef,
+  OnDestroy,
+  AfterViewInit,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -17,13 +27,25 @@ import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
+import { ShapeService } from '../services/shape.service';
+import * as L from 'leaflet';
 
 @Component({
-  selector: 'app-user-main-localities-form',
-  templateUrl: './user-main-localities-form.component.html',
-  styleUrls: ['./user-main-localities-form.component.css'],
+  selector: 'app-user-map-form',
+  templateUrl: './user-map-form.component.html',
+  styleUrls: ['./user-map-form.component.css'],
 })
-export class UserMainLocalitiesFormComponent implements OnInit {
+export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
+  // @Output() map$: EventEmitter<Map> = new EventEmitter();
+  // @Output() zoom$: EventEmitter<number> = new EventEmitter();
+  // options: MapOptions;
+  // public map: Map;
+  // public zoom: number;
+  // geoJsonData: any;
+  // layersControl: Control.LayersObject;
+  private map;
+  private states;
+
   allLocality: any = [];
   activePage: any = {};
   localityCollections: any = [];
@@ -74,6 +96,7 @@ export class UserMainLocalitiesFormComponent implements OnInit {
     public imageService: ImageService,
     public mobileService: MobileService,
     public resizeSvc: ResizeService,
+    private shapeService: ShapeService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -103,6 +126,28 @@ export class UserMainLocalitiesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.options = {
+    //   layers: [
+    //     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //       opacity: 0.7,
+    //       maxZoom: 19,
+    //       minZoom: 2,
+    //       noWrap: true, //this is the crucial line!
+    //       bounds: [
+    //         [-90, -180],
+    //         [90, 180],
+    //       ],
+    //       detectRetina: true,
+    //       attribution:
+    //         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    //     }),
+    //   ],
+    //   zoom: 2,
+    //   center: latLng(0, 0),
+    // };
+    // this.http.get<any>('../../assets/geojson/countries.geojson').subscribe((data) => {
+    //   const geojsonLayer = geoJSON(data).addTo(this.map);
+    // });
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.resizeSvc.countImageWidth();
@@ -149,6 +194,154 @@ export class UserMainLocalitiesFormComponent implements OnInit {
           }
         });
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.initMap();
+    this.shapeService
+      .getStateShapes('/assets/geojson/countries.json')
+      .subscribe((states) => {
+        this.states = states;
+        this.initStatesLayer();
+      });
+  }
+
+  ngOnDestroy() {
+    // this.map.clearAllEventListeners;
+    // this.map.remove();
+  }
+
+  // onMapZoomEnd(e: ZoomAnimEvent) {
+  //   this.zoom = e.target.getZoom();
+  //   this.zoom$.emit(this.zoom);
+  // }
+
+  private initMap(): void {
+    this.map = L.map('map', {
+      center: [50, 14.4],
+      zoom: 4.4,
+    });
+
+    const tiles = L.tileLayer('', {
+      opacity: 0.7,
+      maxZoom: 19,
+      minZoom: 2,
+      noWrap: true, //this is the crucial line!
+      bounds: [
+        [-90, -180],
+        [90, 180],
+      ],
+      detectRetina: true,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    });
+
+    tiles.addTo(this.map);
+  }
+
+  private initStatesLayer() {
+    const stateLayer = L.geoJSON(this.states, {
+      style: this.getRegionStyle,
+      onEachFeature: (feature, layer) =>
+        layer.on({
+          dblclick: (e) => this.highlightFeature(e),
+          mouseover: (e) => this.showLabels(e),
+          mouseout: (e) => this.resetFeature(e),
+        }),
+    });
+
+    this.map.addLayer(stateLayer);
+  }
+
+  private getRegionStyle(feature) {
+    if (feature.properties.name === 'Afghanistan') {
+      return {
+        weight: 5,
+        opacity: 1.0,
+        color: 'hsl(9, 88%, 2%, 1)',
+        fillOpacity: 1.0,
+        fillColor: 'hsla(9, 88%, 17%, 0.75)',
+      };
+    } else {
+      // Default style for other regions
+      return {
+        weight: 5,
+        opacity: 1.0,
+        color: 'hsl(9, 88%, 2%, 1)',
+        fillOpacity: 1.0,
+        fillColor: 'hsla(9, 88%, 17%, 0.4)', // Border width
+      };
+    }
+  }
+
+  private getRegionStyleRuntime(layer) {
+    if (layer.feature.properties.name === 'Afghanistan') {
+      return {
+        weight: 5,
+        opacity: 1.0,
+        color: 'hsl(9, 88%, 2%, 1)',
+        fillOpacity: 1.0,
+        fillColor: 'hsla(9, 88%, 17%, 0.75)',
+      };
+    } else {
+      // Default style for other regions
+      return {
+        weight: 5,
+        opacity: 1.0,
+        color: 'hsl(9, 88%, 2%, 1)',
+        fillOpacity: 1.0,
+        fillColor: 'hsla(9, 88%, 17%, 0.4)', // Border width
+      };
+    }
+  }
+
+  private highlightFeature(e) {
+    const layer = e.target;
+    // console.log(e.target.feature.properties.ADMIN);
+
+    layer.setStyle({
+      weight: 5,
+      opacity: 1.0,
+      color: '#DFA612',
+      fillOpacity: 1.0,
+      fillColor: '#FAE042',
+    });
+  }
+
+  private showLabels(e) {
+    const layer = e.target;
+    layer.bindTooltip(
+      e.target.feature.properties.name +
+        '<br>' +
+        'localities: ' +
+        e.target.feature.properties.localities +
+        '<br>' +
+        'minerals: ' +
+        e.target.feature.properties.minerals,
+      {
+        permanent: true,
+        offset: [0, 40],
+        sticky: true,
+        direction: 'center',
+        className: 'countryLabel',
+      },
+    );
+
+    layer.setStyle({
+      weight: 5,
+      opacity: 1.0,
+      color: 'hsl(9, 88%, 2%, 1)',
+      fillOpacity: 1.0,
+      fillColor: 'hsla(9, 88%, 17%, 0.65)',
+    });
+  }
+
+  private resetFeature(e) {
+    const layer = e.target;
+    layer.unbindTooltip();
+    // console.log(e.target);
+
+    layer.setStyle(this.getRegionStyleRuntime(layer));
   }
 
   private findById(localityCollections, id) {

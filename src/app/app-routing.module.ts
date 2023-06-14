@@ -19,6 +19,7 @@ import { AdminHlavniFormComponent } from './admin-hlavni-form/admin-hlavni-form.
 import { FirstPageFormComponent } from './first-page-form/first-page-form.component';
 import { UserSettingsFormComponent } from './user-settings-form/user-settings-form.component';
 import { ChatFormComponent } from './chat-form/chat-form.component';
+import { UserMapFormComponent } from './user-map-form/user-map-form.component';
 
 const routes: Routes = [
   {
@@ -88,6 +89,10 @@ const routes: Routes = [
   {
     path: 'chat/:page/:idRecipient/:nameRecipient/:type',
     component: ChatFormComponent,
+  },
+  {
+    path: 'userMap',//:page/:idPostedBy/:place',
+    component: UserMapFormComponent,
   },
   {
     path: 'locality/:uid/:page/:idPostedBy',

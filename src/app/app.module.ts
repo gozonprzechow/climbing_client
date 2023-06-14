@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePipe } from '@angular/common';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +24,7 @@ import { ResizeService } from './services/resize.service';
 import { MobileService } from './services/mobile.service';
 import { FileDragNDrop } from './services/file.drag.n.drop';
 import { InputMineralService } from './services/input.mineral.service';
+import { ShapeService } from './services/shape.service';
 
 import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -45,8 +47,10 @@ import { AdminHlavniFormComponent } from './admin-hlavni-form/admin-hlavni-form.
 import { FirstPageFormComponent } from './first-page-form/first-page-form.component';
 import { UserSettingsFormComponent } from './user-settings-form/user-settings-form.component';
 import { ChatFormComponent } from './chat-form/chat-form.component';
+import { UserMapFormComponent } from './user-map-form/user-map-form.component';
 
 import { ConfirmModalComponent } from './models/confirm-modal/confirm-modal.component';
+import { InputMapModalComponent } from './models/input-map-modal/input-map-modal.component';
 import { AddOfferModalComponent } from './models/add-offer-modal/add-offer-modal.component';
 import { MainNavbarMenuComponent } from './models/main-navbar-menu/main-navbar-menu.component';
 import { ChatNavbarMenuComponent } from './models/chat-navbar-menu/chat-navbar-menu.component';
@@ -82,12 +86,14 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     MondifyMineralFormComponent,
     MondifySubMineralFormComponent,
     ConfirmModalComponent,
+    InputMapModalComponent,
     AddOfferModalComponent,
     ModifyLocalityFormComponent,
     FirstPageFormComponent,
     PagingButtonsComponent,
     UserSettingsFormComponent,
     ChatFormComponent,
+    UserMapFormComponent,
     ChatNavbarMenuComponent,
     DropdownButtonInItemComponent,
     FileDragNDrop,
@@ -99,6 +105,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    LeafletModule,
     CarouselModule.forRoot(),
     ModalModule.forRoot(),
     NgbModule,
@@ -118,6 +125,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     ImageService,
     MobileService,
     InputMineralService,
+    ShapeService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

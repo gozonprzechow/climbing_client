@@ -25,6 +25,7 @@ export class MainNavbarMenuComponent implements OnInit {
   show_add_friend_option: boolean = false;
   imgAddSrc: String;
   imgChatSrc: String;
+  imgMapSrc: String;
   imgSrc: String;
   dropdownMenuClass: String = '';
   modalRef: BsModalRef;
@@ -115,6 +116,7 @@ export class MainNavbarMenuComponent implements OnInit {
     this.imgSrc = '../../../assets/skins/settings_button.png';
     this.imgChatSrc = '../../../assets/skins/message_button.png';
     this.imgAddSrc = '../../../assets/skins/add_friend_button.png';
+    this.imgMapSrc = '../../../assets/skins/globus_button.png';
 
     this.home_txt = this.languageService.getNativeLanguageText(this.homeTranslation);
 
@@ -161,6 +163,12 @@ export class MainNavbarMenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.activePage.homePage = 'nav-link';
+    this.activePage.userLocality = 'nav-link';
+    this.activePage.add = 'nav-link dropdown-toggle';
+    this.activePage.loaclity = 'nav-link dropdown-toggle';
+    this.activePage.otherUsers = 'nav-link';
+
     if (this.auth.isLoggedIn()) {
       let formData = new FormData();
       formData.append('actual_user_id', this.auth.getActualUserId());

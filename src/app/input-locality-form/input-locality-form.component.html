@@ -30,12 +30,20 @@
         </div>
       </div>
 
+      <img
+        class="imgSetLocation"
+        [src]="imgSetLocation"
+        (mouseover)="imgSetLocation = '../../../assets/skins/globus_button_hover.png'"
+        (mouseout)="imgSetLocation = '../../../assets/skins/globus_button.png'"
+        (click)="openInputCountyModal()"
+      />
+      <div class="location-text-container">Country: {{this.county}}</div>
+      <div class="location-text-container">Region: {{this.region}}</div>
+
       <div class="form-group" [ngClass]="{ 'has-error': invalidDescription() }">
         <!-- Last Name -->
         <div class="col-sm-12">
-          <label for="description" class="control-label">{{
-            description_txt
-          }}</label>
+          <label for="description" class="control-label">{{ description_txt }}</label>
           <textarea
             type="text"
             formControlName="description"

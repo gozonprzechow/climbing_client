@@ -1,3 +1,7 @@
 .hide_element {
   display: none;
 }
+
+p {
+  font-family: Lato;
+}

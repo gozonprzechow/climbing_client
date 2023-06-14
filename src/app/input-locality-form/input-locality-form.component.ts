@@ -8,6 +8,8 @@ import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
+import { InputMapModalComponent } from '../models/input-map-modal/input-map-modal.component';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-input-locality-form',
@@ -23,8 +25,14 @@ export class InputLocalityFormComponent implements OnInit {
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
   allLocality: any = [];
+  county: string = '';
+  region: string = '';
+  region_map: string = '';
 
   is_submit_in_progress: Boolean = false;
+  imgSetLocation: string;
+  countryModalRef: BsModalRef;
+  regionModalRef: BsModalRef;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -56,6 +64,11 @@ export class InputLocalityFormComponent implements OnInit {
     cz: 'Čekej. . .',
     en: 'Wait. . .',
   };
+  inputLocationModalTitle_txt: string;
+  inputLocationModalTitleTranslation: TextTranslator = {
+    cz: 'Výběr lokace',
+    en: 'Location selection',
+  };
 
   constructor(
     public elementRef: ElementRef,
@@ -64,6 +77,7 @@ export class InputLocalityFormComponent implements OnInit {
     public routerService: RouterServices,
     public languageService: LanguageService,
     public auth: AuthenticationService,
+    public modalService: BsModalService,
     public resizeSvc: ResizeService,
     public mobileService: MobileService,
   ) {
@@ -78,6 +92,11 @@ export class InputLocalityFormComponent implements OnInit {
       this.priorityTranslation,
     );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
+    this.inputLocationModalTitle_txt = this.languageService.getNativeLanguageText(
+      this.inputLocationModalTitleTranslation,
+    );
+
+    this.imgSetLocation = '../../../assets/skins/globus_button.png';
   }
 
   public invalidName() {
@@ -182,5 +201,70 @@ export class InputLocalityFormComponent implements OnInit {
           },
         );
     }
+  }
+
+  public openInputCountyModal() {
+    this.county = '';
+    this.region = '';
+    const initialState = {
+      list: {
+        modalTitle: this.inputLocationModalTitle_txt,
+        pageSize: this.resizeSvc.getPageWidth(),
+        screenSize: this.resizeSvc.getScreenSize(),
+        geojsonMap: '/assets/geojson/countries.json', //countries.geojson
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.countryModalRef = this.modalService.show(
+      InputMapModalComponent,
+      Object.assign(
+        { animated: false },
+        { class: 'inputLocationModal' },
+        { initialState },
+      ),
+    );
+    this.countryModalRef.content.event.subscribe((res) => {
+      this.county = res.state;
+      // console.log(res);
+      setTimeout(() => {
+        this.openInputRegionModal();
+      }, 50);
+    });
+  }
+
+  public openInputRegionModal() {
+    let ifOpenMap: Boolean = false;
+
+    if ('Czech Republic' === this.county) {
+      this.region_map = 'cz_kraje.json';
+      ifOpenMap = true;
+    }
+
+    if (!ifOpenMap) {
+      return;
+    }
+    const initialState = {
+      list: {
+        modalTitle: this.inputLocationModalTitle_txt,
+        pageSize: this.resizeSvc.getPageWidth(),
+        screenSize: this.resizeSvc.getScreenSize(),
+        geojsonMap: '/assets/geojson/' + this.region_map, //countries.geojson
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.regionModalRef = this.modalService.show(
+      InputMapModalComponent,
+      Object.assign(
+        { animated: false },
+        { class: 'inputLocationModal' },
+        { initialState },
+      ),
+    );
+    this.regionModalRef.content.event.subscribe((res) => {
+      this.region = res.state;
+      // console.log(res);
+    });
   }
 }

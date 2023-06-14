@@ -24,6 +24,8 @@ ul.list-inline li {
 .enderLine {
   min-width: 265px;
   clear: both;
+  height: 2px;
+  margin: auto;
   background-color: rgb(177, 185, 189);
 }
 

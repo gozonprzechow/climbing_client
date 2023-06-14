@@ -41,3 +41,22 @@
   color: white;
   cursor: default;
 }
+
+.imgSetLocation {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+  height: 84px;
+  border: 1px solid #28a745 !important;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.location-text-container {
+  background-color: #242020;
+  border-color: rgb(177, 185, 189);
+  color: rgb(199, 199, 199);
+  border-bottom-width: 0px;
+  text-align: center;
+}
