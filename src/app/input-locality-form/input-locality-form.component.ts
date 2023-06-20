@@ -25,7 +25,7 @@ export class InputLocalityFormComponent implements OnInit {
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
   allLocality: any = [];
-  county: string = '';
+  country: string = '';
   region: string = '';
   region_map: string = '';
 
@@ -174,6 +174,8 @@ export class InputLocalityFormComponent implements OnInit {
       Object.keys(this.userForm.value).forEach((key) => {
         formData.append(key, this.userForm.value[key]);
       });
+      formData.append('country', this.country);
+      formData.append('region', this.region);
 
       let postedBy = this.auth.getLogUserId();
       this.http
@@ -191,8 +193,11 @@ export class InputLocalityFormComponent implements OnInit {
 
             if (null == returnData.inputErrorMessage.uploadSuccess) {
             } else {
+              this.country = '';
+              this.region = '';
               this.submitted = false;
-              this.userForm.reset();
+              this.userForm.setValue({ name: '', description: '', priority: 1 });
+              console.log('sem tu');
             }
           },
           (error) => {
@@ -203,8 +208,8 @@ export class InputLocalityFormComponent implements OnInit {
     }
   }
 
-  public openInputCountyModal() {
-    this.county = '';
+  public openInputCountryModal() {
+    this.country = '';
     this.region = '';
     const initialState = {
       list: {
@@ -225,7 +230,7 @@ export class InputLocalityFormComponent implements OnInit {
       ),
     );
     this.countryModalRef.content.event.subscribe((res) => {
-      this.county = res.state;
+      this.country = res.state;
       // console.log(res);
       setTimeout(() => {
         this.openInputRegionModal();
@@ -236,7 +241,7 @@ export class InputLocalityFormComponent implements OnInit {
   public openInputRegionModal() {
     let ifOpenMap: Boolean = false;
 
-    if ('Czech Republic' === this.county) {
+    if ('Czech Republic' === this.country) {
       this.region_map = 'cz_kraje.json';
       ifOpenMap = true;
     }

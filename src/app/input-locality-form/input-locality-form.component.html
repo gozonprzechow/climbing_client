@@ -35,9 +35,9 @@
         [src]="imgSetLocation"
         (mouseover)="imgSetLocation = '../../../assets/skins/globus_button_hover.png'"
         (mouseout)="imgSetLocation = '../../../assets/skins/globus_button.png'"
-        (click)="openInputCountyModal()"
+        (click)="openInputCountryModal()"
       />
-      <div class="location-text-container">Country: {{this.county}}</div>
+      <div class="location-text-container">Country: {{this.country}}</div>
       <div class="location-text-container">Region: {{this.region}}</div>
 
       <div class="form-group" [ngClass]="{ 'has-error': invalidDescription() }">
