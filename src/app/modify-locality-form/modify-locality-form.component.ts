@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
+import { InputMapModalComponent } from '../models/input-map-modal/input-map-modal.component';
 
 @Component({
   selector: 'app-modify-locality-form',
@@ -25,12 +26,17 @@ export class ModifyLocalityFormComponent implements OnInit {
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
   allLocality: any = [];
+  country: string = '';
+  region: string = '';
+  region_map: string = '';
   localityUnderChange: any = {};
   previousRoute: string;
 
   product: any = {};
 
-  modalRef: BsModalRef;
+  imgSetLocation: string;
+  countryModalRef: BsModalRef;
+  regionModalRef: BsModalRef;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
@@ -57,6 +63,11 @@ export class ModifyLocalityFormComponent implements OnInit {
     cz: 'Uložit',
     en: 'Store',
   };
+  inputLocationModalTitle_txt: string;
+  inputLocationModalTitleTranslation: TextTranslator = {
+    cz: 'Výběr lokace',
+    en: 'Location selection',
+  };
 
   constructor(
     public elementRef: ElementRef,
@@ -80,6 +91,11 @@ export class ModifyLocalityFormComponent implements OnInit {
       this.priorityTranslation,
     );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
+    this.inputLocationModalTitle_txt = this.languageService.getNativeLanguageText(
+      this.inputLocationModalTitleTranslation,
+    );
+
+    this.imgSetLocation = '../../../assets/skins/globus_button.png';
   }
 
   public invalidName() {
@@ -117,6 +133,8 @@ export class ModifyLocalityFormComponent implements OnInit {
       this.routerService.inputLocality();
     } else {
       this.localityUnderChange = this.product.data.locality;
+      this.country = this.localityUnderChange.country;
+      this.region = this.localityUnderChange.region;
       this.previousRoute = this.product.data.previousRoute;
     }
 
@@ -167,6 +185,8 @@ export class ModifyLocalityFormComponent implements OnInit {
       Object.keys(this.userForm.value).forEach((key) => {
         formData.append(key, this.userForm.value[key]);
       });
+      formData.append('country', this.country);
+      formData.append('region', this.region);
 
       let postedBy = this.auth.getLogUserId();
       formData.append('locality', JSON.stringify(this.localityUnderChange));
@@ -192,6 +212,71 @@ export class ModifyLocalityFormComponent implements OnInit {
     }
   }
 
+  public openInputCountryModal() {
+    this.country = '';
+    this.region = '';
+    const initialState = {
+      list: {
+        modalTitle: this.inputLocationModalTitle_txt,
+        pageSize: this.resizeSvc.getPageWidth(),
+        screenSize: this.resizeSvc.getScreenSize(),
+        geojsonMap: '/assets/geojson/countries.json', //countries.geojson
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.countryModalRef = this.modalService.show(
+      InputMapModalComponent,
+      Object.assign(
+        { animated: false },
+        { class: 'inputLocationModal' },
+        { initialState },
+      ),
+    );
+    this.countryModalRef.content.event.subscribe((res) => {
+      this.country = res.state;
+      // console.log(res);
+      setTimeout(() => {
+        this.openInputRegionModal();
+      }, 50);
+    });
+  }
+
+  public openInputRegionModal() {
+    let ifOpenMap: Boolean = false;
+
+    if ('Czech Republic' === this.country) {
+      this.region_map = 'cz_kraje.json';
+      ifOpenMap = true;
+    }
+
+    if (!ifOpenMap) {
+      return;
+    }
+    const initialState = {
+      list: {
+        modalTitle: this.inputLocationModalTitle_txt,
+        pageSize: this.resizeSvc.getPageWidth(),
+        screenSize: this.resizeSvc.getScreenSize(),
+        geojsonMap: '/assets/geojson/' + this.region_map, //countries.geojson
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.regionModalRef = this.modalService.show(
+      InputMapModalComponent,
+      Object.assign(
+        { animated: false },
+        { class: 'inputLocationModal' },
+        { initialState },
+      ),
+    );
+    this.regionModalRef.content.event.subscribe((res) => {
+      this.region = res.state;
+      // console.log(res);
+    });
+  }
+
   copyReturnData(returnData) {
     this.inputCondition.errorLoad = null;
     this.activePage = returnData.activePage;
@@ -200,8 +285,10 @@ export class ModifyLocalityFormComponent implements OnInit {
   }
 
   setDataOnUploadSuccess() {
+    this.country = '';
+    this.region = '';
     this.submitted = false;
-    this.userForm.reset();
+    this.userForm.setValue({ name: '', description: '', priority: 1 });
     this.routerService.returnToPreviousPage(this.previousRoute);
   }
 }

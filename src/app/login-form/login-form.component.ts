@@ -219,7 +219,12 @@ export class LoginFormComponent implements OnInit {
           } else {
             let yourId = this.auth.getLogUserId();
             this.auth.saveActualUserId(yourId);
-            this.routeToUserLocalities();
+            this.allLocality = returnData.localities;
+            if (0 == this.allLocality.length) {
+              this.routerService.inputLocality();
+            } else {
+              this.routeToUserLocalities();
+            }
           }
         },
         (error) => {

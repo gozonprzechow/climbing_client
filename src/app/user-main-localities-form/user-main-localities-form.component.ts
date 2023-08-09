@@ -17,6 +17,7 @@ import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
+import { MathServices } from '../services/math.service';
 
 @Component({
   selector: 'app-user-main-localities-form',
@@ -29,6 +30,8 @@ export class UserMainLocalitiesFormComponent implements OnInit {
   localityCollections: any = [];
   confirmModalMessage: string;
   confirmModalTitle: string;
+  country: string;
+  region: string;
 
   modalRef: BsModalRef;
 
@@ -74,6 +77,7 @@ export class UserMainLocalitiesFormComponent implements OnInit {
     public imageService: ImageService,
     public mobileService: MobileService,
     public resizeSvc: ResizeService,
+    public mathServices: MathServices,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
@@ -118,36 +122,87 @@ export class UserMainLocalitiesFormComponent implements OnInit {
       }
 
       this.pagingButtons.setActualPage(params.page);
+      if (params.country && params.region) {
+        this.country = this.mathServices.hexToString(params.country);
+        this.region = this.mathServices.hexToString(params.region);
+        this.http
+          .get(
+            environment.urlAddress +
+              '/api/v1/locality/region/' +
+              this.country +
+              '/' +
+              this.region +
+              '/' +
+              this.pagingButtons.getActualPage() +
+              '/' +
+              postedBy,
+          )
+          .subscribe((data: any) => {
+            this.pagingButtons.setNumOfPage(data.numberOfPages);
+            this.buttonCollections = this.pagingButtons.createButtonsField();
+            this.activePage = data.activePage;
+            this.allLocality = data.localities;
+            this.localityCollections = data.localityCollections;
 
-      this.http
-        .get(
-          environment.urlAddress +
-            '/api/v1/locality/all/' +
-            this.pagingButtons.getActualPage() +
-            '/' +
-            postedBy,
-        )
-        .subscribe((data: any) => {
-          this.pagingButtons.setNumOfPage(data.numberOfPages);
-          this.buttonCollections = this.pagingButtons.createButtonsField();
-          this.activePage = data.activePage;
-          this.allLocality = data.localities;
-          this.localityCollections = data.localityCollections;
-
-          if (params.image && params.slide) {
-            let previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
-            let achatdbCollection = this.findById(this.localityCollections, params.image);
-            if (achatdbCollection === undefined) {
-              return;
+            if (params.image && params.slide) {
+              let previousUrl =
+                'localities/' +
+                params.page +
+                '/' +
+                this.country +
+                '/' +
+                this.region +
+                '/' +
+                params.idPostedBy;
+              let achatdbCollection = this.findById(
+                this.localityCollections,
+                params.image,
+              );
+              if (achatdbCollection === undefined) {
+                return;
+              }
+              this.openModalOnImage(
+                achatdbCollection,
+                params.slide,
+                previousUrl,
+                params.localityNum,
+              );
             }
-            this.openModalOnImage(
-              achatdbCollection,
-              params.slide,
-              previousUrl,
-              params.localityNum,
-            );
-          }
-        });
+          });
+      } else {
+        this.http
+          .get(
+            environment.urlAddress +
+              '/api/v1/locality/all/' +
+              this.pagingButtons.getActualPage() +
+              '/' +
+              postedBy,
+          )
+          .subscribe((data: any) => {
+            this.pagingButtons.setNumOfPage(data.numberOfPages);
+            this.buttonCollections = this.pagingButtons.createButtonsField();
+            this.activePage = data.activePage;
+            this.allLocality = data.localities;
+            this.localityCollections = data.localityCollections;
+
+            if (params.image && params.slide) {
+              let previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
+              let achatdbCollection = this.findById(
+                this.localityCollections,
+                params.image,
+              );
+              if (achatdbCollection === undefined) {
+                return;
+              }
+              this.openModalOnImage(
+                achatdbCollection,
+                params.slide,
+                previousUrl,
+                params.localityNum,
+              );
+            }
+          });
+      }
     });
   }
 

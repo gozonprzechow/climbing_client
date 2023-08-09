@@ -34,6 +34,9 @@ export class SuccesCreateAccountFormComponent implements OnInit {
       this.routerService.login(this.screen_size);
     } else {
       this.message = this.product.data.message;
+      setTimeout(() => {
+        this.routerService.login();
+      }, 2000);
     }
   }
 

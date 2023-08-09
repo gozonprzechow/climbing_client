@@ -209,6 +209,11 @@ export class MainNavbarMenuComponent implements OnInit {
     this.routerService.userLocalities(userId, 0);
   }
 
+  public routeToUserMap() {
+    let userId = this.auth.getActualUserId();
+    this.routerService.userMap(userId);
+  }
+
   public routeToUserLocality(localityName) {
     let userId = this.auth.getActualUserId();
     this.routerService.userLocality(localityName, userId, 0);
@@ -267,6 +272,15 @@ export class MainNavbarMenuComponent implements OnInit {
   }
 
   public ifDisplayLocality(): boolean {
+    if (null == this.auth.getActualUserId() || 'null' == this.auth.getActualUserId()) {
+      if (!this.auth.isLoggedIn()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public ifDisplayMap(): boolean {
     if (null == this.auth.getActualUserId() || 'null' == this.auth.getActualUserId()) {
       if (!this.auth.isLoggedIn()) {
         return false;

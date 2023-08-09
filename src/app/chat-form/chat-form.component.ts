@@ -21,6 +21,7 @@ import {
 } from '../services/pagingButtons.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
+import { MathServices } from '../services/math.service';
 
 @Component({
   selector: 'app-chat-form',
@@ -183,6 +184,7 @@ export class ChatFormComponent implements OnInit {
     public imageService: ImageService,
     public resizeSvc: ResizeService,
     public mobileService: MobileService,
+    public mathServices: MathServices,
   ) {
     this.alerts.message_alert = false;
     this.alerts.price_alert = false;
@@ -264,7 +266,7 @@ export class ChatFormComponent implements OnInit {
         this.recipient = null;
       } else {
         this.recipient.id = params.idRecipient;
-        this.recipient.name = params.nameRecipient;
+        this.recipient.name = this.mathServices.hexToString(params.nameRecipient);
         this.recipient_id = this.recipient.id;
         this.title = this.titleMain_txt + this.recipient.name;
       }
@@ -290,10 +292,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .get(
         environment.urlAddress +
-        '/api/v1/user_input/chat/' +
-        this.pagingButtons.getActualPage() +
-        '/' +
-        this.recipient_id,
+          '/api/v1/user_input/chat/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          this.recipient_id,
       )
       .subscribe(
         (returnData: any) => {
@@ -325,10 +327,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-        '/api/v1/user_input/chat/' +
-        this.pagingButtons.getActualPage() +
-        '/' +
-        this.recipient_id,
+          '/api/v1/user_input/chat/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          this.recipient_id,
         formData,
       )
       .subscribe(
@@ -357,10 +359,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .get(
         environment.urlAddress +
-        '/api/v1/user_input/priceChat/' +
-        this.pagingButtons.getActualPage() +
-        '/' +
-        this.recipient_id,
+          '/api/v1/user_input/priceChat/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          this.recipient_id,
       )
       .subscribe(
         (returnData: any) => {
@@ -392,10 +394,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-        '/api/v1/user_input/priceChat/' +
-        this.pagingButtons.getActualPage() +
-        '/' +
-        this.recipient_id,
+          '/api/v1/user_input/priceChat/' +
+          this.pagingButtons.getActualPage() +
+          '/' +
+          this.recipient_id,
         formData,
       )
       .subscribe(
@@ -449,7 +451,7 @@ export class ChatFormComponent implements OnInit {
     }
   }
 
-  public toggleDeleteMessage(message_id, num_in_array) { }
+  public toggleDeleteMessage(message_id, num_in_array) {}
 
   public isDeleteMessageActive(num_in_array) {
     return true;
@@ -471,10 +473,10 @@ export class ChatFormComponent implements OnInit {
     this.http
       .post<any>(
         environment.urlAddress +
-        '/api/v1/user_input/chatInputMessage/' +
-        userId +
-        '/' +
-        this.recipient_id,
+          '/api/v1/user_input/chatInputMessage/' +
+          userId +
+          '/' +
+          this.recipient_id,
         formData,
       )
       .subscribe((returnData: any) => {

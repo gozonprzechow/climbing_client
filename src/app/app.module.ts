@@ -25,6 +25,7 @@ import { MobileService } from './services/mobile.service';
 import { FileDragNDrop } from './services/file.drag.n.drop';
 import { InputMineralService } from './services/input.mineral.service';
 import { ShapeService } from './services/shape.service';
+import { MapService } from './services/map.service';
 
 import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -54,6 +55,7 @@ import { InputMapModalComponent } from './models/input-map-modal/input-map-modal
 import { AddOfferModalComponent } from './models/add-offer-modal/add-offer-modal.component';
 import { MainNavbarMenuComponent } from './models/main-navbar-menu/main-navbar-menu.component';
 import { ChatNavbarMenuComponent } from './models/chat-navbar-menu/chat-navbar-menu.component';
+import { MapNavbarMenuComponent } from './models/map-navbar-menu/map-navbar-menu.component';
 import { ImageModalComponent } from './models/image-modal/image-modal.component';
 import { TittleMain } from './models/customTittle';
 import { PagingButtonsComponent } from './models/paging-buttons/paging-buttons.component';
@@ -95,6 +97,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     ChatFormComponent,
     UserMapFormComponent,
     ChatNavbarMenuComponent,
+    MapNavbarMenuComponent,
     DropdownButtonInItemComponent,
     FileDragNDrop,
   ],
@@ -126,6 +129,7 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     MobileService,
     InputMineralService,
     ShapeService,
+    MapService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

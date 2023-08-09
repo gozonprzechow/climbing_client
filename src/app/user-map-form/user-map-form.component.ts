@@ -11,12 +11,11 @@ import {
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { Globals } from '../services/globals.services';
-import { ImageModalComponent } from '../models/image-modal/image-modal.component';
-import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { RouterServices } from '../services/router.services';
 import { ImageService } from '../services/image.service';
 import {
@@ -28,7 +27,9 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 import { ShapeService } from '../services/shape.service';
+import { MapService, LabelParam } from '../services/map.service';
 import * as L from 'leaflet';
+import { MathServices } from '../services/math.service';
 
 @Component({
   selector: 'app-user-map-form',
@@ -36,51 +37,16 @@ import * as L from 'leaflet';
   styleUrls: ['./user-map-form.component.css'],
 })
 export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
-  // @Output() map$: EventEmitter<Map> = new EventEmitter();
-  // @Output() zoom$: EventEmitter<number> = new EventEmitter();
-  // options: MapOptions;
-  // public map: Map;
-  // public zoom: number;
-  // geoJsonData: any;
-  // layersControl: Control.LayersObject;
   private map;
-  private states;
 
-  allLocality: any = [];
-  activePage: any = {};
-  localityCollections: any = [];
-  confirmModalMessage: string;
-  confirmModalTitle: string;
+  country: string = 'none';
+  region: string = 'none';
+  stateLayer: any = {};
+  is_country_map: boolean = false;
 
   modalRef: BsModalRef;
 
   buttonCollections: ButtonCollection[] = [];
-
-  titleMain_txt: string;
-  titleMainTranslation: TextTranslator = {
-    cz: 'Lokality uživatele',
-    en: 'User localities',
-  };
-  modifyLocality_txt: string;
-  modifyLocalityTranslation: TextTranslator = {
-    cz: 'Upravit lokalitu',
-    en: 'Modify locality',
-  };
-  deleteLocality_txt: string;
-  deleteLocalityTranslation: TextTranslator = {
-    cz: 'Smazat lokalitu',
-    en: 'Delete locality',
-  };
-  modalMessage_txt: string;
-  modalMessageTranslation: TextTranslator = {
-    cz: 'Chcete smazat tuto lokalitu a všechny její kolekce?',
-    en: 'Do you want delete this locality and all their collections?',
-  };
-  modalTitle_txt: string;
-  modalTitleTranslation: TextTranslator = {
-    cz: 'Smazat lokalitu',
-    en: 'Delete locality',
-  };
 
   constructor(
     public elementRef: ElementRef,
@@ -91,32 +57,16 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
     public auth: AuthenticationService,
     public globals: Globals,
     public router: Router,
+    private location: Location,
     public languageService: LanguageService,
     public modalService: BsModalService,
     public imageService: ImageService,
     public mobileService: MobileService,
     public resizeSvc: ResizeService,
     private shapeService: ShapeService,
-  ) {
-    this.titleMain_txt = this.languageService.getNativeLanguageText(
-      this.titleMainTranslation,
-    );
-    this.modifyLocality_txt = this.languageService.getNativeLanguageText(
-      this.modifyLocalityTranslation,
-    );
-    this.deleteLocality_txt = this.languageService.getNativeLanguageText(
-      this.deleteLocalityTranslation,
-    );
-    this.modalMessage_txt = this.languageService.getNativeLanguageText(
-      this.modalMessageTranslation,
-    );
-    this.modalTitle_txt = this.languageService.getNativeLanguageText(
-      this.modalTitleTranslation,
-    );
-
-    this.confirmModalMessage = this.modalMessage_txt;
-    this.confirmModalTitle = this.modalTitle_txt;
-  }
+    private map_service: MapService,
+    public mathServices: MathServices,
+  ) {}
 
   public subscriber: any;
 
@@ -126,32 +76,13 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    // this.options = {
-    //   layers: [
-    //     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //       opacity: 0.7,
-    //       maxZoom: 19,
-    //       minZoom: 2,
-    //       noWrap: true, //this is the crucial line!
-    //       bounds: [
-    //         [-90, -180],
-    //         [90, 180],
-    //       ],
-    //       detectRetina: true,
-    //       attribution:
-    //         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    //     }),
-    //   ],
-    //   zoom: 2,
-    //   center: latLng(0, 0),
-    // };
-    // this.http.get<any>('../../assets/geojson/countries.geojson').subscribe((data) => {
-    //   const geojsonLayer = geoJSON(data).addTo(this.map);
-    // });
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.resizeSvc.countImageWidth();
+  }
 
+  ngAfterViewInit(): void {
+    this.initMap();
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
       if (!params.idPostedBy) {
@@ -161,68 +92,48 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
         postedBy = params.idPostedBy;
         this.auth.saveActualUserId(postedBy);
       }
-
-      this.pagingButtons.setActualPage(params.page);
-
-      this.http
-        .get(
-          environment.urlAddress +
-            '/api/v1/locality/all/' +
-            this.pagingButtons.getActualPage() +
-            '/' +
-            postedBy,
-        )
-        .subscribe((data: any) => {
-          this.pagingButtons.setNumOfPage(data.numberOfPages);
-          this.buttonCollections = this.pagingButtons.createButtonsField();
-          this.activePage = data.activePage;
-          this.allLocality = data.localities;
-          this.localityCollections = data.localityCollections;
-
-          if (params.image && params.slide) {
-            let previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
-            let achatdbCollection = this.findById(this.localityCollections, params.image);
-            if (achatdbCollection === undefined) {
-              return;
-            }
-            this.openModalOnImage(
-              achatdbCollection,
-              params.slide,
-              previousUrl,
-              params.localityNum,
-            );
-          }
-        });
+      this.country = this.mathServices.hexToString(params.country);
+      if ('world' === this.country) {
+        this.shapeService
+          .getStateShapes('/assets/geojson/countries.json')
+          .subscribe((geojson_area) => {
+            this.httpGetCountryData();
+            this.map_service.updateGeojsonArea(geojson_area);
+            this.initStatesLayer();
+            this.is_country_map = false;
+          });
+      } else {
+        let region_geojson = this.map_service.getRegionGeojson(this.country);
+        if (region_geojson) {
+          this.map.removeLayer(this.stateLayer);
+          this.modifyUrl(this.country);
+          this.shapeService
+            .getStateShapes('/assets/geojson/' + region_geojson)
+            .subscribe((geojson_area) => {
+              this.httpGetRegionData(this.country);
+              this.map_service.updateGeojsonArea(geojson_area);
+              this.initRegionsLayer();
+              this.map_service.initRegionView(this.map);
+              this.is_country_map = true;
+            });
+        } else {
+          this.goBackToWorldMap();
+        }
+      }
     });
   }
 
-  ngAfterViewInit(): void {
-    this.initMap();
-    this.shapeService
-      .getStateShapes('/assets/geojson/countries.json')
-      .subscribe((states) => {
-        this.states = states;
-        this.initStatesLayer();
-      });
-  }
-
-  ngOnDestroy() {
-    // this.map.clearAllEventListeners;
-    // this.map.remove();
-  }
-
-  // onMapZoomEnd(e: ZoomAnimEvent) {
-  //   this.zoom = e.target.getZoom();
-  //   this.zoom$.emit(this.zoom);
-  // }
+  ngOnDestroy() {}
 
   private initMap(): void {
     this.map = L.map('map', {
       center: [50, 14.4],
       zoom: 4.4,
+      doubleClickZoom: false,
     });
 
     const tiles = L.tileLayer('', {
+      className: 'custom-class',
       opacity: 0.7,
       maxZoom: 19,
       minZoom: 2,
@@ -240,108 +151,131 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initStatesLayer() {
-    const stateLayer = L.geoJSON(this.states, {
-      style: this.getRegionStyle,
+    this.stateLayer = L.geoJSON(this.map_service.getGeojsonArea(), {
+      style: this.map_service.getInitialGeojsonAreaStyle(),
       onEachFeature: (feature, layer) =>
         layer.on({
-          dblclick: (e) => this.highlightFeature(e),
-          mouseover: (e) => this.showLabels(e),
-          mouseout: (e) => this.resetFeature(e),
+          dblclick: (e) => this.activateGeojsonCountry(e),
+          mouseover: (e) => this.showCountryLabels(e),
+          mouseout: (e) => this.hideCountryLabels(e),
         }),
     });
 
-    this.map.addLayer(stateLayer);
+    this.map.addLayer(this.stateLayer);
   }
 
-  private getRegionStyle(feature) {
-    if (feature.properties.name === 'Afghanistan') {
-      return {
-        weight: 5,
-        opacity: 1.0,
-        color: 'hsl(9, 88%, 2%, 1)',
-        fillOpacity: 1.0,
-        fillColor: 'hsla(9, 88%, 17%, 0.75)',
-      };
+  private activateGeojsonCountry(e) {
+    const layer = e.target;
+    this.country = layer.feature.properties.name;
+    let region_geojson = this.map_service.getRegionGeojson(this.country);
+    if (region_geojson) {
+      this.map.removeLayer(this.stateLayer);
+      this.modifyUrl(layer.feature.properties.name);
+      this.shapeService
+        .getStateShapes('/assets/geojson/' + region_geojson)
+        .subscribe((geojson_area) => {
+          this.httpGetRegionData(layer.feature.properties.name);
+          this.map_service.updateGeojsonArea(geojson_area);
+          this.initRegionsLayer();
+          this.map_service.initRegionView(this.map);
+          this.is_country_map = true;
+        });
     } else {
-      // Default style for other regions
-      return {
-        weight: 5,
-        opacity: 1.0,
-        color: 'hsl(9, 88%, 2%, 1)',
-        fillOpacity: 1.0,
-        fillColor: 'hsla(9, 88%, 17%, 0.4)', // Border width
-      };
+      if (0 < this.map_service.getLabelParam(layer).minerals) {
+        let userId = this.auth.getActualUserId();
+        this.region = 'none';
+        this.routerService.userLocalities(
+          userId,
+          0,
+          this.country,
+          this.region,
+        );
+      }
     }
   }
 
-  private getRegionStyleRuntime(layer) {
-    if (layer.feature.properties.name === 'Afghanistan') {
-      return {
-        weight: 5,
-        opacity: 1.0,
-        color: 'hsl(9, 88%, 2%, 1)',
-        fillOpacity: 1.0,
-        fillColor: 'hsla(9, 88%, 17%, 0.75)',
-      };
-    } else {
-      // Default style for other regions
-      return {
-        weight: 5,
-        opacity: 1.0,
-        color: 'hsl(9, 88%, 2%, 1)',
-        fillOpacity: 1.0,
-        fillColor: 'hsla(9, 88%, 17%, 0.4)', // Border width
-      };
-    }
+  private httpGetCountryData() {
+    this.http
+      .get(
+        environment.urlAddress +
+          '/api/v1/user_input/userMap/' +
+          this.auth.getActualUserId(),
+      )
+      .subscribe((data: any) => {
+        this.map_service.updateGeojsonAreaData(data.countries);
+        this.stateLayer.eachLayer((layer) => {
+          this.map_service.setGeojsonAreaStyle(layer);
+        });
+      });
   }
 
-  private highlightFeature(e) {
-    const layer = e.target;
-    // console.log(e.target.feature.properties.ADMIN);
-
-    layer.setStyle({
-      weight: 5,
-      opacity: 1.0,
-      color: '#DFA612',
-      fillOpacity: 1.0,
-      fillColor: '#FAE042',
-    });
+  private httpGetRegionData(country: string) {
+    this.http
+      .get(
+        environment.urlAddress +
+          '/api/v1/user_input/userRegionMap/' +
+          this.auth.getActualUserId() +
+          '/' +
+          country,
+      )
+      .subscribe((data: any) => {
+        this.map_service.updateGeojsonAreaData(data.countries);
+        this.stateLayer.eachLayer((layer) => {
+          this.map_service.setGeojsonAreaStyle(layer);
+        });
+      });
   }
 
-  private showLabels(e) {
+  private showCountryLabels(e) {
     const layer = e.target;
-    layer.bindTooltip(
-      e.target.feature.properties.name +
-        '<br>' +
-        'localities: ' +
-        e.target.feature.properties.localities +
-        '<br>' +
-        'minerals: ' +
-        e.target.feature.properties.minerals,
-      {
-        permanent: true,
-        offset: [0, 40],
-        sticky: true,
-        direction: 'center',
-        className: 'countryLabel',
-      },
-    );
-
-    layer.setStyle({
-      weight: 5,
-      opacity: 1.0,
-      color: 'hsl(9, 88%, 2%, 1)',
-      fillOpacity: 1.0,
-      fillColor: 'hsla(9, 88%, 17%, 0.65)',
-    });
+    this.map_service.setCountryLabel(layer);
+    this.map_service.setGeojsonAreaStyle(layer, true);
   }
 
-  private resetFeature(e) {
+  private hideCountryLabels(e) {
     const layer = e.target;
+    this.map_service.setGeojsonAreaStyle(layer);
     layer.unbindTooltip();
-    // console.log(e.target);
+  }
 
-    layer.setStyle(this.getRegionStyleRuntime(layer));
+  private initRegionsLayer() {
+    this.stateLayer = L.geoJSON(this.map_service.getGeojsonArea(), {
+      style: this.map_service.getInitialGeojsonAreaStyle(),
+      onEachFeature: (feature, layer) =>
+        layer.on({
+          dblclick: (e) => this.activateGeojsonRegion(e),
+          mouseover: (e) => this.showRegionLabels(e),
+          mouseout: (e) => this.hideRegionLabels(e),
+        }),
+    });
+
+    this.map.addLayer(this.stateLayer);
+  }
+
+  private activateGeojsonRegion(e) {
+    const layer = e.target;
+    this.region = layer.feature.properties.name;
+    if (0 < this.map_service.getLabelParam(layer).minerals) {
+      let userId = this.auth.getActualUserId();
+      this.routerService.userLocalities(
+        userId,
+        0,
+        this.country,
+        this.region,
+      );
+    }
+  }
+
+  private showRegionLabels(e) {
+    const layer = e.target;
+    this.map_service.setCountryLabel(layer);
+    this.map_service.setGeojsonAreaStyle(layer, true);
+  }
+
+  private hideRegionLabels(e) {
+    const layer = e.target;
+    this.map_service.setGeojsonAreaStyle(layer);
+    layer.unbindTooltip();
   }
 
   private findById(localityCollections, id) {
@@ -361,124 +295,23 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resizeSvc.countImageWidth();
   }
 
-  clickPageButton(page: number): void {
-    let postedBy = this.auth.getActualUserId();
-    if (!postedBy) {
-      postedBy = this.auth.getLogUserId();
-    }
-    this.routerService.userLocalities(postedBy, page);
+  private modifyUrl(country: string) {
+    country = this.mathServices.stringToHex(country);
+    let url: string = 'userMap/' + this.auth.getActualUserId() + '/' + country;
+    this.location.replaceState(url);
   }
 
-  openModal(achatdbCollection, numOflocalityCollection) {
-    let previousUrl;
-    this.subscriber = this.route.params.subscribe((params) => {
-      previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
-      const initialState = {
-        list: {
-          achatdbCollection: achatdbCollection,
-          previousUrl: previousUrl,
-          numOfItemCollection: numOflocalityCollection,
-        },
-      };
-
-      this.modalRef = this.modalService.show(
-        ImageModalComponent,
-        Object.assign(
-          { animated: false },
-          { class: 'mineralImageModal' },
-          { initialState },
-        ),
-      );
-    });
-  }
-
-  openModalOnImage(achatdbCollection, actualSlide, previousUrl, numOflocalityCollection) {
-    const initialState = {
-      list: {
-        achatdbCollection: achatdbCollection,
-        actualSlide: actualSlide,
-        previousUrl: previousUrl,
-        numOfItemCollection: numOflocalityCollection,
-      },
-    };
-
-    this.modalRef = this.modalService.show(
-      ImageModalComponent,
-      Object.assign(
-        { animated: false },
-        { class: 'mineralImageModal' },
-        { initialState },
-      ),
-    );
-  }
-
-  openConfirmModal(locality) {
-    const initialState = {
-      list: {
-        confirmModalMessage: this.confirmModalMessage,
-        confirmModalTitle: this.confirmModalTitle,
-        modalRef: BsModalRef,
-      },
-    };
-
-    this.modalRef = this.modalService.show(
-      ConfirmModalComponent,
-      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
-    );
-    this.modalRef.content.event.subscribe((res) => {
-      this.runDeleteLocality(locality);
-    });
-  }
-
-  runDeleteLocality(locality) {
-    let formData = new FormData();
-
-    formData.append('locality', JSON.stringify(locality));
-
-    let postedBy;
-    this.subscriber = this.route.params.subscribe((params) => {
-      if (!params.idPostedBy) {
-        postedBy = this.auth.getLogUserId();
-      } else {
-        postedBy = params.idPostedBy;
-      }
-
-      this.pagingButtons.setActualPageOnDeleteItem(
-        params.page,
-        this.localityCollections.length,
-      );
-
-      this.http
-        .post<any>(
-          environment.urlAddress +
-            '/api/v1/user_input/deleteLocality/' +
-            this.pagingButtons.getActualPage() +
-            '/' +
-            postedBy,
-          formData,
-        )
-        .subscribe((data: any) => {
-          this.pagingButtons.setNumOfPage(data.numberOfPages);
-          this.buttonCollections = this.pagingButtons.createButtonsField();
-          this.activePage = data.activePage;
-          this.allLocality = data.localities;
-          this.localityCollections = data.localityCollections;
-          this.routerService.userLocalities(postedBy, this.pagingButtons.getActualPage());
-        });
-    });
-  }
-
-  public getLocalityDropDownClass(): string {
-    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
-      return 'btn-secondary dropdown-toggle top-right top-right_mobile';
-    }
-    return 'btn-secondary dropdown-toggle top-right';
-  }
-
-  public getLocalityNameClass(): string {
-    if (SCREEN_SIZE.XS === this.resizeSvc.getScreenSize()) {
-      return 'localityName localityName_mobile';
-    }
-    return 'localityName';
+  public goBackToWorldMap(res?: any) {
+    this.modifyUrl('world');
+    this.map.removeLayer(this.stateLayer);
+    this.shapeService
+      .getStateShapes('/assets/geojson/countries.json')
+      .subscribe((geojson_area) => {
+        this.httpGetCountryData();
+        this.map_service.updateGeojsonArea(geojson_area);
+        this.initStatesLayer();
+        this.map_service.initCountryView(this.map);
+      });
+    this.is_country_map = false;
   }
 }

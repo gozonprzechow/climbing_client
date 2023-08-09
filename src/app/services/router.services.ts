@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResizeService, SCREEN_SIZE } from './resize.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { MathServices } from '../services/math.service';
 
 @Injectable()
 export class RouterServices {
@@ -10,6 +11,7 @@ export class RouterServices {
     public router: Router,
     public auth: AuthenticationService,
     private resizeSvc: ResizeService,
+    public mathServices: MathServices,
   ) {}
 
   public notLoginError(): void {
@@ -30,9 +32,15 @@ export class RouterServices {
     });
   }
 
-  public inputMineral(): void {
+  public inputMineral(locality?: string): void {
     let path = '/inputMineral';
-    this.router.navigate([path]);
+    this.router.navigate([path], {
+      state: {
+        data: {
+          locality: locality,
+        },
+      },
+    });
   }
 
   public createAccount(screen_size: SCREEN_SIZE = SCREEN_SIZE.XL): void {
@@ -52,15 +60,29 @@ export class RouterServices {
     this.router.navigate([path], { state: { data: { message: message } } });
   }
 
-  public userLocalities(userId: string, page: number): void {
-    let path = '/localities/' + page + '/' + userId;
+  public userLocalities(
+    userId: string,
+    page: number,
+    country?: string,
+    region?: string,
+  ): void {
+    console.log(country + region);
+    let path;
+    if (country && region) {
+      region = this.mathServices.stringToHex(region);
+      country = this.mathServices.stringToHex(country);
+      path = '/localities/' + page + '/' + country + '/' + region + '/' + userId;
+    } else {
+      path = '/localities/' + page + '/' + userId;
+    }
     this.auth.saveActualUserId(userId);
     this.router.navigate([path]);
   }
 
   public userLocality(localityName: string, userId: string, page: number): void {
     this.auth.saveActualUserId(userId);
-    let path = '/locality/' + localityName + '/' + page + '/' + userId;
+    localityName = this.mathServices.stringToHex(localityName);
+    let path = '/userlocality/' + localityName + '/' + page + '/' + userId;
     this.router.navigate([path]);
   }
 
@@ -70,8 +92,9 @@ export class RouterServices {
     page: number,
     image_id: string,
   ): void {
+    localityName = this.mathServices.stringToHex(localityName);
     let path =
-      '/locality/' + localityName + '/' + page + '/' + userId + '/' + image_id + '/0';
+      '/userlocality/' + localityName + '/' + page + '/' + userId + '/' + image_id + '/0';
 
     this.router.navigate([path]);
   }
@@ -83,8 +106,9 @@ export class RouterServices {
     image_id: string,
     sub_mineral: number,
   ): void {
+    localityName = this.mathServices.stringToHex(localityName);
     let path =
-      '/locality/' +
+      '/userlocality/' +
       localityName +
       '/' +
       page +
@@ -180,6 +204,7 @@ export class RouterServices {
     if (null == recipient) {
       path = '/chat/' + page + '/' + type;
     } else {
+      recipient.name = this.mathServices.stringToHex(recipient.name);
       path = '/chat/' + page + '/' + recipient.id + '/' + recipient.name + '/' + type;
     }
     this.router.navigate([path], {
@@ -195,8 +220,12 @@ export class RouterServices {
     window.location.href = 'https://sutrak.net';
   }
 
-  public userMap(): void {
-    let path = '/userMap';
+  public userMap(userId: string, country?: string): void {
+    if (!country) {
+      country = 'world';
+    }
+    country = this.mathServices.stringToHex(country);
+    let path = '/userMap/' + userId + '/' + country;
     this.router.navigate([path]);
   }
 }

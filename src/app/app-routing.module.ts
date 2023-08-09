@@ -87,19 +87,19 @@ const routes: Routes = [
     component: ChatFormComponent,
   },
   {
-    path: 'chat/:page/:idRecipient/:nameRecipient/:type',
+    path: 'chat/:page/:idRecipient/:nameRecipient/:type', // nameRecipient string to hex
     component: ChatFormComponent,
   },
   {
-    path: 'userMap',//:page/:idPostedBy/:place',
+    path: 'userMap/:idPostedBy/:country', // country string to hex
     component: UserMapFormComponent,
   },
   {
-    path: 'locality/:uid/:page/:idPostedBy',
+    path: 'userlocality/:uid/:page/:idPostedBy', // uid string to hex
     component: UserLocalityFormComponent,
   },
   {
-    path: 'locality/:uid/:page/:idPostedBy/:image/:slide',
+    path: 'userlocality/:uid/:page/:idPostedBy/:image/:slide', // uid string to hex
     component: UserLocalityFormComponent,
   },
   {
@@ -108,6 +108,14 @@ const routes: Routes = [
   },
   {
     path: 'localities/:page/:idPostedBy/:localityNum/:image/:slide',
+    component: UserMainLocalitiesFormComponent,
+  },
+  {
+    path: 'localities/:page/:country/:region/:idPostedBy', // country and region string to hex
+    component: UserMainLocalitiesFormComponent,
+  },
+  {
+    path: 'localities/:page/:country/:region/:idPostedBy/:localityNum/:image/:slide', // country and region string to hex
     component: UserMainLocalitiesFormComponent,
   },
   {

@@ -9,6 +9,7 @@ import { ImageModalComponent } from '../models/image-modal/image-modal.component
 import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { RouterServices } from '../services/router.services';
 import { ImageService } from '../services/image.service';
+import { MathServices } from '../services/math.service';
 import {
   ButtonCollection,
   PagingButtonsServices,
@@ -33,6 +34,7 @@ export class UserLocalityFormComponent implements OnInit {
   deleteCollection: any = {};
   confirmModalMessage: string;
   confirmModalTitle: string;
+  actual_locality_name: string = '';
 
   modalRef: BsModalRef;
 
@@ -88,10 +90,11 @@ export class UserLocalityFormComponent implements OnInit {
     public imageService: ImageService,
     public mobileService: MobileService,
     public resizeSvc: ResizeService,
+    public mathServices: MathServices,
   ) {
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
+    // this.router.routeReuseStrategy.shouldReuseRoute = function () {
+    //   return false;
+    // };
 
     this.toProfile_txt = this.languageService.getNativeLanguageText(
       this.toProfileTranslation,
@@ -128,6 +131,7 @@ export class UserLocalityFormComponent implements OnInit {
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
+      this.actual_locality_name = this.mathServices.hexToString(params.uid);
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
         this.auth.saveActualUserId(postedBy);
@@ -142,7 +146,7 @@ export class UserLocalityFormComponent implements OnInit {
         .get(
           environment.urlAddress +
             '/api/v1/locality/one/' +
-            params.uid +
+            this.actual_locality_name +
             '/' +
             this.pagingButtons.getActualPage() +
             '/' +
@@ -160,7 +164,7 @@ export class UserLocalityFormComponent implements OnInit {
 
           if (params.image && params.slide) {
             let previousUrl =
-              'locality/' + params.uid + '/' + params.page + '/' + params.idPostedBy;
+              'userlocality/' + params.uid + '/' + params.page + '/' + params.idPostedBy;
             let achatdbCollection = this.findById(this.achatdbCollections, params.image);
             if (achatdbCollection === undefined) {
               return;
@@ -199,7 +203,7 @@ export class UserLocalityFormComponent implements OnInit {
     let previousUrl;
     this.subscriber = this.route.params.subscribe((params) => {
       previousUrl =
-        'locality/' + params.uid + '/' + params.page + '/' + params.idPostedBy;
+        'userlocality/' + params.uid + '/' + params.page + '/' + params.idPostedBy;
       const initialState = {
         list: {
           achatdbCollection: achatdbCollection,
@@ -278,7 +282,7 @@ export class UserLocalityFormComponent implements OnInit {
         .post<any>(
           environment.urlAddress +
             '/api/v1/locality/one/' +
-            params.uid +
+            this.actual_locality_name +
             '/' +
             this.pagingButtons.getActualPage() +
             '/' +
@@ -293,7 +297,7 @@ export class UserLocalityFormComponent implements OnInit {
           this.allLocality = data.localities;
           this.achatdbCollections = data.achatdbCollections;
           this.routerService.userLocality(
-            params.uid,
+            this.actual_locality_name,
             postedBy,
             this.pagingButtons.getActualPage(),
           );
@@ -309,7 +313,7 @@ export class UserLocalityFormComponent implements OnInit {
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
-      formData.append('locality', JSON.stringify(params.uid));
+      formData.append('locality', JSON.stringify(this.actual_locality_name));
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
       } else {

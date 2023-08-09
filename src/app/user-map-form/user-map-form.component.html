@@ -1,118 +1,12 @@
-<!-- <div
-  class="map-container"
-  leaflet
-  [leafletOptions]="options"
-></div> -->
-
+<app-map-navbar-menu
+  [screen_size]="resizeSvc.getScreenSize()"
+  [is_country_map]="is_country_map"
+  [country]="this.country"
+  [region]="this.region"
+  (event)="goBackToWorldMap($event)"
+></app-map-navbar-menu>
 <div class="map-container">
   <div class="map-frame">
     <div id="map"></div>
   </div>
 </div>
-
-<!-- <app-main-navbar-menu
-  [allLocality]="allLocality"
-  [activePage]="activePage"
-></app-main-navbar-menu>
-<custom-tittle-main
-  [tittleMain]="titleMain_txt"
-  [screen_size]="resizeSvc.getScreenSize()"
-  [margin_right]="resizeSvc.getPageMarginRight()"
-></custom-tittle-main>
-
-<div class="wrapper" center="block">
-  <div
-    [ngStyle]="{
-      width: resizeSvc.getPageWidth() + 'px'
-    }"
-  >
-    <div class="wrap">
-      <div
-        *ngFor="let localityCollection of localityCollections; let i = index"
-        class="localityWrapper"
-      >
-        <div class="localityDescription">
-          <a
-            class="{{ getLocalityNameClass() }}"
-            (click)="routeToUserLocality(localityCollection.locality.name)"
-          >
-            {{ localityCollection.locality.name }}</a
-          >
-          <div
-            *ngIf="auth.isItemYours(localityCollection.locality.postedBy)"
-            class="dropdownLocality"
-            ngbDropdown
-          >
-            <button
-              type="button"
-              id="dropdown01"
-              class="{{ getLocalityDropDownClass() }}"
-              ngbDropdownToggle
-            ></button>
-            <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown01">
-              <a
-                class="dropdown-item"
-                (click)="routerService.modifyLocality(localityCollection.locality)"
-              >
-                {{ modifyLocality_txt }}</a
-              >
-              <a
-                class="dropdown-item"
-                (click)="openConfirmModal(localityCollection.locality)"
-                >{{ deleteLocality_txt }}</a
-              >
-            </div>
-          </div>
-        </div>
-        <div>
-          <ul
-            class="list-inline"
-            [ngStyle]="{
-              'min-height': resizeSvc.getPictureHeight() + 'px'
-            }"
-          >
-            <li
-              *ngFor="
-                let achatdbCollection of localityCollection.achatdbCollections;
-                let j = index
-              "
-            >
-              <div *ngIf="achatdbCollection">
-                <img
-                  [attr.src]="
-                    imageService.getImage(
-                      achatdbCollection.imgName,
-                      achatdbCollection.imgPath
-                    )
-                  "
-                  class="imageLocality"
-                  [ngStyle]="{
-                    'margin-top': resizeSvc.getPictureMarginSize() + 'px',
-                    width: resizeSvc.getPictureWidth() + 'px',
-                    left:
-                      resizeSvc.getFirstImageOffset(
-                        localityCollection.achatdbCollections.length,
-                        j
-                      ) + 'px'
-                  }"
-                  (click)="openModal(achatdbCollection, j)"
-                />
-              </div>
-            </li>
-          </ul>
-          <hr
-            class="enderLine"
-            [ngStyle]="{
-              width: resizeSvc.getEndLinerWidth(3) + 'px'
-            }"
-          />
-        </div>
-      </div>
-      <app-paging-buttons
-        *ngIf="this.pagingButtons.ifAnyMorePage()"
-        [buttonCollections]="buttonCollections"
-        (clickPageButtonEvent)="clickPageButton($event)"
-      ></app-paging-buttons>
-    </div>
-  </div>
-</div> -->

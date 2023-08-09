@@ -1,5 +1,10 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+  UntypedFormControl,
+} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputMineral';
 import { AuthenticationService } from '../services/authentication.service';
@@ -30,6 +35,9 @@ export class InputMineralFormComponent implements OnInit {
   currency_array: string[];
   mainImage: any;
   shadow_upload_success: string;
+
+  product: any = {};
+  recommended_locality: string = '';
 
   imgSetStandardSrc: string;
   imgSetPrizeSrc: string;
@@ -155,10 +163,17 @@ export class InputMineralFormComponent implements OnInit {
     this.resetTitleImage();
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.resizeSvc.countImageWidth();
+    this.product = history.state;
+    if (this.product.data != null) {
+      this.recommended_locality = this.product.data.locality;
+    }
     this.userForm = this.formBuilder.group(
       {
         title: ['', [Validators.required, Validators.maxLength(50)]],
-        locality: [null, [Validators.required, Validators.maxLength(50)]],
+        locality: [
+          this.recommended_locality,
+          [Validators.required, Validators.maxLength(50)],
+        ],
         comment: ['', [Validators.maxLength(300)]],
         priority: [1, [Validators.maxLength(100), Validators.pattern('^[0-9]+$')]],
         date: [null],

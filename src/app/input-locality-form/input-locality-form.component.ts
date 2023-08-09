@@ -193,11 +193,13 @@ export class InputLocalityFormComponent implements OnInit {
 
             if (null == returnData.inputErrorMessage.uploadSuccess) {
             } else {
-              this.country = '';
-              this.region = '';
+              // this.country = '';
+              // this.region = '';
               this.submitted = false;
-              this.userForm.setValue({ name: '', description: '', priority: 1 });
-              console.log('sem tu');
+              // this.userForm.setValue({ name: '', description: '', priority: 1 });
+              setTimeout(() => {
+                this.routerService.inputMineral(this.userForm.get('name').value);
+              }, 1100);
             }
           },
           (error) => {

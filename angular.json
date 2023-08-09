@@ -13,8 +13,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            // "baseHref": "/g1/",
-            // "deployUrl": "/g1/",
+            "allowedCommonJsDependencies": [
+              "leaflet"
+            ],
+            "baseHref": "/g1",
             "outputPath": "dist/sutrak_net_angular",
             "index": "src/index.html",
             "main": "src/main.ts",

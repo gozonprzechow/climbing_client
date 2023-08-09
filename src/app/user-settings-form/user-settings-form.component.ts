@@ -168,6 +168,8 @@ export class UserSettingsFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.mathServices.stringToHex('čeh ost'));
+    console.log(this.mathServices.hexToString('10d06506802006f073074'));
     this.elementRef.nativeElement.ownerDocument.body.style.backgroundColor = '#242020';
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.userForm = this.formBuilder.group(

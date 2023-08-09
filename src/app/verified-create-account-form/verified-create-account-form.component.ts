@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
+import { RouterServices } from '../services/router.services';
 
 @Component({
   selector: 'app-verified-create-account-form',
@@ -28,6 +29,7 @@ export class VerifiedCreateAccountFormComponent implements OnInit {
     public http: HttpClient,
     public route: ActivatedRoute,
     public resizeSvc: ResizeService,
+    public routerService: RouterServices,
     public mobileService: MobileService,
   ) {
     this.tittleMain = 'Account was verified';
@@ -43,6 +45,11 @@ export class VerifiedCreateAccountFormComponent implements OnInit {
         .get(environment.urlAddress + '/api/v1/user_input/verify/' + params.uid)
         .subscribe((data: any) => {
           this.message = data.message;
+          if (data.message != null) {
+            setTimeout(() => {
+              this.routerService.login();
+            }, 2000);
+          }
         });
     });
   }

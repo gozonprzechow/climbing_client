@@ -122,15 +122,14 @@
           </div>
         </div>
 
-        <div class="chatImageBox">
+        <div *ngIf="ifDisplayMap()" class="chatImageBox">
           <div class="chatImageBoxRelative">
             <img
-              *ngIf="auth.isLoggedIn()"
               class="mapImage"
               [src]="imgMapSrc"
               (mouseover)="imgMapSrc = '../../../assets/skins/globus_button_hover.png'"
               (mouseout)="imgMapSrc = '../../../assets/skins/globus_button.png'"
-              (click)="routerService.userMap()"
+              (click)="routeToUserMap()"
               [ngClass]="{ mapButton: navbarOpen }"
             />
           </div>
