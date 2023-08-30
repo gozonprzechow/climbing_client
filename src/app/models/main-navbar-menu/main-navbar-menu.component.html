@@ -86,6 +86,7 @@
           >
         </li>
       </ul>
+
       <div ngbDropdown>
         <div *ngIf="ifDisplayAddFriend()" class="chatImageBox">
           <div class="chatImageBoxRelative">
@@ -102,10 +103,9 @@
           </div>
         </div>
 
-        <div class="chatImageBox">
+        <div *ngIf="auth.isLoggedIn()" class="chatImageBox">
           <div class="chatImageBoxRelative">
             <img
-              *ngIf="auth.isLoggedIn()"
               class="chatImage"
               [src]="imgChatSrc"
               (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
@@ -135,15 +135,31 @@
           </div>
         </div>
 
-        <img
-          *ngIf="auth.isLoggedIn()"
-          class="settingsImage dropdown-toggle"
-          ngbDropdownToggle
-          [src]="imgSrc"
-          (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
-          (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
-          [ngClass]="{ settingsButton: navbarOpen }"
-        />
+        <div *ngIf="ifDisplayMapFirstIcon()" class="chatImageBox">
+          <div class="chatImageBoxRelative">
+            <img
+              class="mapImage"
+              [src]="imgMapSrc"
+              (mouseover)="imgMapSrc = '../../../assets/skins/globus_button_hover.png'"
+              (mouseout)="imgMapSrc = '../../../assets/skins/globus_button.png'"
+              (click)="routeToUserMap()"
+              [ngClass]="{ mapButtonFirstIcon: navbarOpen }"
+            />
+          </div>
+        </div>
+
+        <div *ngIf="auth.isLoggedIn()" class="chatImageBox">
+          <div class="chatImageBoxRelative">
+            <img
+              class="settingsImage dropdown-toggle"
+              ngbDropdownToggle
+              [src]="imgSrc"
+              (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
+              (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
+              [ngClass]="{ settingsButton: navbarOpen }"
+            />
+          </div>
+        </div>
         <div
           *ngIf="auth.isLoggedIn()"
           ngbDropdownMenu

@@ -48,12 +48,19 @@
 .mapButton {
   margin-bottom: 9px;
   /* margin-top: 7px; */
+  /* margin-top: 7px; */
+}
+
+.mapButtonFirstIcon {
+  margin-bottom: 9px;
+  margin-top: 7px;
+  margin-left: 10px;
 }
 
 .settingsButtonDropdown {
   margin-left: 10px;
   margin-bottom: 9px;
-  margin-top: -7px;
+  /* margin-top: -7px; */
 }
 
 .containerNavbar {

@@ -281,10 +281,18 @@ export class MainNavbarMenuComponent implements OnInit {
   }
 
   public ifDisplayMap(): boolean {
+    if (!this.auth.isLoggedIn()) {
+      return false;
+    }
+    return true;
+  }
+
+  public ifDisplayMapFirstIcon(): boolean {
+    if (this.auth.isLoggedIn()) {
+      return false;
+    }
     if (null == this.auth.getActualUserId() || 'null' == this.auth.getActualUserId()) {
-      if (!this.auth.isLoggedIn()) {
-        return false;
-      }
+      return false;
     }
     return true;
   }

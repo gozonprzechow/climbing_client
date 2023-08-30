@@ -149,9 +149,9 @@ export class UserMainLocalitiesFormComponent implements OnInit {
                 'localities/' +
                 params.page +
                 '/' +
-                this.country +
+                params.country +
                 '/' +
-                this.region +
+                params.region +
                 '/' +
                 params.idPostedBy;
               let achatdbCollection = this.findById(
@@ -186,7 +186,20 @@ export class UserMainLocalitiesFormComponent implements OnInit {
             this.localityCollections = data.localityCollections;
 
             if (params.image && params.slide) {
-              let previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
+              let previousUrl;
+              if (params.country && params.region) {
+                previousUrl =
+                  'localities/' +
+                  params.page +
+                  '/' +
+                  params.country +
+                  '/' +
+                  params.region +
+                  '/' +
+                  params.idPostedBy;
+              } else {
+                previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
+              }
               let achatdbCollection = this.findById(
                 this.localityCollections,
                 params.image,
@@ -234,7 +247,19 @@ export class UserMainLocalitiesFormComponent implements OnInit {
   openModal(achatdbCollection, numOflocalityCollection) {
     let previousUrl;
     this.subscriber = this.route.params.subscribe((params) => {
-      previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
+      if (params.country && params.region) {
+        previousUrl =
+          'localities/' +
+          params.page +
+          '/' +
+          params.country +
+          '/' +
+          params.region +
+          '/' +
+          params.idPostedBy;
+      } else {
+        previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
+      }
       const initialState = {
         list: {
           achatdbCollection: achatdbCollection,

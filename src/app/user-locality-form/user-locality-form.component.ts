@@ -92,9 +92,9 @@ export class UserLocalityFormComponent implements OnInit {
     public resizeSvc: ResizeService,
     public mathServices: MathServices,
   ) {
-    // this.router.routeReuseStrategy.shouldReuseRoute = function () {
-    //   return false;
-    // };
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
 
     this.toProfile_txt = this.languageService.getNativeLanguageText(
       this.toProfileTranslation,
