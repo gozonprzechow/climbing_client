@@ -48,3 +48,7 @@
   opacity: 0.15;
   filter: alpha(opacity=0);
 }
+
+.leaflet-pane.leaflet-shadow-pane {
+  display: none;
+}

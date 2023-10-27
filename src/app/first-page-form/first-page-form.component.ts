@@ -23,13 +23,13 @@ export class FirstPageFormComponent implements OnInit {
   titleMain_txt: string;
   page_description_img: string = '../../../assets/image/achat.jpg';
   titleMainTranslation: TextTranslator = {
-    cz: 'Sbírky minerálů',
-    en: 'Mineral collections',
+    cz: 'Lezecké cesty',
+    en: 'Climbing routes',
   };
   pageDescription_txt: string;
   pageDescriptionTranslation: TextTranslator = {
-    cz: 'Zde si můžete založit sbírku minerálů, kde můžete své kameny vystavovat, nebo i dražit a prodávat.',
-    en: 'Here you can set up a collection of minerals where you can display your minerals or even auction and sell them.',
+    cz: 'Zde si můžete založit deníček s fotkami cest, ke kterým můžete přidružit i jejich lokalitu.',
+    en: 'Here you can set up a climbing diary with photos of routes with their locality.',
   };
   otherUsersCollections: any = [];
 

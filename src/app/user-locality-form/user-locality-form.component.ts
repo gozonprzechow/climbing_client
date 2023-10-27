@@ -50,30 +50,30 @@ export class UserLocalityFormComponent implements OnInit {
     cz: 'Odstranit z profilu',
     en: 'Remove from profile',
   };
-  modifyMineral_txt: string;
-  modifyMineralTranslation: TextTranslator = {
-    cz: 'Upravit minerál',
-    en: 'Modify mineral',
+  modifyRoute_txt: string;
+  modifyRouteTranslation: TextTranslator = {
+    cz: 'Upravit cestu',
+    en: 'Modify route',
   };
-  addSubMineral_txt: string;
-  addSubMineralTranslation: TextTranslator = {
-    cz: 'Přidat pod-minerál',
-    en: 'Add sub-mineral',
+  addPhoto_txt: string;
+  addPhotoTranslation: TextTranslator = {
+    cz: 'Přidat fotku',
+    en: 'Add photo',
   };
-  deleteMineral_txt: string;
-  deleteMineralTranslation: TextTranslator = {
-    cz: 'Smazat minerál',
-    en: 'Delete mineral',
+  deleteRoute_txt: string;
+  deleteRouteTranslation: TextTranslator = {
+    cz: 'Smazat cestu',
+    en: 'Delete route',
   };
   modalMessage_txt: string;
   modalMessageTranslation: TextTranslator = {
-    cz: 'Chcete smazat minerál s jeho pod-minerály?',
-    en: 'Do you want delete mineral with its sub-minerals?',
+    cz: 'Chcete smazat cestu?',
+    en: 'Do you want delete route?',
   };
   modalTitle_txt: string;
   modalTitleTranslation: TextTranslator = {
-    cz: 'Smazat minerál',
-    en: 'Delete mineral',
+    cz: 'Smazat route',
+    en: 'Delete route',
   };
 
   constructor(
@@ -102,14 +102,14 @@ export class UserLocalityFormComponent implements OnInit {
     this.removeFromProfile_txt = this.languageService.getNativeLanguageText(
       this.removeFromProfileTranslation,
     );
-    this.modifyMineral_txt = this.languageService.getNativeLanguageText(
-      this.modifyMineralTranslation,
+    this.modifyRoute_txt = this.languageService.getNativeLanguageText(
+      this.modifyRouteTranslation,
     );
-    this.addSubMineral_txt = this.languageService.getNativeLanguageText(
-      this.addSubMineralTranslation,
+    this.addPhoto_txt = this.languageService.getNativeLanguageText(
+      this.addPhotoTranslation,
     );
-    this.deleteMineral_txt = this.languageService.getNativeLanguageText(
-      this.deleteMineralTranslation,
+    this.deleteRoute_txt = this.languageService.getNativeLanguageText(
+      this.deleteRouteTranslation,
     );
     this.modalMessage_txt = this.languageService.getNativeLanguageText(
       this.modalMessageTranslation,

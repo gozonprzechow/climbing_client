@@ -1,9 +1,11 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { DatePipe } from '@angular/common';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
 import { InputCondition } from '../models/inputMineral';
 import { AuthenticationService } from '../services/authentication.service';
+import { ConfirmModalComponent } from '../models/confirm-modal/confirm-modal.component';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator } from '../services/language.service';
@@ -11,17 +13,18 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-mondify-mineral-form',
-  templateUrl: './mondify-mineral-form.component.html',
-  styleUrls: ['./mondify-mineral-form.component.css', '../models/mobile.css'],
-  providers: [DatePipe],
+  selector: 'app-mondify-photo-form',
+  templateUrl: './mondify-photo-form.component.html',
+  styleUrls: ['./mondify-photo-form.component.css', '../models/mobile.css'],
 })
-export class MondifyMineralFormComponent implements OnInit {
+export class MondifyPhotoFormComponent implements OnInit {
   submitted = false;
   userForm: UntypedFormGroup;
   serviceErrors: any = {};
   activePage: any = {};
   achatdbCollection: any = {};
+  actualSlide: any = {};
+  subMineralId: any = {};
   previousRoute: string;
   allLocality: any = [];
   serverServiceErrors: any = {};
@@ -31,48 +34,46 @@ export class MondifyMineralFormComponent implements OnInit {
 
   imgURL: any;
   product: any = {};
+  confirmModalMessage: string;
+  confirmModalTitle: string;
 
+  modalRef: BsModalRef;
   is_submit_in_progress: Boolean = false;
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: 'Upravit minerál',
-    en: 'Modify mineral',
-  };
-  title_txt: string;
-  titleTranslation: TextTranslator = {
-    cz: 'Popisek',
-    en: 'Title',
-  };
-  locality_txt: string;
-  localityTranslation: TextTranslator = {
-    cz: 'Lokalita',
-    en: 'Locality',
+    cz: 'Upravit fotku',
+    en: 'Modify photo',
   };
   comment_txt: string;
   commentTranslation: TextTranslator = {
     cz: 'Komentář',
     en: 'Comment',
   };
-  priority_txt: string;
-  priorityTranslation: TextTranslator = {
-    cz: 'Priorita <0, 1000>',
-    en: 'Priority <0, 1000>',
-  };
-  date_txt: string;
-  dateTranslation: TextTranslator = {
-    cz: 'Datum',
-    en: 'Date',
-  };
   chooseImage_txt: string;
   chooseImageTranslation: TextTranslator = {
-    cz: 'Změnit obrázek',
-    en: 'Change image',
+    cz: 'Vybrat obrázek',
+    en: 'Choose image',
   };
   store_txt: string;
   storeTranslation: TextTranslator = {
     cz: 'Uložit',
     en: 'Store',
+  };
+  delete_txt: string;
+  deleteTranslation: TextTranslator = {
+    cz: 'Smazat fotku',
+    en: 'Delete photo',
+  };
+  modalMessage_txt: string;
+  modalMessageTranslation: TextTranslator = {
+    cz: 'Chcete smazat tuto fotku?',
+    en: 'Do you want delete this photo?',
+  };
+  modalTitle_txt: string;
+  modalTitleTranslation: TextTranslator = {
+    cz: 'Smazat fotku',
+    en: 'Delete photo',
   };
   submitInProgress_txt: string;
   submitInProgressTranslation: TextTranslator = {
@@ -84,34 +85,36 @@ export class MondifyMineralFormComponent implements OnInit {
     public elementRef: ElementRef,
     public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
-    public auth: AuthenticationService,
+    public modalService: BsModalService,
     public routerService: RouterServices,
     public languageService: LanguageService,
-    public datePipe: DatePipe,
+    public auth: AuthenticationService,
     public resizeSvc: ResizeService,
     public mobileService: MobileService,
   ) {
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
     );
-    this.title_txt = this.languageService.getNativeLanguageText(this.titleTranslation);
-    this.locality_txt = this.languageService.getNativeLanguageText(
-      this.localityTranslation,
-    );
     this.comment_txt = this.languageService.getNativeLanguageText(
       this.commentTranslation,
     );
-    this.priority_txt = this.languageService.getNativeLanguageText(
-      this.priorityTranslation,
-    );
-    this.date_txt = this.languageService.getNativeLanguageText(this.dateTranslation);
     this.chooseImage_txt = this.languageService.getNativeLanguageText(
       this.chooseImageTranslation,
     );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
+    this.delete_txt = this.languageService.getNativeLanguageText(this.deleteTranslation);
+    this.modalMessage_txt = this.languageService.getNativeLanguageText(
+      this.modalMessageTranslation,
+    );
+    this.modalTitle_txt = this.languageService.getNativeLanguageText(
+      this.modalTitleTranslation,
+    );
     this.submitInProgress_txt = this.languageService.getNativeLanguageText(
       this.submitInProgressTranslation,
     );
+
+    this.confirmModalMessage = this.modalMessage_txt;
+    this.confirmModalTitle = this.modalTitle_txt;
   }
 
   ngOnInit() {
@@ -121,66 +124,64 @@ export class MondifyMineralFormComponent implements OnInit {
 
     this.product = history.state;
     if (this.product.data == null) {
-      this.routerService.inputMineral();
+      this.routerService.inputRoute();
     } else {
       this.achatdbCollection = this.product.data.achatdbCollection;
+      this.actualSlide = this.product.data.actualSlide;
       this.previousRoute = this.product.data.previousRoute;
+
+      this.subMineralId = this.achatdbCollection.achatImages[this.actualSlide]._id;
     }
 
-    this.achatdbCollection.date = this.datePipe.transform(
-      this.achatdbCollection.date,
-      'yyyy-MM-dd',
-    );
     this.imgURL = this.getImageLarge(
-      this.achatdbCollection.imgName,
+      this.achatdbCollection.achatImages[this.actualSlide].imgName,
       this.achatdbCollection.imgPath,
     );
 
     this.userForm = this.formBuilder.group(
       {
-        title: [
-          this.achatdbCollection.title,
-          [Validators.required, Validators.maxLength(50)],
+        comment: [
+          this.achatdbCollection.achatImages[this.actualSlide].comment,
+          [Validators.maxLength(300)],
         ],
-        locality: [
-          this.achatdbCollection.locality,
-          [Validators.required, Validators.maxLength(50)],
-        ],
-        comment: [this.achatdbCollection.comment, [Validators.maxLength(300)]],
-        priority: [
-          this.achatdbCollection.priority,
-          [Validators.maxLength(100), Validators.pattern('^[0-9]+$')],
-        ],
-        date: [this.achatdbCollection.date],
         img: [null],
       },
       { updateOn: 'submit' },
     );
 
-    if (!this.userForm.get('priority').value) {
-      this.userForm.get('priority').setValue(1);
-    }
-
     let postedBy = this.auth.getLogUserId();
     this.http
-      .get(environment.urlAddress + '/api/v1/user_input/modifyMineral/' + postedBy)
+      .get(environment.urlAddress + '/api/v1/user_input/modifySubMineral/' + postedBy)
       .subscribe(
         (returnData: any) => {
           this.allLocality = returnData.localities;
           this.activePage = returnData.activePage;
         },
-        (error) => {
-          console.log(
-            'There was an error generating the proper GUID on the server',
-            error,
-          );
-        },
+        (error) => { },
       );
   }
 
   @HostListener('window:resize', [])
   onResize() {
     this.resizeSvc.refreshScreenSize(window.innerWidth);
+  }
+
+  openConfirmModal() {
+    const initialState = {
+      list: {
+        confirmModalMessage: this.confirmModalMessage,
+        confirmModalTitle: this.confirmModalTitle,
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.modalRef = this.modalService.show(
+      ConfirmModalComponent,
+      Object.assign({ animated: false }, { class: 'confirmModal' }, { initialState }),
+    );
+    this.modalRef.content.event.subscribe((res) => {
+      this.runDeleteSubImage();
+    });
   }
 
   isFieldValid(field: string) {
@@ -205,24 +206,8 @@ export class MondifyMineralFormComponent implements OnInit {
     this.titleImage = this.chooseImage_txt;
   }
 
-  invalidTitle() {
-    return this.submitted && this.userForm.controls.title.errors != null;
-  }
-
-  invalidLocality() {
-    return this.submitted && this.userForm.controls.locality.errors != null;
-  }
-
   invalidComment() {
     return this.submitted && this.userForm.controls.comment.errors != null;
-  }
-
-  invalidPriority() {
-    return this.submitted && this.userForm.controls.priority.errors != null;
-  }
-
-  invalidDate() {
-    return this.submitted && this.userForm.controls.date.errors != null;
   }
 
   invalidImg() {
@@ -230,21 +215,13 @@ export class MondifyMineralFormComponent implements OnInit {
   }
 
   copyServerErrors(returnData: any) {
-    this.serverServiceErrors.title = returnData.inputErrorMessage.title;
-    this.serverServiceErrors.locality = returnData.inputErrorMessage.locality;
     this.serverServiceErrors.comment = returnData.inputErrorMessage.comment;
-    this.serverServiceErrors.priority = returnData.inputErrorMessage.priority;
-    this.serverServiceErrors.date = returnData.inputErrorMessage.date;
     this.serverServiceErrors.img = returnData.inputErrorMessage.img;
     this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
   }
 
   cleanServerErrors() {
-    this.serverServiceErrors.title = null;
-    this.serverServiceErrors.locality = null;
     this.serverServiceErrors.comment = null;
-    this.serverServiceErrors.priority = null;
-    this.serverServiceErrors.date = null;
     this.serverServiceErrors.img = null;
     this.serverServiceErrors.uploadSuccess = null;
   }
@@ -272,6 +249,23 @@ export class MondifyMineralFormComponent implements OnInit {
     }
   }
 
+  runDeleteSubImage() {
+    let formData = new FormData();
+    formData.append('achatdbCollection', JSON.stringify(this.achatdbCollection));
+    formData.append('subMineralId', JSON.stringify(this.subMineralId));
+    this.http
+      .post<any>(environment.urlAddress + '/api/v1/user_input/deleteSubMineral', formData)
+      .subscribe(
+        (returnData: any) => {
+          this.routerService.returnToPreviousPage(this.previousRoute);
+        },
+        (error) => {
+          this.inputCondition.errorLoad = 'You are not log in, please log in first';
+          this.serverServiceErrors.uploadSuccess = null;
+        },
+      );
+  }
+
   onSubmit() {
     if (this.is_submit_in_progress) {
       return;
@@ -289,7 +283,7 @@ export class MondifyMineralFormComponent implements OnInit {
       let postedBy = this.auth.getLogUserId();
       this.http
         .post<any>(
-          environment.urlAddress + '/api/v1/user_input/modifyMineral/' + postedBy,
+          environment.urlAddress + '/api/v1/user_input/modifyPhoto/' + postedBy,
           formData,
         )
         .subscribe(
@@ -298,13 +292,14 @@ export class MondifyMineralFormComponent implements OnInit {
             this.copyReturnData(returnData);
             if (null == returnData.inputErrorMessage.uploadSuccess) {
             } else {
-              let image_route_info = returnData.image_route_info;
-              if (image_route_info) {
-                this.routerService.userLocalityDirectMineral(
-                  image_route_info.locality,
-                  image_route_info.postedBy,
-                  image_route_info.page_of_image,
-                  image_route_info.image_id,
+              let sub_image_route_info = returnData.sub_image_route_info;
+              if (sub_image_route_info) {
+                this.routerService.userLocalityDirectSecondaryPhoto(
+                  sub_image_route_info.locality,
+                  sub_image_route_info.postedBy,
+                  sub_image_route_info.page_of_image,
+                  sub_image_route_info.image_id,
+                  sub_image_route_info.sub_image_position,
                 );
               }
               // this.setDataOnUploadSuccess();
@@ -328,6 +323,7 @@ export class MondifyMineralFormComponent implements OnInit {
       formData.append(key, this.userForm.value[key]);
     });
     formData.append('achatdbCollection', JSON.stringify(this.achatdbCollection));
+    formData.append('subMineralId', JSON.stringify(this.subMineralId));
     return formData;
   }
 
@@ -344,7 +340,6 @@ export class MondifyMineralFormComponent implements OnInit {
     this.userForm.reset();
     this.resetTitleImage();
     this.imgURL = null;
-    // console.log(this.previousRoute);
     this.routerService.returnToPreviousPage(this.previousRoute);
   }
 }

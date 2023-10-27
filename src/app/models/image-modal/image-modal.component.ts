@@ -243,9 +243,9 @@ export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked 
     this.bsModalRef.hide();
 
     if (0 < this.actualSlide) {
-      this.routerService.modifySubMineral(achatdbCollection, this.actualSlide - 1);
+      this.routerService.modifyPhoto(achatdbCollection, this.actualSlide - 1);
     } else {
-      this.routerService.modifyMineral(achatdbCollection);
+      this.routerService.modifyRoute(achatdbCollection);
     }
   }
 

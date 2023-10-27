@@ -10,11 +10,11 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-input-sub-mineral-form',
-  templateUrl: './input-sub-mineral-form.component.html',
-  styleUrls: ['./input-sub-mineral-form.component.css', '../models/mobile.css'],
+  selector: 'app-input-photo-form',
+  templateUrl: './input-photo-form.component.html',
+  styleUrls: ['./input-photo-form.component.css', '../models/mobile.css'],
 })
-export class InputSubMineralFormComponent implements OnInit {
+export class InputPhotoFormComponent implements OnInit {
   submitted = false;
   userForm: UntypedFormGroup;
   serviceErrors: any = {};
@@ -33,8 +33,8 @@ export class InputSubMineralFormComponent implements OnInit {
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: 'Vložit pod-minerál',
-    en: 'Input sub-mineral',
+    cz: 'Vložit fotku',
+    en: 'Input photo',
   };
   comment_txt: string;
   commentTranslation: TextTranslator = {
@@ -123,7 +123,7 @@ export class InputSubMineralFormComponent implements OnInit {
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.product = history.state;
     if (this.product.data == null) {
-      this.routerService.inputMineral();
+      this.routerService.inputRoute();
     } else {
       this.mainImage = this.product.data.achatdbCollection._id;
     }

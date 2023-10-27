@@ -31,11 +31,11 @@ import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { InputMineralFormComponent } from './input-mineral-form/input-mineral-form.component';
+import { InputRouteFormComponent } from './input-route-form/input-route-form.component';
 import { UserMainLocalitiesFormComponent } from './user-main-localities-form/user-main-localities-form.component';
 import { InputLocalityFormComponent } from './input-locality-form/input-locality-form.component';
 import { UserLocalityFormComponent } from './user-locality-form/user-locality-form.component';
-import { InputSubMineralFormComponent } from './input-sub-mineral-form/input-sub-mineral-form.component';
+import { InputPhotoFormComponent } from './input-photo-form/input-photo-form.component';
 import { CreateAccountFormComponent } from './create-account-form/create-account-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { SuccesCreateAccountFormComponent } from './create-account-form/succes-create-account-form/succes-create-account-form.component';
@@ -52,6 +52,8 @@ import { UserMapFormComponent } from './user-map-form/user-map-form.component';
 
 import { ConfirmModalComponent } from './models/confirm-modal/confirm-modal.component';
 import { InputMapModalComponent } from './models/input-map-modal/input-map-modal.component';
+import { InputAreaModalComponent } from './models/input-area-modal/input-area-modal.component';
+import { InputSectorModalComponent } from './models/input-sector-modal/input-sector-modal.component';
 import { AddOfferModalComponent } from './models/add-offer-modal/add-offer-modal.component';
 import { MainNavbarMenuComponent } from './models/main-navbar-menu/main-navbar-menu.component';
 import { ChatNavbarMenuComponent } from './models/chat-navbar-menu/chat-navbar-menu.component';
@@ -62,18 +64,18 @@ import { PagingButtonsComponent } from './models/paging-buttons/paging-buttons.c
 import { DropdownButtonInItemComponent } from './models/dropdown-button-in-item/dropdown-button-in-item.component';
 
 import { ModifyLocalityFormComponent } from './modify-locality-form/modify-locality-form.component';
-import { MondifyMineralFormComponent } from './mondify-mineral-form/mondify-mineral-form.component';
-import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondify-sub-mineral-form.component';
+import { MondifyRouteFormComponent } from './mondify-route-form/mondify-route-form.component';
+import { MondifyPhotoFormComponent } from './mondify-photo-form/mondify-photo-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    InputMineralFormComponent,
+    InputRouteFormComponent,
     UserMainLocalitiesFormComponent,
     UserLocalityFormComponent,
     TittleMain,
     InputLocalityFormComponent,
-    InputSubMineralFormComponent,
+    InputPhotoFormComponent,
     CreateAccountFormComponent,
     LoginFormComponent,
     SuccesCreateAccountFormComponent,
@@ -85,10 +87,12 @@ import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondi
     OtherUsersFormComponent,
     ImageModalComponent,
     AdminHlavniFormComponent,
-    MondifyMineralFormComponent,
-    MondifySubMineralFormComponent,
+    MondifyRouteFormComponent,
+    MondifyPhotoFormComponent,
     ConfirmModalComponent,
     InputMapModalComponent,
+    InputAreaModalComponent,
+    InputSectorModalComponent,
     AddOfferModalComponent,
     ModifyLocalityFormComponent,
     FirstPageFormComponent,

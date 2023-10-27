@@ -4,10 +4,10 @@
 
 export const environment = {
   production: true,
-  // urlAddress: '',
-  // serverUrl: 'http://localhost:3000',
-  urlAddress: 'https://server.sutrak.net',
-  serverUrl: 'https://server.sutrak.net',
+  urlAddress: '',
+  serverUrl: 'http://localhost:3000',
+  // urlAddress: 'https://server.sutrak.net',
+  // serverUrl: 'https://server.sutrak.net',
 };
 
 /*

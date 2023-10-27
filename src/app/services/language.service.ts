@@ -17,14 +17,14 @@ export class LanguageService {
     getNativeLanguageText(textTranslator: TextTranslator): string {
         let languageIdentifier = this.getUsersLocale("en").slice(0, 2);
         let translateText;
-        translateText = textTranslator.cz;
-       /* if ("cs" === languageIdentifier) {
+        // translateText = textTranslator.cz;
+        if ("cs" === languageIdentifier) {
             translateText = textTranslator.cz;
         } else if ("en" === languageIdentifier) {
             translateText = textTranslator.en;
         } else {
             translateText = textTranslator.en;
-        }*/
+        }
         return translateText;
     }
 

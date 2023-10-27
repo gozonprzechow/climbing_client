@@ -198,7 +198,7 @@ export class InputLocalityFormComponent implements OnInit {
               this.submitted = false;
               // this.userForm.setValue({ name: '', description: '', priority: 1 });
               setTimeout(() => {
-                this.routerService.inputMineral(this.userForm.get('name').value);
+                this.routerService.inputRoute(this.userForm.get('name').value);
               }, 1100);
             }
           },

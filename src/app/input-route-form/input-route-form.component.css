@@ -166,3 +166,23 @@ label.image:hover {
   background-color: rgb(179, 96, 96) !important;
   color: rgb(187, 41, 5) !important;
 }
+
+.imgAdd {
+  float: right;
+  width: 30px;
+  height: 28px;
+  padding: 0px 0;
+  border: 1px solid #28a745 !important;
+  text-align: center;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+  font-size: 24px;
+  /* top: 8px; */
+  right: 16px;
+  margin-bottom: 3px;
+}
+
+.blabla {
+  float: right;
+}

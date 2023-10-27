@@ -32,8 +32,8 @@ export class RouterServices {
     });
   }
 
-  public inputMineral(locality?: string): void {
-    let path = '/inputMineral';
+  public inputRoute(locality?: string): void {
+    let path = '/inputRoute';
     this.router.navigate([path], {
       state: {
         data: {
@@ -86,7 +86,7 @@ export class RouterServices {
     this.router.navigate([path]);
   }
 
-  public userLocalityDirectMineral(
+  public userLocalityDirectRoute(
     localityName: string,
     userId: string,
     page: number,
@@ -99,12 +99,12 @@ export class RouterServices {
     this.router.navigate([path]);
   }
 
-  public userLocalityDirectSubMineral(
+  public userLocalityDirectSecondaryPhoto(
     localityName: string,
     userId: string,
     page: number,
     image_id: string,
-    sub_mineral: number,
+    photo_number: number,
   ): void {
     localityName = this.mathServices.stringToHex(localityName);
     let path =
@@ -117,13 +117,13 @@ export class RouterServices {
       '/' +
       image_id +
       '/' +
-      sub_mineral;
+      photo_number;
 
     this.router.navigate([path]);
   }
 
-  public addSubMineral(achatdbCollection): void {
-    let path = '/inputSub-mineral';
+  public addPhoto(achatdbCollection): void {
+    let path = '/inputPhoto';
     this.router.navigate([path], {
       state: {
         data: {
@@ -145,8 +145,8 @@ export class RouterServices {
     });
   }
 
-  public modifySubMineral(achatdbCollection, actualSlide: number): void {
-    let path = '/modifySub-mineral';
+  public modifyPhoto(achatdbCollection, actualSlide: number): void {
+    let path = '/modifyPhoto';
     this.router.navigate([path], {
       state: {
         data: {
@@ -158,8 +158,8 @@ export class RouterServices {
     });
   }
 
-  public modifyMineral(achatdbCollection): void {
-    let path = '/modifyMineral';
+  public modifyRoute(achatdbCollection): void {
+    let path = '/modifyRoute';
     this.router.navigate([path], {
       state: {
         data: {
@@ -217,7 +217,7 @@ export class RouterServices {
   }
 
   public home(): void {
-    window.location.href = 'https://sutrak.net';
+    window.location.href = '/';
   }
 
   public userMap(userId: string, country?: string): void {

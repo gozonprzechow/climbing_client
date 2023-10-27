@@ -14,13 +14,16 @@ import { LanguageService, TextTranslator, Country } from '../services/language.s
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 import { InputMineralService, ImageInfo } from '../services/input.mineral.service';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { InputAreaModalComponent } from '../models/input-area-modal/input-area-modal.component';
+import { InputSectorModalComponent } from '../models/input-sector-modal/input-sector-modal.component';
 
 @Component({
-  selector: 'app-input-mineral-form',
-  templateUrl: './input-mineral-form.component.html',
-  styleUrls: ['./input-mineral-form.component.css', '../models/mobile.css'],
+  selector: 'app-input-route-form',
+  templateUrl: './input-route-form.component.html',
+  styleUrls: ['./input-route-form.component.css', '../models/mobile.css'],
 })
-export class InputMineralFormComponent implements OnInit {
+export class InputRouteFormComponent implements OnInit {
   submitted = false;
   userForm: UntypedFormGroup;
   serviceErrors: any = {};
@@ -44,6 +47,12 @@ export class InputMineralFormComponent implements OnInit {
   imgSetAuctionSrc: string;
   input_status: Number = 0;
 
+  imgAddArea: string;
+  imgAddSector: string;
+
+  areaModalRef: BsModalRef;
+  sectorModalRef: BsModalRef;
+
   is_submit_in_progress: boolean = false;
 
   selectedFiles: FileList;
@@ -53,18 +62,23 @@ export class InputMineralFormComponent implements OnInit {
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {
-    cz: 'Vložit minerál',
-    en: 'Input mineral',
+    cz: 'Vložit cestu',
+    en: 'Input route',
   };
   title_txt: string;
   titleTranslation: TextTranslator = {
     cz: 'Popisek',
     en: 'Title',
   };
-  locality_txt: string;
-  localityTranslation: TextTranslator = {
-    cz: 'Lokalita',
-    en: 'Locality',
+  area_txt: string;
+  areaTranslation: TextTranslator = {
+    cz: 'Oblast',
+    en: 'Area',
+  };
+  sector_txt: string;
+  sectorTranslation: TextTranslator = {
+    cz: 'Sektor',
+    en: 'Sector',
   };
   comment_txt: string;
   commentTranslation: TextTranslator = {
@@ -120,17 +134,23 @@ export class InputMineralFormComponent implements OnInit {
     public resizeSvc: ResizeService,
     public mobileService: MobileService,
     public input_mineral_service: InputMineralService,
+    public modalService: BsModalService,
   ) {
     this.imgSetStandardSrc = '../../../assets/skins/insert_standard_collection_hover.png';
     this.imgSetPrizeSrc = '../../../assets/skins/insert_prize_collection.png';
     this.imgSetAuctionSrc = '../../../assets/skins/insert_auction_collection.png';
+    this.imgAddArea = '../../../assets/skins/add_friend_button.png';
+    this.imgAddSector = '../../../assets/skins/add_friend_button.png';
 
     this.titleMain_txt = this.languageService.getNativeLanguageText(
       this.titleMainTranslation,
     );
     this.title_txt = this.languageService.getNativeLanguageText(this.titleTranslation);
-    this.locality_txt = this.languageService.getNativeLanguageText(
-      this.localityTranslation,
+    this.area_txt = this.languageService.getNativeLanguageText(
+      this.areaTranslation,
+    );
+    this.sector_txt = this.languageService.getNativeLanguageText(
+      this.sectorTranslation,
     );
     this.comment_txt = this.languageService.getNativeLanguageText(
       this.commentTranslation,
@@ -364,6 +384,54 @@ export class InputMineralFormComponent implements OnInit {
     }
   }
 
+  public openInputAreaModal() {
+    const initialState = {
+      list: {
+        pageSize: this.resizeSvc.getPageWidth(),
+        screenSize: this.resizeSvc.getScreenSize(),
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.areaModalRef = this.modalService.show(
+      InputAreaModalComponent,
+      Object.assign(
+        { animated: false },
+        { class: 'inputLocationModal' },
+        { initialState },
+      ),
+    );
+    this.areaModalRef.content.event.subscribe((res) => {
+      // console.log(res);
+      setTimeout(() => {
+      }, 50);
+    });
+  }
+
+  public openInputSectorModal() {
+    const initialState = {
+      list: {
+        pageSize: this.resizeSvc.getPageWidth(),
+        screenSize: this.resizeSvc.getScreenSize(),
+        modalRef: BsModalRef,
+      },
+    };
+
+    this.sectorModalRef = this.modalService.show(
+      InputSectorModalComponent,
+      Object.assign(
+        { animated: false },
+        { class: 'inputLocationModal' },
+        { initialState },
+      ),
+    );
+    this.sectorModalRef.content.event.subscribe((res) => {
+      // console.log(res);
+      setTimeout(() => {
+      }, 50);
+    });
+  }
+
   async onSubmit() {
     if (this.is_submit_in_progress) {
       return;
@@ -375,7 +443,7 @@ export class InputMineralFormComponent implements OnInit {
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
       this.is_submit_in_progress = false;
-      this.routerService.inputMineral();
+      this.routerService.inputRoute();
       return;
     } else {
       if (await this.postInputMineral()) {
@@ -385,7 +453,7 @@ export class InputMineralFormComponent implements OnInit {
           this.input_mineral_service.clearImageInfo();
           this.previews.length = 0;
           this.loading_in_progress = false;
-          this.routerService.userLocalityDirectMineral(
+          this.routerService.userLocalityDirectRoute(
             this.route_after_submit_information.locality,
             this.route_after_submit_information.postedBy,
             this.route_after_submit_information.page_of_image,

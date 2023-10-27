@@ -16,7 +16,7 @@
             "allowedCommonJsDependencies": [
               "leaflet"
             ],
-            "baseHref": "/g1",
+            "baseHref": "/",
             "outputPath": "dist/sutrak_net_angular",
             "index": "src/index.html",
             "main": "src/main.ts",

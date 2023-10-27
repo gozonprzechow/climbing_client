@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { InputMineralFormComponent } from './input-mineral-form/input-mineral-form.component';
-import { MondifyMineralFormComponent } from './mondify-mineral-form/mondify-mineral-form.component';
-import { InputSubMineralFormComponent } from './input-sub-mineral-form/input-sub-mineral-form.component';
-import { MondifySubMineralFormComponent } from './mondify-sub-mineral-form/mondify-sub-mineral-form.component';
+import { InputRouteFormComponent } from './input-route-form/input-route-form.component';
+import { MondifyRouteFormComponent } from './mondify-route-form/mondify-route-form.component';
+import { InputPhotoFormComponent } from './input-photo-form/input-photo-form.component';
+import { MondifyPhotoFormComponent } from './mondify-photo-form/mondify-photo-form.component';
 import { InputLocalityFormComponent } from './input-locality-form/input-locality-form.component';
 import { ModifyLocalityFormComponent } from './modify-locality-form/modify-locality-form.component';
 import { UserMainLocalitiesFormComponent } from './user-main-localities-form/user-main-localities-form.component';
@@ -55,20 +55,20 @@ const routes: Routes = [
     component: LoginFormComponent,
   },
   {
-    path: 'inputMineral',
-    component: InputMineralFormComponent,
+    path: 'inputRoute',
+    component: InputRouteFormComponent,
   },
   {
-    path: 'modifyMineral',
-    component: MondifyMineralFormComponent,
+    path: 'modifyRoute',
+    component: MondifyRouteFormComponent,
   },
   {
-    path: 'inputSub-mineral',
-    component: InputSubMineralFormComponent,
+    path: 'inputPhoto',
+    component: InputPhotoFormComponent,
   },
   {
-    path: 'modifySub-mineral',
-    component: MondifySubMineralFormComponent,
+    path: 'modifyPhoto',
+    component: MondifyPhotoFormComponent,
   },
   {
     path: 'inputLocality',

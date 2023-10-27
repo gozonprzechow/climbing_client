@@ -58,8 +58,8 @@ export class MainNavbarMenuComponent implements OnInit {
   };
   inputMineral_txt: string;
   inputMineralTranslation: TextTranslator = {
-    cz: 'Vložit minerál',
-    en: 'Input mineral',
+    cz: 'Vložit cestu',
+    en: 'Input route',
   };
   otherUsers_txt: string;
   otherUsersTranslation: TextTranslator = {
