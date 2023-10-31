@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
 import * as L from 'leaflet';
-import { ShapeService } from '../../services/shape.service';
 import { ResizeService, SCREEN_SIZE } from '../../services/resize.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { LanguageService, TextTranslator } from '../../services/language.service';
 import { InputCondition } from '../../models/inputLocality';
 import { MobileService } from '../../services/mobile.service';
+import { environment } from 'src/environments/environment';
+import { RouterServices } from '../../services/router.services';
 
 @Component({
   selector: 'app-input-area-modal',
@@ -73,7 +74,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
     public auth: AuthenticationService,
     public languageService: LanguageService,
     public resizeSvc: ResizeService,
-    private shapeService: ShapeService,
+    public routerService: RouterServices,
     public mobileService: MobileService,
   ) {
     this.imgSetLocation = '../../../assets/skins/globus_button.png';
@@ -163,6 +164,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
 
     tiles.addTo(this.map);
     let propagate_this = this;
+    
     this.map.on('click', function (e) {
       if (propagate_this.markers) {
         propagate_this.map.removeLayer(propagate_this.markers);
@@ -199,11 +201,6 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-  triggerConfirmEvent() {
-    this.bsModalRef.hide();
-    this.event.emit({ res: 200 });
-  }
-
   getModalBodyHeight() {
     let modal_body_height;
     if (SCREEN_SIZE.XS == this.list.screenSize) {
@@ -224,5 +221,54 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
+    if (this.is_submit_in_progress) {
+      return;
+    }
+    this.is_submit_in_progress = true;
+    let formData = new FormData();
+    this.submitted = true;
+
+    if (this.userForm.invalid == true) {
+      this.cleanServerErrors();
+      this.is_submit_in_progress = false;
+      this.inputCondition.successLoad = null;
+      return;
+    } else {
+      Object.keys(this.userForm.value).forEach((key) => {
+        formData.append(key, this.userForm.value[key]);
+      });
+      formData.append('lat', this.lat.toString());
+      formData.append('lng', this.lng.toString());
+
+      let postedBy = this.auth.getLogUserId();
+      this.http
+        .post<any>(
+          environment.urlAddress + '/api/v1/user_input/locality/' + postedBy,
+          formData,
+        )
+        .subscribe(
+          (returnData: any) => {
+            this.is_submit_in_progress = false;
+            this.inputCondition.errorLoad = null;
+            this.copyServerErrors(returnData);
+
+            if (null == returnData.inputErrorMessage.uploadSuccess) {
+            } else {
+              // this.country = '';
+              // this.region = '';
+              this.submitted = false;
+              // this.userForm.setValue({ name: '', description: '', priority: 1 });
+              setTimeout(() => {
+                this.bsModalRef.hide();
+                this.event.emit({ res: 200 });
+              }, 1100);
+            }
+          },
+          (error) => {
+            this.routerService.notLoginError();
+            this.serverServiceErrors.uploadSuccess = null;
+          },
+        );
+    }
   }
 }
