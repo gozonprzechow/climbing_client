@@ -26,6 +26,7 @@ import { FileDragNDrop } from './services/file.drag.n.drop';
 import { InputMineralService } from './services/input.mineral.service';
 import { ShapeService } from './services/shape.service';
 import { MapService } from './services/map.service';
+import { ClimbingDifficultyService } from './services/climbing.difficulty.service';
 
 import { ModalModule, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -134,6 +135,7 @@ import { MondifyPhotoFormComponent } from './mondify-photo-form/mondify-photo-fo
     InputMineralService,
     ShapeService,
     MapService,
+    ClimbingDifficultyService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

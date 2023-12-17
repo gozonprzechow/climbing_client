@@ -11,6 +11,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator, Country } from '../services/language.service';
+import { ClimbingDifficultyService } from '../services/climbing.difficulty.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 import { InputMineralService, ImageInfo } from '../services/input.mineral.service';
@@ -34,8 +35,8 @@ export class InputRouteFormComponent implements OnInit {
   inputCondition: InputCondition = new InputCondition();
   titleImage: string;
   input_price_text: string;
-  currency: string;
-  currency_array: string[];
+  difficulty: string;
+  difficulty_array: string[];
   mainImage: any;
   shadow_upload_success: string;
 
@@ -105,15 +106,10 @@ export class InputRouteFormComponent implements OnInit {
     cz: 'Uložit',
     en: 'Store',
   };
-  price_txt: string;
-  priceTranslation: TextTranslator = {
-    cz: 'Cena',
-    en: 'Price',
-  };
-  startingPrice_txt: string;
-  startingPriceTranslation: TextTranslator = {
-    cz: 'Počáteční cena',
-    en: 'Starting price',
+  difficulty_txt: string;
+  difficultyTranslation: TextTranslator = {
+    cz: 'Klasifikace',
+    en: 'Classification',
   };
 
   submitInProgress_txt: string;
@@ -129,6 +125,7 @@ export class InputRouteFormComponent implements OnInit {
     public formBuilder: UntypedFormBuilder,
     public http: HttpClient,
     public languageService: LanguageService,
+    public climbing_difficulty_service: ClimbingDifficultyService,
     public routerService: RouterServices,
     public auth: AuthenticationService,
     public resizeSvc: ResizeService,
@@ -146,12 +143,8 @@ export class InputRouteFormComponent implements OnInit {
       this.titleMainTranslation,
     );
     this.title_txt = this.languageService.getNativeLanguageText(this.titleTranslation);
-    this.area_txt = this.languageService.getNativeLanguageText(
-      this.areaTranslation,
-    );
-    this.sector_txt = this.languageService.getNativeLanguageText(
-      this.sectorTranslation,
-    );
+    this.area_txt = this.languageService.getNativeLanguageText(this.areaTranslation);
+    this.sector_txt = this.languageService.getNativeLanguageText(this.sectorTranslation);
     this.comment_txt = this.languageService.getNativeLanguageText(
       this.commentTranslation,
     );
@@ -163,16 +156,16 @@ export class InputRouteFormComponent implements OnInit {
       this.chooseImageTranslation,
     );
     this.store_txt = this.languageService.getNativeLanguageText(this.storeTranslation);
-    this.price_txt = this.languageService.getNativeLanguageText(this.priceTranslation);
-    this.startingPrice_txt = this.languageService.getNativeLanguageText(
-      this.startingPriceTranslation,
+    this.difficulty_txt = this.languageService.getNativeLanguageText(
+      this.difficultyTranslation,
     );
     this.submitInProgress_txt = this.languageService.getNativeLanguageText(
       this.submitInProgressTranslation,
     );
 
-    this.currency_array = this.languageService.getAllCurrency();
-    this.currency = this.languageService.getNativeCurrencyByLanguageText();
+    this.difficulty_array =
+      this.climbing_difficulty_service.getClassificationList('UIAA');
+    this.difficulty = '';
   }
 
   ngOnInit() {
@@ -205,13 +198,13 @@ export class InputRouteFormComponent implements OnInit {
             Validators.pattern('^[0-9]+$'),
           ],
         ],
-        currency: [this.currency, [Validators.required, Validators.maxLength(50)]],
+        difficulty: ['', [Validators.required, Validators.maxLength(50)]],
         img: [null],
       },
       { updateOn: 'submit' },
     );
     this.userForm.controls['price'].clearValidators();
-    this.userForm.controls['currency'].clearValidators();
+    this.userForm.controls['difficulty'].clearValidators();
 
     let postedBy = this.auth.getLogUserId();
     this.auth.saveActualUserId(postedBy);
@@ -241,33 +234,13 @@ export class InputRouteFormComponent implements OnInit {
     return this.userForm.controls.price as UntypedFormControl;
   }
 
-  activeStandardCollectionInput() {
+  activeLeadCollectionInput() {
     this.imgSetStandardSrc = '../../../assets/skins/insert_standard_collection_hover.png';
     this.imgSetPrizeSrc = '../../../assets/skins/insert_prize_collection.png';
     this.imgSetAuctionSrc = '../../../assets/skins/insert_auction_collection.png';
     this.userForm.controls['price'].clearValidators();
     this.userForm.get('price').updateValueAndValidity();
     this.input_status = 0;
-  }
-
-  activePrizeCollectionInput() {
-    this.imgSetStandardSrc = '../../../assets/skins/insert_standard_collection.png';
-    this.imgSetPrizeSrc = '../../../assets/skins/insert_prize_collection_hover.png';
-    this.imgSetAuctionSrc = '../../../assets/skins/insert_auction_collection.png';
-    this.input_price_text = this.price_txt;
-    this.userForm.controls['price'].setValidators(Validators.required);
-    this.userForm.get('price').updateValueAndValidity();
-    this.input_status = 1;
-  }
-
-  activeAuctionCollectionInput() {
-    this.imgSetStandardSrc = '../../../assets/skins/insert_standard_collection.png';
-    this.imgSetPrizeSrc = '../../../assets/skins/insert_prize_collection.png';
-    this.imgSetAuctionSrc = '../../../assets/skins/insert_auction_collection_hover.png';
-    this.input_price_text = this.startingPrice_txt;
-    this.userForm.controls['price'].setValidators(Validators.required);
-    this.userForm.get('price').updateValueAndValidity();
-    this.input_status = 2;
   }
 
   public ifShowPrice() {
@@ -403,8 +376,7 @@ export class InputRouteFormComponent implements OnInit {
     );
     this.areaModalRef.content.event.subscribe((res) => {
       // console.log(res);
-      setTimeout(() => {
-      }, 50);
+      setTimeout(() => {}, 50);
     });
   }
 
@@ -427,8 +399,7 @@ export class InputRouteFormComponent implements OnInit {
     );
     this.sectorModalRef.content.event.subscribe((res) => {
       // console.log(res);
-      setTimeout(() => {
-      }, 50);
+      setTimeout(() => {}, 50);
     });
   }
 
@@ -464,6 +435,20 @@ export class InputRouteFormComponent implements OnInit {
     }
   }
 
+  changeArea(name: string) {
+    // console.log('xx');
+    console.log(name);
+    for (let i = 0; i < this.allLocality.length; i++) {
+      if (name === this.allLocality[i].name) {
+        console.log('vv');
+        this.difficulty_array = this.climbing_difficulty_service.getClassificationList(
+          this.allLocality[i].classification_type,
+        );
+        console.log(this.allLocality[i]);
+      }
+    }
+  }
+
   private async postInputMineral(): Promise<boolean> {
     let input_main_mineral_success: boolean = true;
     if (this.input_mineral_service.getImagesInfo().length <= 0) {
@@ -485,7 +470,7 @@ export class InputRouteFormComponent implements OnInit {
     let formData = new FormData();
     if (0 == this.input_status) {
       this.userForm.value['price'] = 1;
-      this.userForm.value['currency'] = 0;
+      this.userForm.value['difficulty'] = '';
     }
     formData.append('title', this.userForm.value['title']);
     formData.append('locality', this.userForm.value['locality']);
@@ -493,7 +478,7 @@ export class InputRouteFormComponent implements OnInit {
     formData.append('priority', this.userForm.value['priority']);
     formData.append('date', this.userForm.value['date']);
     formData.append('price', this.userForm.value['price']);
-    formData.append('currency', this.userForm.value['currency']);
+    formData.append('difficulty', this.userForm.value['difficulty']);
     formData.append('img', main_image_info.file);
     formData.append('mainImage', '');
     formData.append('status', this.input_status.toString());

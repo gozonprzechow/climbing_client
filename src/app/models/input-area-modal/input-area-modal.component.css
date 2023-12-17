@@ -172,3 +172,7 @@
   color: white;
   cursor: default;
 }
+
+.classification_type {
+  max-width: 80px;
+}

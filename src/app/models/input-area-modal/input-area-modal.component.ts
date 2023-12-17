@@ -26,6 +26,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
   markers: any;
   imgSetLocation: string;
   public event: EventEmitter<any> = new EventEmitter();
+  readonly all_classification_types: string[] = ['UIAA', 'sasko', 'FRA', 'USA'];
 
   serviceErrors: any = {};
   serverServiceErrors: any = {};
@@ -36,6 +37,10 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
   is_map_active: boolean = false;
   is_confirm_active: boolean = false;
   i: number = 0;
+
+  name: string;
+  description: string;
+  priority: number = 1;
 
   lat: number;
   lng: number;
@@ -55,6 +60,12 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
     cz: 'Priorita <0, 1000>',
     en: 'Priority <0, 1000>',
   };
+
+  prefferedClassification_txt: string;
+  prefferedClassificationTranlation: TextTranslator = {
+    cz: 'Preferovaná klasifikace',
+    en: 'Preffered classification',
+  }
 
   store_txt: string;
   storeTranslation: TextTranslator = {
@@ -100,6 +111,10 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
     return this.submitted && this.userForm.controls.description.errors != null;
   }
 
+  public invalidClassificationType() {
+    return this.submitted && this.userForm.controls.classification_type.errors != null;
+  }
+
   public invalidPriority() {
     return this.submitted && this.userForm.controls.priority.errors != null;
   }
@@ -107,6 +122,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
   copyServerErrors(returnData: any) {
     this.serverServiceErrors.name = returnData.inputErrorMessage.name;
     this.serverServiceErrors.description = returnData.inputErrorMessage.description;
+    this.serverServiceErrors.classification_type = returnData.inputErrorMessage.classification_type;
     this.serverServiceErrors.errorMessage = returnData.inputErrorMessage.errorMessage;
     this.serverServiceErrors.uploadSuccess = returnData.inputErrorMessage.uploadSuccess;
   }
@@ -114,6 +130,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
   cleanServerErrors() {
     this.serverServiceErrors.name = null;
     this.serverServiceErrors.description = null;
+    this.serverServiceErrors.classification_type = null;
     this.serverServiceErrors.uploadSuccess = null;
     this.serverServiceErrors.errorMessage = null;
   }
@@ -124,6 +141,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
       {
         name: ['', [Validators.required, Validators.maxLength(50)]],
         description: [''],
+        classification_type: ['UIAA', [Validators.required, Validators.maxLength(50)]],
         priority: [1, [Validators.maxLength(100), Validators.pattern('^[0-9]+$')]],
       },
       { updateOn: 'submit' },
@@ -164,7 +182,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
 
     tiles.addTo(this.map);
     let propagate_this = this;
-    
+
     this.map.on('click', function (e) {
       if (propagate_this.markers) {
         propagate_this.map.removeLayer(propagate_this.markers);
@@ -189,12 +207,30 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
   confirmLocation() {
     this.is_confirm_active = false;
     this.is_map_active = false;
+    setTimeout(() => {
+      if (this.name) {
+        this.userForm.controls['name'].setValue(this.name);
+      }
+      if (this.description) {
+        this.userForm.controls['description'].setValue(this.description);
+      }
+      this.userForm.controls['priority'].setValue(this.priority.toString());
+    }, 100);
   }
 
   closeModal() {
     this.is_confirm_active = false;
     if (this.is_map_active) {
       this.is_map_active = !this.is_map_active;
+      setTimeout(() => {
+        if (this.name) {
+          this.userForm.controls['name'].setValue(this.name);
+        }
+        if (this.description) {
+          this.userForm.controls['description'].setValue(this.description);
+        }
+        this.userForm.controls['priority'].setValue(this.priority.toString());
+      }, 100);
     }
     else {
       this.bsModalRef.hide();
@@ -220,6 +256,18 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
     }
   }
 
+  changeName(event) {
+    this.name = event.target.value;
+  }
+
+  changeDescription(event) {
+    this.description = event.target.value;
+  }
+
+  changePriority(event) {
+    this.priority = event.target.value;
+  }
+
   onSubmit() {
     if (this.is_submit_in_progress) {
       return;
@@ -243,7 +291,7 @@ export class InputAreaModalComponent implements OnInit, AfterViewInit {
       let postedBy = this.auth.getLogUserId();
       this.http
         .post<any>(
-          environment.urlAddress + '/api/v1/user_input/locality/' + postedBy,
+          environment.urlAddress + '/api/v1/user_input/area/' + postedBy,
           formData,
         )
         .subscribe(

@@ -32,7 +32,7 @@ export class CreateAccountFormComponent implements OnInit {
   inputCondition: InputCondition = new InputCondition();
 
   is_submit_in_progress: Boolean = false;
-  create_account_message: string = "";
+  create_account_message: string = '';
 
   titleMain_txt: string;
   titleMainTranslation: TextTranslator = {

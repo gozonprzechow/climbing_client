@@ -9,33 +9,60 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body" [ngStyle]="{
+<div
+  class="modal-body"
+  [ngStyle]="{
     'min-height': getModalBodyHeight() + 'px'
-  }">
-  <div *ngIf="!is_map_active" class="{{ mobileService.getMainFormClass(resizeSvc.getScreenSize()) }}">
+  }"
+>
+  <div
+    *ngIf="!is_map_active"
+    class="{{ mobileService.getMainFormClass(resizeSvc.getScreenSize()) }}"
+  >
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [ngClass]="{ 'has-error': invalidName() }">
         <!-- First Name -->
         <div class="col-sm-12">
           <label for="name" class="control-label required">{{ name_txt }}</label>
-          <input type="text" formControlName="name" class="form-control" id="name" name="name"
-            placeholder="{{ name_txt }}" />
+          <input
+            (keyup)="changeName($event)"
+            type="text"
+            formControlName="name"
+            class="form-control"
+            id="name"
+            name="name"
+            placeholder="{{ name_txt }}"
+            ngModel
+          />
           <p *ngIf="invalidName()" id="name_error" class="help-block">
             {{ this.serviceErrors.name || 'Invalid name.' }}
           </p>
           <p class="help-block">{{ this.serverServiceErrors.name }}</p>
         </div>
       </div>
-      <img class="imgSetLocation" [src]="imgSetLocation"
+      <img
+        class="imgSetLocation"
+        [src]="imgSetLocation"
         (mouseover)="imgSetLocation = '../../../assets/skins/globus_button_hover.png'"
-        (mouseout)="imgSetLocation = '../../../assets/skins/globus_button.png'" (click)="triggerInputLocation()" />
-      <div class="location-text-container">Location: [{{this.lat}}][{{this.lng}}]</div>
+        (mouseout)="imgSetLocation = '../../../assets/skins/globus_button.png'"
+        (click)="triggerInputLocation()"
+      />
+      <div class="location-text-container">
+        Location: [{{ this.lat }}][{{ this.lng }}]
+      </div>
       <div class="form-group" [ngClass]="{ 'has-error': invalidDescription() }">
         <!-- Last Name -->
         <div class="col-sm-12">
           <label for="description" class="control-label">{{ description_txt }}</label>
-          <textarea type="text" formControlName="description" class="form-control inputDescriptionBox" id="description"
-            name="description" placeholder="{{ description_txt }}"></textarea>
+          <textarea
+            (keyup)="changeDescription($event)"
+            type="text"
+            formControlName="description"
+            class="form-control inputDescriptionBox"
+            id="description"
+            name="description"
+            placeholder="{{ description_txt }}"
+          ></textarea>
           <p *ngIf="invalidDescription()" id="description_error" class="help-block">
             {{ this.serviceErrors.description || 'Invalid description.' }}
           </p>
@@ -43,11 +70,42 @@
         </div>
       </div>
 
+      <div class="form-group" [ngClass]="{ 'has-error': invalidClassificationType() }">
+        <!-- First Name -->
+        <div class="col-sm-12">
+          <select
+            type="text"
+            formControlName="classification_type"
+            class="form-control classification_type"
+            id="classification_type"
+            name="classification_type"
+          >
+            <option
+              *ngFor="let classification_type of all_classification_types"
+              value="{{ classification_type }}"
+            >
+              {{ classification_type }}
+            </option>
+          </select>
+          <p *ngIf="invalidClassificationType()" id="locality_error" class="help-block">
+            {{ 'Invalid classification type.' }}
+          </p>
+          <p class="help-block">{{ this.serverServiceErrors.classification_type }}</p>
+        </div>
+      </div>
+
       <div class="form-group" [ngClass]="{ 'has-error': invalidPriority() }">
         <!-- Last Name -->
         <div class="col-sm-12">
           <label for="priority" class="control-label">{{ priority_txt }}</label>
-          <input type="number" formControlName="priority" class="form-control" id="priority" name="priority" />
+          <input
+            (keyup)="changePriority($event)"
+            type="number"
+            formControlName="priority"
+            class="form-control"
+            id="priority"
+            name="priority"
+          />
           <p *ngIf="invalidPriority()" id="priority_error" class="help-block">
             {{ 'Invalid priority.' }}
           </p>
@@ -88,5 +146,4 @@
     </div>
   </div>
 </div>
-<div class="modal-footer">
-</div>
+<div class="modal-footer"></div>

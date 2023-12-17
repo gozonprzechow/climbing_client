@@ -9,6 +9,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { LanguageService, TextTranslator } from '../../services/language.service';
 import { InputCondition } from '../../models/inputLocality';
 import { MobileService } from '../../services/mobile.service';
+import { environment } from 'src/environments/environment';
+import { RouterServices } from '../../services/router.services';
 
 @Component({
   selector: 'app-input-sector-modal',
@@ -37,6 +39,10 @@ export class InputSectorModalComponent implements OnInit, AfterViewInit {
   is_confirm_active: boolean = false;
   i: number = 0;
 
+  name: string;
+  area: string = "";
+  description: string;
+  priority: number = 1;
   lat: number;
   lng: number;
 
@@ -80,6 +86,7 @@ export class InputSectorModalComponent implements OnInit, AfterViewInit {
     public languageService: LanguageService,
     public resizeSvc: ResizeService,
     private shapeService: ShapeService,
+    public routerService: RouterServices,
     public mobileService: MobileService,
   ) {
     this.imgSetLocation = '../../../assets/skins/globus_button.png';
@@ -143,6 +150,18 @@ export class InputSectorModalComponent implements OnInit, AfterViewInit {
       },
       { updateOn: 'submit' },
     );
+    let postedBy = this.auth.getLogUserId();
+    this.auth.saveActualUserId(postedBy);
+    this.http
+      .get(environment.urlAddress + '/api/v1/user_input/sector/' + postedBy)
+      .subscribe(
+        (data: any) => {
+          this.allAreas = data.areas;
+        },
+        (error) => {
+          this.routerService.notLoginError();
+        },
+      );
   }
 
   @HostListener('window:resize', [])
@@ -203,12 +222,32 @@ export class InputSectorModalComponent implements OnInit, AfterViewInit {
   confirmLocation() {
     this.is_confirm_active = false;
     this.is_map_active = false;
+    setTimeout(() => {
+      if (this.name) {
+        this.userForm.controls['name'].setValue(this.name);
+      }
+      this.userForm.controls['area'].setValue(this.area);
+      if (this.description) {
+        this.userForm.controls['description'].setValue(this.description);
+      }
+      this.userForm.controls['priority'].setValue(this.priority.toString());
+    }, 100);
   }
 
   closeModal() {
     this.is_confirm_active = false;
     if (this.is_map_active) {
       this.is_map_active = !this.is_map_active;
+      setTimeout(() => {
+        if (this.name) {
+          this.userForm.controls['name'].setValue(this.name);
+        }
+        this.userForm.controls['area'].setValue(this.area);
+        if (this.description) {
+          this.userForm.controls['description'].setValue(this.description);
+        }
+        this.userForm.controls['priority'].setValue(this.priority.toString());
+      }, 100);
     }
     else {
       this.bsModalRef.hide();
@@ -239,6 +278,71 @@ export class InputSectorModalComponent implements OnInit, AfterViewInit {
     }
   }
 
+  changeName(event) {
+    this.name = event.target.value;
+  }
+
+  changeArea(event) {
+    this.area = event.target.value;
+  }
+
+  changeDescription(event) {
+    this.description = event.target.value;
+  }
+
+  changePriority(event) {
+    this.priority = event.target.value;
+  }
+
   onSubmit() {
+    if (this.is_submit_in_progress) {
+      return;
+    }
+    this.is_submit_in_progress = true;
+    let formData = new FormData();
+    this.submitted = true;
+
+    if (this.userForm.invalid == true) {
+      this.cleanServerErrors();
+      this.is_submit_in_progress = false;
+      this.inputCondition.successLoad = null;
+      return;
+    } else {
+      Object.keys(this.userForm.value).forEach((key) => {
+        formData.append(key, this.userForm.value[key]);
+      });
+      formData.append('lat', this.lat.toString());
+      formData.append('lng', this.lng.toString());
+
+      let postedBy = this.auth.getLogUserId();
+      this.http
+        .post<any>(
+          environment.urlAddress + '/api/v1/user_input/sector/' + postedBy,
+          formData,
+        )
+        .subscribe(
+          (returnData: any) => {
+            this.is_submit_in_progress = false;
+            this.inputCondition.errorLoad = null;
+            this.copyServerErrors(returnData);
+
+            if (null == returnData.inputErrorMessage.uploadSuccess) {
+            } else {
+              // this.country = '';
+              // this.region = '';
+              this.submitted = false;
+              // this.userForm.setValue({ name: '', description: '', priority: 1 });
+              setTimeout(() => {
+                this.bsModalRef.hide();
+                this.event.emit({ res: 200 });
+              }, 1100);
+            }
+          },
+          (error) => {
+            this.routerService.notLoginError();
+            this.serverServiceErrors.uploadSuccess = null;
+          },
+        );
+    }
   }
 }
