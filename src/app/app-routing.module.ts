@@ -95,11 +95,11 @@ const routes: Routes = [
     component: UserMapFormComponent,
   },
   {
-    path: 'userlocality/:uid/:page/:idPostedBy', // uid string to hex
+    path: 'userlocality/:area/:sector/:page/:idPostedBy', // area and sector string to hex
     component: UserLocalityFormComponent,
   },
   {
-    path: 'userlocality/:uid/:page/:idPostedBy/:image/:slide', // uid string to hex
+    path: 'userlocality/:area/:sector/:page/:idPostedBy/:image/:slide', // area and sector string to hex
     component: UserLocalityFormComponent,
   },
   {
@@ -111,11 +111,11 @@ const routes: Routes = [
     component: UserMainLocalitiesFormComponent,
   },
   {
-    path: 'localities/:page/:country/:region/:idPostedBy', // country and region string to hex
+    path: 'localities/:page/:area/:idPostedBy', // area string to hex
     component: UserMainLocalitiesFormComponent,
   },
   {
-    path: 'localities/:page/:country/:region/:idPostedBy/:localityNum/:image/:slide', // country and region string to hex
+    path: 'localities/:page/:area/:idPostedBy/:localityNum/:image/:slide', // area string to hex
     component: UserMainLocalitiesFormComponent,
   },
   {

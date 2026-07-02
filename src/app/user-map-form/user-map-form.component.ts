@@ -72,7 +72,7 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public routeToUserLocality(localityName) {
     let userId = this.auth.getActualUserId();
-    this.routerService.userLocality(localityName, userId, 0);
+    this.routerService.userLocality(localityName, 'none', userId, 0);
   }
 
   ngOnInit() {
@@ -184,12 +184,7 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
       if (0 < this.map_service.getLabelParam(layer).minerals) {
         let userId = this.auth.getActualUserId();
         this.region = 'none';
-        this.routerService.userLocalities(
-          userId,
-          0,
-          this.country,
-          this.region,
-        );
+        this.routerService.userLocalities(userId, 0, this.country);
       }
     }
   }
@@ -257,12 +252,7 @@ export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
     this.region = layer.feature.properties.name;
     if (0 < this.map_service.getLabelParam(layer).minerals) {
       let userId = this.auth.getActualUserId();
-      this.routerService.userLocalities(
-        userId,
-        0,
-        this.country,
-        this.region,
-      );
+      this.routerService.userLocalities(userId, 0, this.country);
     }
   }
 

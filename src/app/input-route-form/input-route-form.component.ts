@@ -11,7 +11,11 @@ import { AuthenticationService } from '../services/authentication.service';
 import { RouterServices } from '../services/router.services';
 import { environment } from 'src/environments/environment';
 import { LanguageService, TextTranslator, Country } from '../services/language.service';
-import { ClimbingDifficultyService } from '../services/climbing.difficulty.service';
+import {
+  ClimbingDifficultyService,
+  DifficultyConversion,
+  Difficulty,
+} from '../services/climbing.difficulty.service';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 import { InputMineralService, ImageInfo } from '../services/input.mineral.service';
@@ -30,18 +34,20 @@ export class InputRouteFormComponent implements OnInit {
   serviceErrors: any = {};
   activePage: any = {};
   allLocality: any = [];
+  allSectors: any = [];
   serverServiceErrors: any = {};
   successLoadCondition: string;
   inputCondition: InputCondition = new InputCondition();
   titleImage: string;
-  input_price_text: string;
-  difficulty: string;
+  difficulty: Difficulty;
+  actual_difficulty_type: string = 'UIAA';
   difficulty_array: string[];
+  points: number = 0;
+  style_array: string[];
   mainImage: any;
   shadow_upload_success: string;
 
   product: any = {};
-  recommended_locality: string = '';
 
   imgSetStandardSrc: string;
   imgSetPrizeSrc: string;
@@ -111,6 +117,11 @@ export class InputRouteFormComponent implements OnInit {
     cz: 'Klasifikace',
     en: 'Classification',
   };
+  style_txt: string;
+  styleTranslation: TextTranslator = {
+    cz: 'Styl',
+    en: 'Style',
+  };
 
   submitInProgress_txt: string;
   submitInProgressTranslation: TextTranslator = {
@@ -159,13 +170,15 @@ export class InputRouteFormComponent implements OnInit {
     this.difficulty_txt = this.languageService.getNativeLanguageText(
       this.difficultyTranslation,
     );
+    this.style_txt = this.languageService.getNativeLanguageText(this.styleTranslation);
     this.submitInProgress_txt = this.languageService.getNativeLanguageText(
       this.submitInProgressTranslation,
     );
 
     this.difficulty_array =
       this.climbing_difficulty_service.getClassificationList('UIAA');
-    this.difficulty = '';
+    this.style_array = this.climbing_difficulty_service.getStyleList();
+    this.actual_difficulty_type = 'UIAA';
   }
 
   ngOnInit() {
@@ -177,34 +190,21 @@ export class InputRouteFormComponent implements OnInit {
     this.resizeSvc.refreshScreenSize(window.innerWidth);
     this.resizeSvc.countImageWidth();
     this.product = history.state;
-    if (this.product.data != null) {
-      this.recommended_locality = this.product.data.locality;
-    }
     this.userForm = this.formBuilder.group(
       {
         title: ['', [Validators.required, Validators.maxLength(50)]],
-        locality: [
-          this.recommended_locality,
-          [Validators.required, Validators.maxLength(50)],
-        ],
+        area: ['', [Validators.required, Validators.maxLength(50)]],
+        sector: ['', [Validators.maxLength(50)]],
         comment: ['', [Validators.maxLength(300)]],
         priority: [1, [Validators.maxLength(100), Validators.pattern('^[0-9]+$')]],
         date: [null],
-        price: [
-          null,
-          [
-            Validators.required,
-            Validators.maxLength(100),
-            Validators.pattern('^[0-9]+$'),
-          ],
-        ],
         difficulty: ['', [Validators.required, Validators.maxLength(50)]],
+        style: ['', [Validators.required, Validators.maxLength(50)]],
         img: [null],
       },
       { updateOn: 'submit' },
     );
-    this.userForm.controls['price'].clearValidators();
-    this.userForm.controls['difficulty'].clearValidators();
+    // this.userForm.controls['difficulty'].clearValidators();
 
     let postedBy = this.auth.getLogUserId();
     this.auth.saveActualUserId(postedBy);
@@ -230,16 +230,10 @@ export class InputRouteFormComponent implements OnInit {
     this.resizeSvc.countImageWidth();
   }
 
-  get price(): UntypedFormControl {
-    return this.userForm.controls.price as UntypedFormControl;
-  }
-
   activeLeadCollectionInput() {
     this.imgSetStandardSrc = '../../../assets/skins/insert_standard_collection_hover.png';
     this.imgSetPrizeSrc = '../../../assets/skins/insert_prize_collection.png';
     this.imgSetAuctionSrc = '../../../assets/skins/insert_auction_collection.png';
-    this.userForm.controls['price'].clearValidators();
-    this.userForm.get('price').updateValueAndValidity();
     this.input_status = 0;
   }
 
@@ -269,12 +263,20 @@ export class InputRouteFormComponent implements OnInit {
     return this.submitted && this.userForm.controls.title.errors != null;
   }
 
-  invalidLocality() {
-    return this.submitted && this.userForm.controls.locality.errors != null;
+  invalidArea() {
+    return this.submitted && this.userForm.controls.area.errors != null;
   }
 
-  invalidPrice() {
-    return this.submitted && this.userForm.controls.price.errors != null;
+  invalidSector() {
+    return this.submitted && this.userForm.controls.sector.errors != null;
+  }
+
+  invalidDifficulty() {
+    return this.submitted && this.userForm.controls.difficulty.errors != null;
+  }
+
+  invalidStyle() {
+    return this.submitted && this.userForm.controls.style.errors != null;
   }
 
   invalidComment() {
@@ -296,6 +298,8 @@ export class InputRouteFormComponent implements OnInit {
   copyServerErrors(returnData: any) {
     this.serverServiceErrors.title = returnData.inputErrorMessage.title;
     this.serverServiceErrors.locality = returnData.inputErrorMessage.locality;
+    this.serverServiceErrors.difficulty = returnData.inputErrorMessage.difficulty;
+    this.serverServiceErrors.style = returnData.inputErrorMessage.style;
     this.serverServiceErrors.comment = returnData.inputErrorMessage.comment;
     this.serverServiceErrors.date = returnData.inputErrorMessage.date;
     this.serverServiceErrors.img = returnData.inputErrorMessage.img;
@@ -305,6 +309,8 @@ export class InputRouteFormComponent implements OnInit {
   cleanServerErrors() {
     this.serverServiceErrors.title = null;
     this.serverServiceErrors.locality = null;
+    this.serverServiceErrors.difficulty = null;
+    this.serverServiceErrors.style = null;
     this.serverServiceErrors.comment = null;
     this.serverServiceErrors.date = null;
     this.serverServiceErrors.img = null;
@@ -409,7 +415,18 @@ export class InputRouteFormComponent implements OnInit {
     }
     this.is_submit_in_progress = true;
     this.submitted = true;
+    let difficulty_conversion = this.climbing_difficulty_service.convertDifficulty(
+      this.userForm.value['difficulty'],
+      this.actual_difficulty_type,
+      this.userForm.value['style'],
+    );
 
+    if (!difficulty_conversion.success) {
+      this.inputCondition.errorLoad = 'Input difficulty are not correct';
+      return;
+    }
+    this.difficulty = difficulty_conversion.difficulty;
+    this.points = difficulty_conversion.points;
     if (this.userForm.invalid == true) {
       this.cleanServerErrors();
       this.inputCondition.successLoad = null;
@@ -436,15 +453,26 @@ export class InputRouteFormComponent implements OnInit {
   }
 
   changeArea(name: string) {
-    // console.log('xx');
-    console.log(name);
     for (let i = 0; i < this.allLocality.length; i++) {
       if (name === this.allLocality[i].name) {
-        console.log('vv');
+        this.actual_difficulty_type = this.allLocality[i].classification_type;
         this.difficulty_array = this.climbing_difficulty_service.getClassificationList(
           this.allLocality[i].classification_type,
         );
-        console.log(this.allLocality[i]);
+        this.userForm.controls['difficulty'].setValue(this.difficulty_array[0]);
+        let formData = new FormData();
+        formData.append('area', name);
+        this.http
+          .post<any>(
+            environment.urlAddress + '/api/v1/user_input/sectorsOfarea',
+            formData,
+          )
+          .subscribe(
+            (returnData: any) => {
+              this.allSectors = returnData.sectors;
+            },
+            (error) => {},
+          );
       }
     }
   }
@@ -469,16 +497,17 @@ export class InputRouteFormComponent implements OnInit {
     // console.log(main_image_info);
     let formData = new FormData();
     if (0 == this.input_status) {
-      this.userForm.value['price'] = 1;
       this.userForm.value['difficulty'] = '';
     }
     formData.append('title', this.userForm.value['title']);
-    formData.append('locality', this.userForm.value['locality']);
+    formData.append('area', this.userForm.value['area']);
+    formData.append('sector', this.userForm.value['sector']);
     formData.append('comment', this.userForm.value['comment']);
     formData.append('priority', this.userForm.value['priority']);
     formData.append('date', this.userForm.value['date']);
-    formData.append('price', this.userForm.value['price']);
-    formData.append('difficulty', this.userForm.value['difficulty']);
+    formData.append('difficulty', JSON.stringify(this.difficulty));
+    formData.append('style', this.userForm.value['style']);
+    formData.append('points', this.points.toString());
     formData.append('img', main_image_info.file);
     formData.append('mainImage', '');
     formData.append('status', this.input_status.toString());

@@ -88,7 +88,7 @@ export class MapNavbarMenuComponent implements OnInit {
 
   public routeGoInside() {
     let userId = this.auth.getActualUserId();
-    this.routerService.userLocalities(userId, 0, this.country, this.region);
+    this.routerService.userLocalities(userId, 0, this.country);
   }
 
   public isShowGoInside() {

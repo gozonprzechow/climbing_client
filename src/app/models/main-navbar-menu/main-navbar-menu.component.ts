@@ -204,9 +204,13 @@ export class MainNavbarMenuComponent implements OnInit {
     this.routerService.otherUsers(0);
   }
 
-  public routeToUserLocalities() {
+  public routeToUserLocalities(area?: string, sector_count?: number) {
     let userId = this.auth.getActualUserId();
-    this.routerService.userLocalities(userId, 0);
+    if (area) {
+      this.routerService.userLocalities(userId, 0, area, sector_count);
+    } else {
+      this.routerService.userLocalities(userId, 0, null);
+    }
   }
 
   public routeToUserMap() {
@@ -216,7 +220,7 @@ export class MainNavbarMenuComponent implements OnInit {
 
   public routeToUserLocality(localityName) {
     let userId = this.auth.getActualUserId();
-    this.routerService.userLocality(localityName, userId, 0);
+    this.routerService.userLocality(localityName, 'none', userId, 0);
   }
 
   public logOutHandler() {

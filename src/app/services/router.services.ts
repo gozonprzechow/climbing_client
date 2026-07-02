@@ -63,15 +63,17 @@ export class RouterServices {
   public userLocalities(
     userId: string,
     page: number,
-    country?: string,
-    region?: string,
+    area?: string,
+    number_of_sector?: number,
   ): void {
-    console.log(country + region);
     let path;
-    if (country && region) {
-      region = this.mathServices.stringToHex(region);
-      country = this.mathServices.stringToHex(country);
-      path = '/localities/' + page + '/' + country + '/' + region + '/' + userId;
+    if (0 >= number_of_sector && area) {
+      this.userLocality(area, 'none', userId, page);
+      return;
+    }
+    if (area) {
+      area = this.mathServices.stringToHex(area);
+      path = '/localities/' + page + '/' + area + '/' + userId;
     } else {
       path = '/localities/' + page + '/' + userId;
     }
@@ -79,10 +81,11 @@ export class RouterServices {
     this.router.navigate([path]);
   }
 
-  public userLocality(localityName: string, userId: string, page: number): void {
+  public userLocality(area: string, sector: string, userId: string, page: number): void {
     this.auth.saveActualUserId(userId);
-    localityName = this.mathServices.stringToHex(localityName);
-    let path = '/userlocality/' + localityName + '/' + page + '/' + userId;
+    area = this.mathServices.stringToHex(area);
+    sector = this.mathServices.stringToHex(sector);
+    let path = '/userlocality/' + area + '/' + sector + '/' + page + '/' + userId;
     this.router.navigate([path]);
   }
 

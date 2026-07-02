@@ -596,11 +596,6 @@ export class ChatFormComponent implements OnInit {
     this.showAddMessage = false;
   }
 
-  public routeToUserLocalities() {
-    let userId = this.auth.getActualUserId();
-    this.routerService.userLocalities(userId, 0);
-  }
-
   public routeToChatWithUsers(name, id) {
     let recipient: any = {};
     if (id == this.auth.getLogUserId()) {

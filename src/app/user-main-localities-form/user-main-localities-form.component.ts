@@ -30,8 +30,8 @@ export class UserMainLocalitiesFormComponent implements OnInit {
   localityCollections: any = [];
   confirmModalMessage: string;
   confirmModalTitle: string;
-  country: string;
-  region: string;
+  area: string;
+  sector: string;
 
   modalRef: BsModalRef;
 
@@ -101,9 +101,13 @@ export class UserMainLocalitiesFormComponent implements OnInit {
 
   public subscriber: any;
 
-  public routeToUserLocality(localityName) {
+  public routeToUserLocality(locality: any) {
     let userId = this.auth.getActualUserId();
-    this.routerService.userLocality(localityName, userId, 0);
+    if (this.area) {
+      this.routerService.userLocality(this.area, locality.name, userId, 0);
+    } else {
+      this.routerService.userLocalities(userId, 0, locality.name, locality.sector_count);
+    }
   }
 
   ngOnInit() {
@@ -122,100 +126,59 @@ export class UserMainLocalitiesFormComponent implements OnInit {
       }
 
       this.pagingButtons.setActualPage(params.page);
-      if (params.country && params.region) {
-        this.country = this.mathServices.hexToString(params.country);
-        this.region = this.mathServices.hexToString(params.region);
-        this.http
-          .get(
-            environment.urlAddress +
-              '/api/v1/locality/region/' +
-              this.country +
-              '/' +
-              this.region +
-              '/' +
-              this.pagingButtons.getActualPage() +
-              '/' +
-              postedBy,
-          )
-          .subscribe((data: any) => {
-            this.pagingButtons.setNumOfPage(data.numberOfPages);
-            this.buttonCollections = this.pagingButtons.createButtonsField();
-            this.activePage = data.activePage;
-            this.allLocality = data.localities;
-            this.localityCollections = data.localityCollections;
+      if (params.area) {
+        this.area = this.mathServices.hexToString(params.area);
+      }
+      let get_area;
+      if (!this.area) {
+        get_area = 'none';
+      } else {
+        get_area = this.area;
+      }
+      this.http
+        .get(
+          environment.urlAddress +
+            '/api/v1/locality/all/' +
+            get_area +
+            '/' +
+            this.pagingButtons.getActualPage() +
+            '/' +
+            postedBy,
+        )
+        .subscribe((data: any) => {
+          this.pagingButtons.setNumOfPage(data.numberOfPages);
+          this.buttonCollections = this.pagingButtons.createButtonsField();
+          this.activePage = data.activePage;
+          this.allLocality = data.localities;
+          this.localityCollections = data.localityCollections;
 
-            if (params.image && params.slide) {
-              let previousUrl =
+          if (params.image && params.slide) {
+            let previousUrl;
+            if (params.area && params.sector) {
+              previousUrl =
                 'localities/' +
                 params.page +
                 '/' +
-                params.country +
+                params.area +
                 '/' +
-                params.region +
+                params.sector +
                 '/' +
                 params.idPostedBy;
-              let achatdbCollection = this.findById(
-                this.localityCollections,
-                params.image,
-              );
-              if (achatdbCollection === undefined) {
-                return;
-              }
-              this.openModalOnImage(
-                achatdbCollection,
-                params.slide,
-                previousUrl,
-                params.localityNum,
-              );
+            } else {
+              previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
             }
-          });
-      } else {
-        this.http
-          .get(
-            environment.urlAddress +
-              '/api/v1/locality/all/' +
-              this.pagingButtons.getActualPage() +
-              '/' +
-              postedBy,
-          )
-          .subscribe((data: any) => {
-            this.pagingButtons.setNumOfPage(data.numberOfPages);
-            this.buttonCollections = this.pagingButtons.createButtonsField();
-            this.activePage = data.activePage;
-            this.allLocality = data.localities;
-            this.localityCollections = data.localityCollections;
-
-            if (params.image && params.slide) {
-              let previousUrl;
-              if (params.country && params.region) {
-                previousUrl =
-                  'localities/' +
-                  params.page +
-                  '/' +
-                  params.country +
-                  '/' +
-                  params.region +
-                  '/' +
-                  params.idPostedBy;
-              } else {
-                previousUrl = 'localities/' + params.page + '/' + params.idPostedBy;
-              }
-              let achatdbCollection = this.findById(
-                this.localityCollections,
-                params.image,
-              );
-              if (achatdbCollection === undefined) {
-                return;
-              }
-              this.openModalOnImage(
-                achatdbCollection,
-                params.slide,
-                previousUrl,
-                params.localityNum,
-              );
+            let achatdbCollection = this.findById(this.localityCollections, params.image);
+            if (achatdbCollection === undefined) {
+              return;
             }
-          });
-      }
+            this.openModalOnImage(
+              achatdbCollection,
+              params.slide,
+              previousUrl,
+              params.localityNum,
+            );
+          }
+        });
     });
   }
 
@@ -247,14 +210,14 @@ export class UserMainLocalitiesFormComponent implements OnInit {
   openModal(achatdbCollection, numOflocalityCollection) {
     let previousUrl;
     this.subscriber = this.route.params.subscribe((params) => {
-      if (params.country && params.region) {
+      if (params.area && params.sector) {
         previousUrl =
           'localities/' +
           params.page +
           '/' +
-          params.country +
+          params.area +
           '/' +
-          params.region +
+          params.sector +
           '/' +
           params.idPostedBy;
       } else {

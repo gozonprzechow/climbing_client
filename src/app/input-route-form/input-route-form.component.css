@@ -13,7 +13,12 @@
   top: 7px;
 }
 
-.currency {
+.difficulty {
+  min-width: 115px;
+  max-width: 115px;
+}
+
+.style {
   min-width: 115px;
   max-width: 115px;
 }

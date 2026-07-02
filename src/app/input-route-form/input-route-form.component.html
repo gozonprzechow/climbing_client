@@ -35,10 +35,10 @@
         </div>
       </div>
 
-      <div class="form-group" [ngClass]="displayFieldCss('locality')">
+      <div class="form-group" [ngClass]="displayFieldCss('area')">
         <!-- First Name -->
         <div class="col-sm-12">
-          <label for="locality" class="control-label required">{{ area_txt }}</label>
+          <label for="area" class="control-label required">{{ area_txt }}</label>
           <img
             class="imgAdd"
             [src]="imgAddArea"
@@ -49,29 +49,26 @@
           <select
             type="text"
             (change)="changeArea($event.target.value)"
-            formControlName="locality"
+            formControlName="area"
             class="form-control"
-            id="locality"
-            name="locality"
+            id="area"
+            name="area"
           >
-            <option
-              *ngFor="let locality of allLocality"
-              value="{{ locality.name }}"
-            >
-              {{ locality.name }}
+            <option *ngFor="let area of allLocality" value="{{ area.name }}">
+              {{ area.name }}
             </option>
           </select>
-          <p *ngIf="invalidLocality()" id="locality_error" class="help-block">
-            {{ 'Invalid locality.' }}
+          <p *ngIf="invalidArea()" id="area_error" class="help-block">
+            {{ 'Invalid area.' }}
           </p>
-          <p class="help-block">{{ this.serverServiceErrors.locality }}</p>
+          <p class="help-block">{{ this.serverServiceErrors.area }}</p>
         </div>
       </div>
 
-      <div class="form-group" [ngClass]="displayFieldCss('locality')">
+      <div class="form-group" [ngClass]="displayFieldCss('sector')">
         <!-- First Name -->
         <div class="col-sm-12">
-          <label for="locality" class="control-label required">{{ sector_txt }}</label>
+          <label for="sector" class="control-label">{{ sector_txt }}</label>
           <img
             class="imgAdd"
             [src]="imgAddSector"
@@ -83,19 +80,19 @@
           />
           <select
             type="text"
-            formControlName="locality"
+            formControlName="sector"
             class="form-control"
-            id="locality"
-            name="locality"
+            id="sector"
+            name="sector"
           >
-            <option *ngFor="let locality of allLocality" value="{{ locality.name }}">
-              {{ locality.name }}
+            <option *ngFor="let sector of allSectors" value="{{ sector.name }}">
+              {{ sector.name }}
             </option>
           </select>
-          <p *ngIf="invalidLocality()" id="locality_error" class="help-block">
-            {{ 'Invalid locality.' }}
+          <p *ngIf="invalidSector()" id="sector_error" class="help-block">
+            {{ 'Invalid sector.' }}
           </p>
-          <p class="help-block">{{ this.serverServiceErrors.locality }}</p>
+          <p class="help-block">{{ this.serverServiceErrors.sector }}</p>
         </div>
       </div>
 
@@ -120,6 +117,32 @@
             </option>
           </select>
         </div>
+        <p *ngIf="invalidDifficulty()" id="sector_error" class="help-block">
+          {{ 'Invalid classification.' }}
+        </p>
+        <p class="help-block">{{ this.serverServiceErrors.difficulty }}</p>
+      </div>
+
+      <div class="form-group">
+        <!-- First Name -->
+        <div class="col-sm-4 style">
+          <label for="style" class="control-label required">{{ style_txt }}</label>
+          <select
+            type="text"
+            formControlName="style"
+            class="form-control"
+            id="style"
+            name="style"
+          >
+            <option *ngFor="let style_item of style_array" value="{{ style_item }}">
+              {{ style_item }}
+            </option>
+          </select>
+        </div>
+        <p *ngIf="invalidStyle()" id="sector_error" class="help-block">
+          {{ 'Invalid style.' }}
+        </p>
+        <p class="help-block">{{ this.serverServiceErrors.style }}</p>
       </div>
 
       <div class="form-group" [ngClass]="displayFieldCss('comment')">

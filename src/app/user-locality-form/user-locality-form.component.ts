@@ -34,7 +34,8 @@ export class UserLocalityFormComponent implements OnInit {
   deleteCollection: any = {};
   confirmModalMessage: string;
   confirmModalTitle: string;
-  actual_locality_name: string = '';
+  actual_area_name: string = '';
+  actual_sector_name: string = '';
 
   modalRef: BsModalRef;
 
@@ -131,7 +132,9 @@ export class UserLocalityFormComponent implements OnInit {
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
-      this.actual_locality_name = this.mathServices.hexToString(params.uid);
+      this.actual_area_name = this.mathServices.hexToString(params.area);
+      this.actual_sector_name = this.mathServices.hexToString(params.sector);
+      console.log(this.actual_area_name + '  ' + this.actual_sector_name);
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
         this.auth.saveActualUserId(postedBy);
@@ -146,7 +149,7 @@ export class UserLocalityFormComponent implements OnInit {
         .get(
           environment.urlAddress +
             '/api/v1/locality/one/' +
-            this.actual_locality_name +
+            this.actual_area_name +
             '/' +
             this.pagingButtons.getActualPage() +
             '/' +
@@ -196,7 +199,7 @@ export class UserLocalityFormComponent implements OnInit {
     if (!postedBy) {
       postedBy = this.auth.getLogUserId();
     }
-    this.routerService.userLocality(this.selectLocality, postedBy, page);
+    this.routerService.userLocality(this.selectLocality, 'none', postedBy, page);
   }
 
   openModal(achatdbCollection) {
@@ -282,7 +285,7 @@ export class UserLocalityFormComponent implements OnInit {
         .post<any>(
           environment.urlAddress +
             '/api/v1/locality/one/' +
-            this.actual_locality_name +
+            this.actual_area_name +
             '/' +
             this.pagingButtons.getActualPage() +
             '/' +
@@ -297,7 +300,8 @@ export class UserLocalityFormComponent implements OnInit {
           this.allLocality = data.localities;
           this.achatdbCollections = data.achatdbCollections;
           this.routerService.userLocality(
-            this.actual_locality_name,
+            this.actual_area_name,
+            'none',
             postedBy,
             this.pagingButtons.getActualPage(),
           );
@@ -313,7 +317,7 @@ export class UserLocalityFormComponent implements OnInit {
 
     let postedBy;
     this.subscriber = this.route.params.subscribe((params) => {
-      formData.append('locality', JSON.stringify(this.actual_locality_name));
+      formData.append('locality', JSON.stringify(this.actual_area_name));
       if (!params.idPostedBy) {
         postedBy = this.auth.getLogUserId();
       } else {
