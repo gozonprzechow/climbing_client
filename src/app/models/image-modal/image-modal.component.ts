@@ -4,6 +4,7 @@ import {
   HostListener,
   OnDestroy,
   AfterViewChecked,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -26,6 +27,7 @@ import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
     selector: 'app-image-modal',
     templateUrl: './image-modal.component.html',
     styleUrls: ['./image-modal.component.css', './image-modal-mobile.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 

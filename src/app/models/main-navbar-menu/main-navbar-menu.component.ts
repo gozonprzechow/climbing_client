@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { RouterServices } from '../../services/router.services';
 import { LanguageService, TextTranslator } from '../../services/language.service';
@@ -15,6 +15,7 @@ import { ResizeService, SCREEN_SIZE } from '../../services/resize.service';
     host: {
         '(window:resize)': 'onResize($event)',
     },
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MainNavbarMenuComponent implements OnInit {

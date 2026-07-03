@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostListener, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -16,6 +16,7 @@ import { RouterServices } from '../../services/router.services';
     selector: 'app-input-sector-modal',
     templateUrl: './input-sector-modal.component.html',
     styleUrls: ['./input-sector-modal.component.css', '../../models/mobile.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class InputSectorModalComponent implements OnInit, AfterViewInit {

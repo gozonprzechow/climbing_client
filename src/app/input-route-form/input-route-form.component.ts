@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -27,6 +27,7 @@ import { InputSectorModalComponent } from '../models/input-sector-modal/input-se
     selector: 'app-input-route-form',
     templateUrl: './input-route-form.component.html',
     styleUrls: ['./input-route-form.component.css', '../models/mobile.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class InputRouteFormComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { delay } from 'rxjs/operators';
 
@@ -20,6 +20,7 @@ import { delay } from 'rxjs/operators';
       </div>
     </div>`,
     styleUrls: ['./customTittle.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TittleMain {

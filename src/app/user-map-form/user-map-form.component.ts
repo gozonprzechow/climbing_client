@@ -8,6 +8,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -35,6 +36,7 @@ import { MathServices } from '../services/math.service';
     selector: 'app-user-map-form',
     templateUrl: './user-map-form.component.html',
     styleUrls: ['./user-map-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +11,7 @@ import { RouterServices } from '../services/router.services';
     selector: 'app-verified-create-account-form',
     templateUrl: './verified-create-account-form.component.html',
     styleUrls: ['./verified-create-account-form.component.css', '../models/mobile.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class VerifiedCreateAccountFormComponent implements OnInit {

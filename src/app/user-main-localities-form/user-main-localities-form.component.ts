@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -23,6 +23,7 @@ import { MathServices } from '../services/math.service';
     selector: 'app-user-main-localities-form',
     templateUrl: './user-main-localities-form.component.html',
     styleUrls: ['./user-main-localities-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class UserMainLocalitiesFormComponent implements OnInit {

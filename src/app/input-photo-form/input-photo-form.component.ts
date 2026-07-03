@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputMineral';
@@ -13,6 +13,7 @@ import { MobileService } from '../services/mobile.service';
     selector: 'app-input-photo-form',
     templateUrl: './input-photo-form.component.html',
     styleUrls: ['./input-photo-form.component.css', '../models/mobile.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class InputPhotoFormComponent implements OnInit {

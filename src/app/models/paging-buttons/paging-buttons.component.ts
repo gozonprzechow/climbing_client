@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonCollection } from '../../services/pagingButtons.service';
 
 @Component({
     selector: 'app-paging-buttons',
     templateUrl: './paging-buttons.component.html',
     styleUrls: ['./paging-buttons.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PagingButtonsComponent {

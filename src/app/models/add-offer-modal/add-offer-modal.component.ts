@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -12,6 +12,7 @@ import { RouterServices } from '../../services/router.services';
     selector: 'app-add-offer-modal',
     templateUrl: './add-offer-modal.component.html',
     styleUrls: ['./add-offer-modal.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AddOfferModalComponent implements OnInit {

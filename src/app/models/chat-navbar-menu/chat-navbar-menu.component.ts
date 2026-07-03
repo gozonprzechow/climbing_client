@@ -5,6 +5,7 @@ import {
   HostListener,
   Output,
   EventEmitter,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -20,6 +21,7 @@ import { SCREEN_SIZE } from '../../services/resize.service';
     selector: 'app-chat-navbar-menu',
     templateUrl: './chat-navbar-menu.component.html',
     styleUrls: ['./chat-navbar-menu.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ChatNavbarMenuComponent implements OnInit {

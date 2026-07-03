@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient } from '@angular/common/http';
@@ -27,6 +27,7 @@ import { MathServices } from '../services/math.service';
     selector: 'app-chat-form',
     templateUrl: './chat-form.component.html',
     styleUrls: ['./chat-form.component.css', './chat-form-mobile.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ChatFormComponent implements OnInit {

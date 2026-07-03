@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { HttpClient } from '@angular/common/http';
@@ -15,6 +15,7 @@ import { InputMapModalComponent } from '../models/input-map-modal/input-map-moda
     selector: 'app-modify-locality-form',
     templateUrl: './modify-locality-form.component.html',
     styleUrls: ['./modify-locality-form.component.css', '../models/mobile.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ModifyLocalityFormComponent implements OnInit {

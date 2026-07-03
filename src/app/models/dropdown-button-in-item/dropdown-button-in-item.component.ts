@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DropdownItem } from '../../services/dropdownButtonsInItem.service';
 
 @Component({
     selector: 'app-dropdown-button-in-item',
     templateUrl: './dropdown-button-in-item.component.html',
     styleUrls: ['./dropdown-button-in-item.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DropdownButtonInItemComponent implements OnInit {

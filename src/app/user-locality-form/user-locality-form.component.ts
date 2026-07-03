@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -23,6 +23,7 @@ import { MobileService } from '../services/mobile.service';
     selector: 'app-user-locality-form',
     templateUrl: './user-locality-form.component.html',
     styleUrls: ['./user-locality-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class UserLocalityFormComponent implements OnInit {

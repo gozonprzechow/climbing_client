@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -10,6 +10,7 @@ import { SCREEN_SIZE } from '../../services/resize.service';
     selector: 'app-input-map-modal',
     templateUrl: './input-map-modal.component.html',
     styleUrls: ['./input-map-modal.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class InputMapModalComponent implements OnInit, AfterViewInit {

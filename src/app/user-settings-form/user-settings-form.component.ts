@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ElementRef } from '@angular/core';
+import { Component, HostListener, OnInit, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -19,6 +19,7 @@ import { ImageService } from '../services/image.service';
     selector: 'app-user-settings-form',
     templateUrl: './user-settings-form.component.html',
     styleUrls: ['./user-settings-form.component.css', '../models/mobile.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class UserSettingsFormComponent implements OnInit {

@@ -5,6 +5,7 @@ import {
   HostListener,
   Output,
   EventEmitter,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
@@ -18,6 +19,7 @@ import { SCREEN_SIZE } from '../../services/resize.service';
     selector: 'app-map-navbar-menu',
     templateUrl: './map-navbar-menu.component.html',
     styleUrls: ['./map-navbar-menu.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MapNavbarMenuComponent implements OnInit {

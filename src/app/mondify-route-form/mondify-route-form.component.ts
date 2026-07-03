@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
@@ -15,6 +15,7 @@ import { MobileService } from '../services/mobile.service';
     templateUrl: './mondify-route-form.component.html',
     styleUrls: ['./mondify-route-form.component.css', '../models/mobile.css'],
     providers: [DatePipe],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MondifyRouteFormComponent implements OnInit {

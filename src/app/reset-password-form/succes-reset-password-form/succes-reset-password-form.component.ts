@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-succes-reset-password-form',
     templateUrl: './succes-reset-password-form.component.html',
     styleUrls: ['./succes-reset-password-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SuccesResetPasswordFormComponent implements OnInit {

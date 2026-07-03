@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { InputCondition } from '../models/inputLocality';
@@ -12,6 +12,7 @@ import { MobileService } from '../services/mobile.service';
     selector: 'app-recover-password-form',
     templateUrl: './recover-password-form.component.html',
     styleUrls: ['./recover-password-form.component.css', '../models/mobile.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class RecoverPasswordFormComponent implements OnInit {
