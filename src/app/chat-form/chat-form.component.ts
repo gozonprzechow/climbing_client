@@ -24,9 +24,10 @@ import { MobileService } from '../services/mobile.service';
 import { MathServices } from '../services/math.service';
 
 @Component({
-  selector: 'app-chat-form',
-  templateUrl: './chat-form.component.html',
-  styleUrls: ['./chat-form.component.css', './chat-form-mobile.component.css'],
+    selector: 'app-chat-form',
+    templateUrl: './chat-form.component.html',
+    styleUrls: ['./chat-form.component.css', './chat-form-mobile.component.css'],
+    standalone: false
 })
 export class ChatFormComponent implements OnInit {
   credentials: TokenPayload = {

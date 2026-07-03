@@ -12,9 +12,10 @@ import { InputMapModalComponent } from '../models/input-map-modal/input-map-moda
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
-  selector: 'app-input-locality-form',
-  templateUrl: './input-locality-form.component.html',
-  styleUrls: ['./input-locality-form.component.css', '../models/mobile.css'],
+    selector: 'app-input-locality-form',
+    templateUrl: './input-locality-form.component.html',
+    styleUrls: ['./input-locality-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class InputLocalityFormComponent implements OnInit {
   submitted = false;

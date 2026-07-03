@@ -11,9 +11,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-create-account-form',
-  templateUrl: './create-account-form.component.html',
-  styleUrls: ['./create-account-form.component.css', '../models/mobile.css'],
+    selector: 'app-create-account-form',
+    templateUrl: './create-account-form.component.html',
+    styleUrls: ['./create-account-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class CreateAccountFormComponent implements OnInit {
   credentials: TokenPayload = {

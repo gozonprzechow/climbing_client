@@ -16,9 +16,10 @@ import { LanguageService, TextTranslator } from '../services/language.service';
 import { ImageService } from '../services/image.service';
 
 @Component({
-  selector: 'app-user-settings-form',
-  templateUrl: './user-settings-form.component.html',
-  styleUrls: ['./user-settings-form.component.css', '../models/mobile.css'],
+    selector: 'app-user-settings-form',
+    templateUrl: './user-settings-form.component.html',
+    styleUrls: ['./user-settings-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class UserSettingsFormComponent implements OnInit {
   submitted = false;

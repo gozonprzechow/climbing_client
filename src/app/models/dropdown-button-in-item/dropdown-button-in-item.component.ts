@@ -2,9 +2,10 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { DropdownItem } from '../../services/dropdownButtonsInItem.service';
 
 @Component({
-  selector: 'app-dropdown-button-in-item',
-  templateUrl: './dropdown-button-in-item.component.html',
-  styleUrls: ['./dropdown-button-in-item.component.css'],
+    selector: 'app-dropdown-button-in-item',
+    templateUrl: './dropdown-button-in-item.component.html',
+    styleUrls: ['./dropdown-button-in-item.component.css'],
+    standalone: false
 })
 export class DropdownButtonInItemComponent implements OnInit {
   @Input() item_collection: DropdownItem[] = [];

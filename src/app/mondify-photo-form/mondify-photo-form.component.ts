@@ -13,9 +13,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-mondify-photo-form',
-  templateUrl: './mondify-photo-form.component.html',
-  styleUrls: ['./mondify-photo-form.component.css', '../models/mobile.css'],
+    selector: 'app-mondify-photo-form',
+    templateUrl: './mondify-photo-form.component.html',
+    styleUrls: ['./mondify-photo-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class MondifyPhotoFormComponent implements OnInit {
   submitted = false;

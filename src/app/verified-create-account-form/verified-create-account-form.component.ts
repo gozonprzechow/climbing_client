@@ -8,9 +8,10 @@ import { MobileService } from '../services/mobile.service';
 import { RouterServices } from '../services/router.services';
 
 @Component({
-  selector: 'app-verified-create-account-form',
-  templateUrl: './verified-create-account-form.component.html',
-  styleUrls: ['./verified-create-account-form.component.css', '../models/mobile.css'],
+    selector: 'app-verified-create-account-form',
+    templateUrl: './verified-create-account-form.component.html',
+    styleUrls: ['./verified-create-account-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class VerifiedCreateAccountFormComponent implements OnInit {
   submitted = false;

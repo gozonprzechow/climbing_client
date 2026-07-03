@@ -20,9 +20,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-other-users-form',
-  templateUrl: './other-users-form.component.html',
-  styleUrls: ['./other-users-form.component.css'],
+    selector: 'app-other-users-form',
+    templateUrl: './other-users-form.component.html',
+    styleUrls: ['./other-users-form.component.css'],
+    standalone: false
 })
 export class OtherUsersFormComponent implements OnInit {
   allLocality: any = [];

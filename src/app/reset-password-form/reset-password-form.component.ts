@@ -11,9 +11,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-reset-password-form',
-  templateUrl: './reset-password-form.component.html',
-  styleUrls: ['./reset-password-form.component.css', '../models/mobile.css'],
+    selector: 'app-reset-password-form',
+    templateUrl: './reset-password-form.component.html',
+    styleUrls: ['./reset-password-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class ResetPasswordFormComponent implements OnInit {
   submitted = false;

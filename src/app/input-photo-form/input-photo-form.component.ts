@@ -10,9 +10,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-input-photo-form',
-  templateUrl: './input-photo-form.component.html',
-  styleUrls: ['./input-photo-form.component.css', '../models/mobile.css'],
+    selector: 'app-input-photo-form',
+    templateUrl: './input-photo-form.component.html',
+    styleUrls: ['./input-photo-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class InputPhotoFormComponent implements OnInit {
   submitted = false;

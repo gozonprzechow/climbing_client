@@ -5,9 +5,10 @@ import { ResizeService, SCREEN_SIZE } from '../../services/resize.service';
 import { MobileService } from '../../services/mobile.service';
 
 @Component({
-  selector: 'app-succes-create-account-form',
-  templateUrl: './succes-create-account-form.component.html',
-  styleUrls: ['./succes-create-account-form.component.css', '../../models/mobile.css'],
+    selector: 'app-succes-create-account-form',
+    templateUrl: './succes-create-account-form.component.html',
+    styleUrls: ['./succes-create-account-form.component.css', '../../models/mobile.css'],
+    standalone: false
 })
 export class SuccesCreateAccountFormComponent implements OnInit {
   tittleMain: string;

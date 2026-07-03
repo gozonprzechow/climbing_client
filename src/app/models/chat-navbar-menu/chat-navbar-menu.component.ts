@@ -17,9 +17,10 @@ import { ChatService } from '../../services/chat.service';
 import { SCREEN_SIZE } from '../../services/resize.service';
 
 @Component({
-  selector: 'app-chat-navbar-menu',
-  templateUrl: './chat-navbar-menu.component.html',
-  styleUrls: ['./chat-navbar-menu.component.css'],
+    selector: 'app-chat-navbar-menu',
+    templateUrl: './chat-navbar-menu.component.html',
+    styleUrls: ['./chat-navbar-menu.component.css'],
+    standalone: false
 })
 export class ChatNavbarMenuComponent implements OnInit {
   @Input() friends: any = [];

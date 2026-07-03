@@ -12,9 +12,10 @@ import { MobileService } from '../services/mobile.service';
 import { InputMapModalComponent } from '../models/input-map-modal/input-map-modal.component';
 
 @Component({
-  selector: 'app-modify-locality-form',
-  templateUrl: './modify-locality-form.component.html',
-  styleUrls: ['./modify-locality-form.component.css', '../models/mobile.css'],
+    selector: 'app-modify-locality-form',
+    templateUrl: './modify-locality-form.component.html',
+    styleUrls: ['./modify-locality-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class ModifyLocalityFormComponent implements OnInit {
   submitted = false;

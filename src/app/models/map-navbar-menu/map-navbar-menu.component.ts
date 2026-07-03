@@ -15,9 +15,10 @@ import { environment } from 'src/environments/environment';
 import { SCREEN_SIZE } from '../../services/resize.service';
 
 @Component({
-  selector: 'app-map-navbar-menu',
-  templateUrl: './map-navbar-menu.component.html',
-  styleUrls: ['./map-navbar-menu.component.css'],
+    selector: 'app-map-navbar-menu',
+    templateUrl: './map-navbar-menu.component.html',
+    styleUrls: ['./map-navbar-menu.component.css'],
+    standalone: false
 })
 export class MapNavbarMenuComponent implements OnInit {
   @Input() friends: any = [];

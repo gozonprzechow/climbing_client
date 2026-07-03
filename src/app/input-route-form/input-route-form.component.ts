@@ -24,9 +24,10 @@ import { InputAreaModalComponent } from '../models/input-area-modal/input-area-m
 import { InputSectorModalComponent } from '../models/input-sector-modal/input-sector-modal.component';
 
 @Component({
-  selector: 'app-input-route-form',
-  templateUrl: './input-route-form.component.html',
-  styleUrls: ['./input-route-form.component.css', '../models/mobile.css'],
+    selector: 'app-input-route-form',
+    templateUrl: './input-route-form.component.html',
+    styleUrls: ['./input-route-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class InputRouteFormComponent implements OnInit {
   submitted = false;

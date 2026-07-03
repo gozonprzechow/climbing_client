@@ -32,9 +32,10 @@ import * as L from 'leaflet';
 import { MathServices } from '../services/math.service';
 
 @Component({
-  selector: 'app-user-map-form',
-  templateUrl: './user-map-form.component.html',
-  styleUrls: ['./user-map-form.component.css'],
+    selector: 'app-user-map-form',
+    templateUrl: './user-map-form.component.html',
+    styleUrls: ['./user-map-form.component.css'],
+    standalone: false
 })
 export class UserMapFormComponent implements OnInit, OnDestroy, AfterViewInit {
   private map;

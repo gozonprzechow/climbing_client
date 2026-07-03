@@ -20,9 +20,10 @@ import { MobileService } from '../services/mobile.service';
 import { MathServices } from '../services/math.service';
 
 @Component({
-  selector: 'app-user-main-localities-form',
-  templateUrl: './user-main-localities-form.component.html',
-  styleUrls: ['./user-main-localities-form.component.css'],
+    selector: 'app-user-main-localities-form',
+    templateUrl: './user-main-localities-form.component.html',
+    styleUrls: ['./user-main-localities-form.component.css'],
+    standalone: false
 })
 export class UserMainLocalitiesFormComponent implements OnInit {
   allLocality: any = [];

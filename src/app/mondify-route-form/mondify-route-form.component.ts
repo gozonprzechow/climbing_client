@@ -11,10 +11,11 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-mondify-route-form',
-  templateUrl: './mondify-route-form.component.html',
-  styleUrls: ['./mondify-route-form.component.css', '../models/mobile.css'],
-  providers: [DatePipe],
+    selector: 'app-mondify-route-form',
+    templateUrl: './mondify-route-form.component.html',
+    styleUrls: ['./mondify-route-form.component.css', '../models/mobile.css'],
+    providers: [DatePipe],
+    standalone: false
 })
 export class MondifyRouteFormComponent implements OnInit {
   submitted = false;

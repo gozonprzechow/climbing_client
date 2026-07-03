@@ -7,9 +7,10 @@ import { ShapeService } from '../../services/shape.service';
 import { SCREEN_SIZE } from '../../services/resize.service';
 
 @Component({
-  selector: 'app-input-map-modal',
-  templateUrl: './input-map-modal.component.html',
-  styleUrls: ['./input-map-modal.component.css'],
+    selector: 'app-input-map-modal',
+    templateUrl: './input-map-modal.component.html',
+    styleUrls: ['./input-map-modal.component.css'],
+    standalone: false
 })
 export class InputMapModalComponent implements OnInit, AfterViewInit {
   textValue: string;

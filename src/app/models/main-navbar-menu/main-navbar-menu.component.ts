@@ -9,12 +9,13 @@ import { ConfirmModalComponent } from '../../models/confirm-modal/confirm-modal.
 import { ResizeService, SCREEN_SIZE } from '../../services/resize.service';
 
 @Component({
-  selector: 'app-main-navbar-menu',
-  templateUrl: './main-navbar-menu.component.html',
-  styleUrls: ['./main-navbar-menu.component.css'],
-  host: {
-    '(window:resize)': 'onResize($event)',
-  },
+    selector: 'app-main-navbar-menu',
+    templateUrl: './main-navbar-menu.component.html',
+    styleUrls: ['./main-navbar-menu.component.css'],
+    host: {
+        '(window:resize)': 'onResize($event)',
+    },
+    standalone: false
 })
 export class MainNavbarMenuComponent implements OnInit {
   @Input() allLocality: any = [];

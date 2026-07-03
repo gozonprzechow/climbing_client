@@ -11,9 +11,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.css', '../models/mobile.css'],
+    selector: 'app-login-form',
+    templateUrl: './login-form.component.html',
+    styleUrls: ['./login-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class LoginFormComponent implements OnInit {
   credentials: TokenPayload = {

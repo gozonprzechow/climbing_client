@@ -15,9 +15,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-admin-hlavni-form',
-  templateUrl: './admin-hlavni-form.component.html',
-  styleUrls: ['./admin-hlavni-form.component.css', '../models/mobile.css'],
+    selector: 'app-admin-hlavni-form',
+    templateUrl: './admin-hlavni-form.component.html',
+    styleUrls: ['./admin-hlavni-form.component.css', '../models/mobile.css'],
+    standalone: false
 })
 export class AdminHlavniFormComponent implements OnInit {
   submitted = false;

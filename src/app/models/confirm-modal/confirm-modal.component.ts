@@ -4,9 +4,10 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
-  selector: 'app-confirm-modal',
-  templateUrl: './confirm-modal.component.html',
-  styleUrls: ['./confirm-modal.component.css'],
+    selector: 'app-confirm-modal',
+    templateUrl: './confirm-modal.component.html',
+    styleUrls: ['./confirm-modal.component.css'],
+    standalone: false
 })
 export class ConfirmModalComponent implements OnInit {
   textValue: string;

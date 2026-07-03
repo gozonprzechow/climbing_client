@@ -3,8 +3,8 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { delay } from 'rxjs/operators';
 
 @Component({
-  selector: 'custom-tittle-main',
-  template: `<div></div>
+    selector: 'custom-tittle-main',
+    template: `<div></div>
     <div class="jumbotron bg-secondary">
       <div class="container bg-secondary">
         <div class="mainJumbotron">
@@ -19,7 +19,8 @@ import { delay } from 'rxjs/operators';
         </div>
       </div>
     </div>`,
-  styleUrls: ['./customTittle.css'],
+    styleUrls: ['./customTittle.css'],
+    standalone: false
 })
 export class TittleMain {
   @Input() tittleMain: any = {};

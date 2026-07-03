@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonCollection } from '../../services/pagingButtons.service';
 
 @Component({
-  selector: 'app-paging-buttons',
-  templateUrl: './paging-buttons.component.html',
-  styleUrls: ['./paging-buttons.component.css'],
+    selector: 'app-paging-buttons',
+    templateUrl: './paging-buttons.component.html',
+    styleUrls: ['./paging-buttons.component.css'],
+    standalone: false
 })
 export class PagingButtonsComponent {
   @Input() buttonCollections: ButtonCollection[] = [];

@@ -23,9 +23,10 @@ import { MobileService } from '../../services/mobile.service';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-image-modal',
-  templateUrl: './image-modal.component.html',
-  styleUrls: ['./image-modal.component.css', './image-modal-mobile.component.css'],
+    selector: 'app-image-modal',
+    templateUrl: './image-modal.component.html',
+    styleUrls: ['./image-modal.component.css', './image-modal-mobile.component.css'],
+    standalone: false
 })
 
 export class ImageModalComponent implements OnInit, OnDestroy, AfterViewChecked {

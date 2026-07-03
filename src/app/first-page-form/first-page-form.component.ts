@@ -13,9 +13,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-first-page-form',
-  templateUrl: './first-page-form.component.html',
-  styleUrls: ['./first-page-form.component.css'],
+    selector: 'app-first-page-form',
+    templateUrl: './first-page-form.component.html',
+    styleUrls: ['./first-page-form.component.css'],
+    standalone: false
 })
 export class FirstPageFormComponent implements OnInit {
   allLocality: any = [];

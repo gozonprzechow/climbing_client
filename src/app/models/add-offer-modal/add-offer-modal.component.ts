@@ -9,9 +9,10 @@ import { OfferService } from '../../services/offerService';
 import { RouterServices } from '../../services/router.services';
 
 @Component({
-  selector: 'app-add-offer-modal',
-  templateUrl: './add-offer-modal.component.html',
-  styleUrls: ['./add-offer-modal.component.css'],
+    selector: 'app-add-offer-modal',
+    templateUrl: './add-offer-modal.component.html',
+    styleUrls: ['./add-offer-modal.component.css'],
+    standalone: false
 })
 export class AddOfferModalComponent implements OnInit {
   submitted = false;

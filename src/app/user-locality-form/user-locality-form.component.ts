@@ -20,9 +20,10 @@ import { ResizeService, SCREEN_SIZE } from '../services/resize.service';
 import { MobileService } from '../services/mobile.service';
 
 @Component({
-  selector: 'app-user-locality-form',
-  templateUrl: './user-locality-form.component.html',
-  styleUrls: ['./user-locality-form.component.css'],
+    selector: 'app-user-locality-form',
+    templateUrl: './user-locality-form.component.html',
+    styleUrls: ['./user-locality-form.component.css'],
+    standalone: false
 })
 export class UserLocalityFormComponent implements OnInit {
   selectLocality: string;

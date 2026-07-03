@@ -13,9 +13,10 @@ import { environment } from 'src/environments/environment';
 import { RouterServices } from '../../services/router.services';
 
 @Component({
-  selector: 'app-input-sector-modal',
-  templateUrl: './input-sector-modal.component.html',
-  styleUrls: ['./input-sector-modal.component.css', '../../models/mobile.css'],
+    selector: 'app-input-sector-modal',
+    templateUrl: './input-sector-modal.component.html',
+    styleUrls: ['./input-sector-modal.component.css', '../../models/mobile.css'],
+    standalone: false
 })
 export class InputSectorModalComponent implements OnInit, AfterViewInit {
   textValue: string;
