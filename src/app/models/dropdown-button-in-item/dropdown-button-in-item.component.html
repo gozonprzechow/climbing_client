@@ -6,36 +6,41 @@
     (mouseover)="img_dropdown_icon = img_dropdown_icon_moseover"
     (mouseout)="img_dropdown_icon = img_dropdown_icon_moseout"
     (click)="onImgDropdownIconClick()"
-  />
+    />
   <img
     id="search_dropdown_togle"
     class="hideItem"
     [src]="img_dropdown_action"
     ngbDropdownToggle
-  />
+    />
   <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown03">
-    <div *ngFor="let item of item_collection" class="dropdown-item">
-      <div class="row dropdownRow">
-        <div
-          class="col-10 dropdownTextColumn"
-          (click)="onDropdownActionEventClick(item)"
-        >
-          {{ item.item_text }}
+    @for (item of item_collection; track item) {
+      <div class="dropdown-item">
+        <div class="row dropdownRow">
+          <div
+            class="col-10 dropdownTextColumn"
+            (click)="onDropdownActionEventClick(item)"
+            >
+            {{ item.item_text }}
+          </div>
+          @if (item.button_visibility) {
+            <div class="col-1">
+              <img
+                id="dropdown03"
+                class="imgDropdownAction"
+                [src]="img_dropdown_action"
+                (click)="onImgDropdownActionEventClick(item)"
+                />
+            </div>
+          }
+          @if (!item.button_visibility) {
+            <div
+              class="col-2"
+              (click)="onDropdownActionEventClick(item)"
+            ></div>
+          }
         </div>
-        <div *ngIf="item.button_visibility" class="col-1">
-          <img
-            id="dropdown03"
-            class="imgDropdownAction"
-            [src]="img_dropdown_action"
-            (click)="onImgDropdownActionEventClick(item)"
-          />
-        </div>
-        <div
-          *ngIf="!item.button_visibility"
-          class="col-2"
-          (click)="onDropdownActionEventClick(item)"
-        ></div>
       </div>
-    </div>
+    }
   </div>
 </div>

@@ -1,10 +1,12 @@
 <div class="modal-header">
   <h4 class="modal-title" id="modal-basic-title">{{ list.modalTitle }}</h4>
-  <div *ngIf="is_confirm_active" class="float-left">
-    <button type="button" class="btn btnConfirmLocation" (click)="confirmLocation()">
-      Confirm
-    </button>
-  </div>
+  @if (is_confirm_active) {
+    <div class="float-left">
+      <button type="button" class="btn btnConfirmLocation" (click)="confirmLocation()">
+        Confirm
+      </button>
+    </div>
+  }
   <button type="button" class="btn closeStyle" aria-label="Close" (click)="closeModal()">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -12,86 +14,98 @@
 <div class="modal-body" [ngStyle]="{
     'min-height': getModalBodyHeight() + 'px'
   }">
-  <div *ngIf="!is_map_active" class="{{ mobileService.getMainFormClass(resizeSvc.getScreenSize()) }}">
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-      <div class="form-group" [ngClass]="{ 'has-error': invalidName() }">
-        <!-- First Name -->
-        <div class="col-sm-12">
-          <label for="name" class="control-label required">{{ name_txt }}</label>
-          <input (keyup)="changeName($event)" type="text" formControlName="name" class="form-control" id="name"
-            name="name" placeholder="{{ name_txt }}" />
-          <p *ngIf="invalidName()" id="name_error" class="help-block">
-            {{ this.serviceErrors.name || 'Invalid name.' }}
-          </p>
-          <p class="help-block">{{ this.serverServiceErrors.name }}</p>
-        </div>
-      </div>
-      <img class="imgSetLocation" [src]="imgSetLocation"
-        (mouseover)="imgSetLocation = '../../../assets/skins/globus_button_hover.png'"
-        (mouseout)="imgSetLocation = '../../../assets/skins/globus_button.png'" (click)="triggerInputLocation()" />
-      <div class="location-text-container">Location: [{{this.lat}}][{{this.lng}}]</div>
-
-      <div class="form-group" [ngClass]="{ 'has-error': invalidArea() }">
-        <!-- First Name -->
-        <div class="col-sm-12">
-          <label for="area" class="control-label required">{{ area_txt }}</label>
-          <select (keyup)="changeArea($event)" type="text" formControlName="area" class="form-control" id="area"
-            name="area">
-            <option *ngFor="let area of allAreas" value="{{ area.name }}">
-              {{ area.name }}
-            </option>
-          </select>
-          <p *ngIf="invalidArea()" id="area_error" class="help-block">
-            {{ 'Invalid area.' }}
-          </p>
-          <p class="help-block">{{ this.serverServiceErrors.area }}</p>
-        </div>
-      </div>
-
-      <div class="form-group" [ngClass]="{ 'has-error': invalidDescription() }">
-        <!-- Last Name -->
-        <div class="col-sm-12">
-          <label for="description" class="control-label">{{ description_txt }}</label>
-          <textarea (keyup)="changeDescription($event)" type="text" formControlName="description"
-            class="form-control inputDescriptionBox" id="description" name="description"
-            placeholder="{{ description_txt }}"></textarea>
-          <p *ngIf="invalidDescription()" id="description_error" class="help-block">
-            {{ this.serviceErrors.description || 'Invalid description.' }}
-          </p>
-          <p class="help-block">{{ this.serverServiceErrors.description }}</p>
-        </div>
-      </div>
-
-      <div class="form-group" [ngClass]="{ 'has-error': invalidPriority() }">
-        <!-- Last Name -->
-        <div class="col-sm-12">
-          <label for="priority" class="control-label">{{ priority_txt }}</label>
-          <input (keyup)="changePriority($event)" type="number" formControlName="priority" class="form-control"
-            id="priority" name="priority" />
-          <p *ngIf="invalidPriority()" id="priority_error" class="help-block">
-            {{ 'Invalid priority.' }}
-          </p>
-          <p class="help-block">{{ this.serverServiceErrors.priority }}</p>
-        </div>
-      </div>
-
-      <div class="form-group has-error">
-        <div class="submitContainer">
+  @if (!is_map_active) {
+    <div class="{{ mobileService.getMainFormClass(resizeSvc.getScreenSize()) }}">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="form-group" [ngClass]="{ 'has-error': invalidName() }">
+          <!-- First Name -->
           <div class="col-sm-12">
-            <!-- Register Button -->
-            <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-              <button type="submit" class="submitButton">{{ store_txt }}</button>
-            </div>
-            <div *ngIf="is_submit_in_progress" class="col-sm-12">
-              <button type="submit" class="submitButton frozen">
-                {{ submitInProgress_txt }}
-              </button>
+            <label for="name" class="control-label required">{{ name_txt }}</label>
+            <input (keyup)="changeName($event)" type="text" formControlName="name" class="form-control" id="name"
+              name="name" placeholder="{{ name_txt }}" />
+            @if (invalidName()) {
+              <p id="name_error" class="help-block">
+                {{ this.serviceErrors.name || 'Invalid name.' }}
+              </p>
+            }
+            <p class="help-block">{{ this.serverServiceErrors.name }}</p>
+          </div>
+        </div>
+        <img class="imgSetLocation" [src]="imgSetLocation"
+          (mouseover)="imgSetLocation = '../../../assets/skins/globus_button_hover.png'"
+          (mouseout)="imgSetLocation = '../../../assets/skins/globus_button.png'" (click)="triggerInputLocation()" />
+        <div class="location-text-container">Location: [{{this.lat}}][{{this.lng}}]</div>
+        <div class="form-group" [ngClass]="{ 'has-error': invalidArea() }">
+          <!-- First Name -->
+          <div class="col-sm-12">
+            <label for="area" class="control-label required">{{ area_txt }}</label>
+            <select (keyup)="changeArea($event)" type="text" formControlName="area" class="form-control" id="area"
+              name="area">
+              @for (area of allAreas; track area) {
+                <option value="{{ area.name }}">
+                  {{ area.name }}
+                </option>
+              }
+            </select>
+            @if (invalidArea()) {
+              <p id="area_error" class="help-block">
+                {{ 'Invalid area.' }}
+              </p>
+            }
+            <p class="help-block">{{ this.serverServiceErrors.area }}</p>
+          </div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': invalidDescription() }">
+          <!-- Last Name -->
+          <div class="col-sm-12">
+            <label for="description" class="control-label">{{ description_txt }}</label>
+            <textarea (keyup)="changeDescription($event)" type="text" formControlName="description"
+              class="form-control inputDescriptionBox" id="description" name="description"
+            placeholder="{{ description_txt }}"></textarea>
+            @if (invalidDescription()) {
+              <p id="description_error" class="help-block">
+                {{ this.serviceErrors.description || 'Invalid description.' }}
+              </p>
+            }
+            <p class="help-block">{{ this.serverServiceErrors.description }}</p>
+          </div>
+        </div>
+        <div class="form-group" [ngClass]="{ 'has-error': invalidPriority() }">
+          <!-- Last Name -->
+          <div class="col-sm-12">
+            <label for="priority" class="control-label">{{ priority_txt }}</label>
+            <input (keyup)="changePriority($event)" type="number" formControlName="priority" class="form-control"
+              id="priority" name="priority" />
+            @if (invalidPriority()) {
+              <p id="priority_error" class="help-block">
+                {{ 'Invalid priority.' }}
+              </p>
+            }
+            <p class="help-block">{{ this.serverServiceErrors.priority }}</p>
+          </div>
+        </div>
+        <div class="form-group has-error">
+          <div class="submitContainer">
+            <div class="col-sm-12">
+              <!-- Register Button -->
+              @if (!is_submit_in_progress) {
+                <div class="col-sm-12">
+                  <button type="submit" class="submitButton">{{ store_txt }}</button>
+                </div>
+              }
+              @if (is_submit_in_progress) {
+                <div class="col-sm-12">
+                  <button type="submit" class="submitButton frozen">
+                    {{ submitInProgress_txt }}
+                  </button>
+                </div>
+              }
             </div>
           </div>
         </div>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
+  }
   <div class="map-container" [style.display]="is_map_active ? 'block' : 'none'">
     <div class="map-frame">
       <div id="map"></div>

@@ -1,12 +1,13 @@
 <div class="btn-group" role="group" aria-label="Basic example">
-  <button
-    *ngFor="let buttonCollection of buttonCollections"
-    type="button"
-    class="btn pagingButtons"
-    [ngClass]="{ active: buttonCollection.activeButton }"
-    aria-label="Close"
-    (click)="clickPageButton(buttonCollection.buttonNumber)"
-  >
-    {{ buttonCollection.buttonNumber }}
-  </button>
+  @for (buttonCollection of buttonCollections; track buttonCollection) {
+    <button
+      type="button"
+      class="btn pagingButtons"
+      [ngClass]="{ active: buttonCollection.activeButton }"
+      aria-label="Close"
+      (click)="clickPageButton(buttonCollection.buttonNumber)"
+      >
+      {{ buttonCollection.buttonNumber }}
+    </button>
+  }
 </div>

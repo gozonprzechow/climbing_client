@@ -21,10 +21,12 @@
             id="title"
             name="title"
             placeholder="title_txt"
-          />
-          <p *ngIf="invalidTitle()" id="title_error" class="help-block">
-            {{ 'Invalid title.' }}
-          </p>
+            />
+          @if (invalidTitle()) {
+            <p id="title_error" class="help-block">
+              {{ 'Invalid title.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.title }}</p>
         </div>
       </div>
@@ -40,14 +42,18 @@
             id="locality"
             name="locality"
             placeholder="locality_txt"
-          >
-            <option *ngFor="let locality of allLocality" value="{{ locality.name }}">
-              {{ locality.name }}
-            </option>
+            >
+            @for (locality of allLocality; track locality) {
+              <option value="{{ locality.name }}">
+                {{ locality.name }}
+              </option>
+            }
           </select>
-          <p *ngIf="invalidLocality()" id="locality_error" class="help-block">
-            {{ 'Invalid locality.' }}
-          </p>
+          @if (invalidLocality()) {
+            <p id="locality_error" class="help-block">
+              {{ 'Invalid locality.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.locality }}</p>
         </div>
       </div>
@@ -63,10 +69,12 @@
             id="comment"
             name="comment"
             placeholder="comment_txt"
-          />
-          <p *ngIf="invalidComment()" id="comment_error" class="help-block">
-            {{ 'Invalid comment.' }}
-          </p>
+            />
+          @if (invalidComment()) {
+            <p id="comment_error" class="help-block">
+              {{ 'Invalid comment.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.comment }}</p>
         </div>
       </div>
@@ -81,10 +89,12 @@
             class="form-control"
             id="priority"
             name="priority"
-          />
-          <p *ngIf="invalidPriority()" id="priority_error" class="help-block">
-            {{ 'Invalid priority.' }}
-          </p>
+            />
+          @if (invalidPriority()) {
+            <p id="priority_error" class="help-block">
+              {{ 'Invalid priority.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.priority }}</p>
         </div>
       </div>
@@ -100,10 +110,12 @@
             id="date"
             name="date"
             placeholder="#####"
-          />
-          <p *ngIf="invalidDate()" id="date_error" class="help-block">
-            {{ 'Invalid date.' }}
-          </p>
+            />
+          @if (invalidDate()) {
+            <p id="date_error" class="help-block">
+              {{ 'Invalid date.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.date }}</p>
         </div>
       </div>
@@ -111,24 +123,28 @@
       <div class="form-group" [ngClass]="displayImgFieldCss('img')">
         <!-- Password -->
         <div class="imageContainer">
-          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-            <label for="img" class="control-label image" id="imgId">{{
-              this.titleImage
-            }}</label>
-            <input
-              type="file"
-              class="form-control"
-              id="img"
-              name="img"
-              (change)="onFileSelect($event)"
-            />
-          </div>
+          @if (!is_submit_in_progress) {
+            <div class="col-sm-12">
+              <label for="img" class="control-label image" id="imgId">{{
+                this.titleImage
+              }}</label>
+              <input
+                type="file"
+                class="form-control"
+                id="img"
+                name="img"
+                (change)="onFileSelect($event)"
+                />
+            </div>
+          }
 
-          <div *ngIf="is_submit_in_progress" class="col-sm-12">
-            <label for="img" class="control-label frozenImage" id="imgId">{{
-              this.titleImage
-            }}</label>
-          </div>
+          @if (is_submit_in_progress) {
+            <div class="col-sm-12">
+              <label for="img" class="control-label frozenImage" id="imgId">{{
+                this.titleImage
+              }}</label>
+            </div>
+          }
         </div>
       </div>
 
@@ -140,21 +156,27 @@
 
       <div class="form-group has-error">
         <div class="submitContainer">
-          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="submitButton">
-              {{ store_txt }}
-            </button>
-          </div>
-          <div *ngIf="is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="frozenSubmitButton">
-              {{ submitInProgress_txt }}
-            </button>
-          </div>
+          @if (!is_submit_in_progress) {
+            <div class="col-sm-12">
+              <button type="submit" class="submitButton">
+                {{ store_txt }}
+              </button>
+            </div>
+          }
+          @if (is_submit_in_progress) {
+            <div class="col-sm-12">
+              <button type="submit" class="frozenSubmitButton">
+                {{ submitInProgress_txt }}
+              </button>
+            </div>
+          }
         </div>
       </div>
     </form>
     <div class="submitContainer">
-      <img [src]="imgURL" width="250" *ngIf="imgURL" />
+      @if (imgURL) {
+        <img [src]="imgURL" width="250" />
+      }
     </div>
   </div>
 </div>

@@ -1,0 +1,19 @@
+❯ Building...
+One or more browsers which are configured in the project's Browserslist configuration will be ignored as ES5 output is not supported by the Angular CLI.
+Ignored browsers:
+kaios 2.5, op_mini all
+One or more browsers which are configured in the project's Browserslist configuration fall outside Angular's browser support for this version.
+Unsupported browsers:
+and_qq 14.9, and_uc 15.5, android 149, chrome 109, ios_saf 26.5, kaios 3.0-3.1, op_mob 80, opera 131, opera 127, samsung 30, samsung 29
+✔ Building...
+Initial chunk files | Names         | Raw size | Estimated transfer size
+main.js             | main          |  1.00 MB |               206.91 kB
+polyfills.js        | polyfills     | 35.04 kB |                11.54 kB
+styles.css          | styles        | 11.53 kB |                 2.45 kB
+
+                    | Initial total |  1.05 MB |               220.90 kB
+
+Application bundle generation complete. [5.927 seconds] - 2026-07-03T20:11:10.596Z
+
+Output location: /home/gozon/web_climb/sutrak_net_server/sutrak_net_angular/dist/sutrak_net_angular
+

@@ -17,7 +17,7 @@
       [ngStyle]="{
         'max-width': getDescriptionContainerWidth() + 'px'
       }"
-    />
+      />
     <div class="{{ getDescriptionMainImageTextSizeClass() }}">
       Bílo-červený achát prorostlý mechem z lomu Doubravice.
     </div>
@@ -26,46 +26,46 @@
       [ngStyle]="{
         width: getDescriptionContainerWidth() + 'px'
       }"
-    >
+      >
       <div class="{{ getDescriptionImageTextSizeClass() }}">
         {{ pageDescription_txt }}
       </div>
     </div>
     <div class="wrap">
-      <div
-        *ngFor="let otherUsersCollection of otherUsersCollections; let i = index"
-        class="localityWrapper"
-      >
-        <div class="userDescription">
-          <a
-            class="{{ getUserNameClass() }}"
+      @for (otherUsersCollection of otherUsersCollections; track otherUsersCollection; let i = $index) {
+        <div
+          class="localityWrapper"
+          >
+          <div class="userDescription">
+            <a
+              class="{{ getUserNameClass() }}"
             (click)="
               routeToAnotherUsersLocalities(otherUsersCollection.otherUser.postedBy)
             "
-            >{{ otherUsersCollection.otherUser.name }}
-          </a>
-        </div>
-        <ul
-          class="list-inline"
+              >{{ otherUsersCollection.otherUser.name }}
+            </a>
+          </div>
+          <ul
+            class="list-inline"
           [ngStyle]="{
             'min-height': resizeSvc.getPictureHeight() + 'px'
           }"
-        >
-          <li
-            *ngFor="
-              let achatdbCollection of otherUsersCollection.achatdbCollections;
-              let j = index
-            "
-          >
-            <div *ngIf="achatdbCollection" class="imageContainer">
-              <img
+            >
+            @for (
+              achatdbCollection of otherUsersCollection.achatdbCollections; track
+              achatdbCollection; let j = $index) {
+              <li
+                >
+                @if (achatdbCollection) {
+                  <div class="imageContainer">
+                    <img
                 [attr.src]="
                   imageService.getImage(
                     achatdbCollection.imgName,
                     achatdbCollection.imgPath
                   )
                 "
-                class="imageLocality"
+                      class="imageLocality"
                 [ngStyle]="{
                   'margin-top': resizeSvc.getPictureMarginSize() + 'px',
                   width: resizeSvc.getPictureWidth() + 'px',
@@ -76,15 +76,17 @@
                       false
                     ) + 'px'
                 }"
-                alt="{{ achatdbCollection.title }}"
-                (click)="openModal(achatdbCollection, j)"
-              />
-            </div>
-          </li>
-        </ul>
-
-        <p class="enderLine"></p>
-      </div>
+                      alt="{{ achatdbCollection.title }}"
+                      (click)="openModal(achatdbCollection, j)"
+                      />
+                  </div>
+                }
+              </li>
+            }
+          </ul>
+          <p class="enderLine"></p>
+        </div>
+      }
     </div>
   </div>
 </div>

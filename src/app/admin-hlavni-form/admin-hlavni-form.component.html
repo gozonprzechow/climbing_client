@@ -22,10 +22,12 @@
             id="email"
             name="email"
             placeholder="email"
-          />
-          <p *ngIf="invalidEmail()" id="email_error" class="help-block">
-            {{ this.serviceErrors.email || 'Invalid email.' }}
-          </p>
+            />
+          @if (invalidEmail()) {
+            <p id="email_error" class="help-block">
+              {{ this.serviceErrors.email || 'Invalid email.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.email }}</p>
         </div>
       </div>
@@ -45,7 +47,7 @@
         <p>{{ registeredUsers_txt }} {{ serverInfo.registerUsers }}</p>
         <p>
           {{ imagesSpace_txt }} {{ this.convertedBytes.numberofBytes }} [{{
-            this.convertedBytes.unit
+          this.convertedBytes.unit
           }}]
         </p>
       </div>

@@ -22,10 +22,12 @@
             id="name"
             name="name"
             placeholder="name_txt"
-          />
-          <p *ngIf="invalidName()" id="name_error" class="help-block">
-            {{ this.serviceErrors.name || 'Invalid name.' }}
-          </p>
+            />
+          @if (invalidName()) {
+            <p id="name_error" class="help-block">
+              {{ this.serviceErrors.name || 'Invalid name.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.name }}</p>
         </div>
       </div>
@@ -36,7 +38,7 @@
         (mouseover)="imgSetLocation = '../../../assets/skins/globus_button_hover.png'"
         (mouseout)="imgSetLocation = '../../../assets/skins/globus_button.png'"
         (click)="openInputCountryModal()"
-      />
+        />
       <div class="location-text-container">Country: {{this.country}}</div>
       <div class="location-text-container">Region: {{this.region}}</div>
 
@@ -54,9 +56,11 @@
             name="description"
             placeholder="description_txt"
           ></textarea>
-          <p *ngIf="invalidDescription()" id="description_error" class="help-block">
-            {{ this.serviceErrors.description || 'Invalid description.' }}
-          </p>
+          @if (invalidDescription()) {
+            <p id="description_error" class="help-block">
+              {{ this.serviceErrors.description || 'Invalid description.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.description }}</p>
         </div>
       </div>
@@ -71,10 +75,12 @@
             class="form-control"
             id="priority"
             name="priority"
-          />
-          <p *ngIf="invalidPriority()" id="priority_error" class="help-block">
-            {{ 'Invalid priority.' }}
-          </p>
+            />
+          @if (invalidPriority()) {
+            <p id="priority_error" class="help-block">
+              {{ 'Invalid priority.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.priority }}</p>
         </div>
       </div>

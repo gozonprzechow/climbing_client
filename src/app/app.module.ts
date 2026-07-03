@@ -111,8 +111,8 @@ import { MondifyPhotoFormComponent } from './mondify-photo-form/mondify-photo-fo
         ReactiveFormsModule,
         BrowserAnimationsModule,
         LeafletModule,
-        CarouselModule.forRoot(),
-        ModalModule.forRoot(),
+        CarouselModule,
+        ModalModule,
         NgbModule], providers: [
         DatePipe,
         ResizeService,

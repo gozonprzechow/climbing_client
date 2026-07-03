@@ -21,10 +21,12 @@
             id="comment"
             name="comment"
             placeholder="{{ comment_txt }}"
-          />
-          <p *ngIf="invalidComment()" id="comment_error" class="help-block">
-            {{ 'Invalid comment.' }}
-          </p>
+            />
+          @if (invalidComment()) {
+            <p id="comment_error" class="help-block">
+              {{ 'Invalid comment.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.comment }}</p>
         </div>
       </div>
@@ -32,24 +34,28 @@
       <div class="form-group" [ngClass]="displayFieldCss('img')">
         <!-- Password -->
         <div class="imageContainer">
-          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-            <label for="img" class="control-label image" id="imgId">{{
-              this.titleImage
-            }}</label>
-            <input
-              type="file"
-              class="form-control"
-              id="img"
-              name="img"
-              (change)="onFileSelect($event)"
-            />
-          </div>
+          @if (!is_submit_in_progress) {
+            <div class="col-sm-12">
+              <label for="img" class="control-label image" id="imgId">{{
+                this.titleImage
+              }}</label>
+              <input
+                type="file"
+                class="form-control"
+                id="img"
+                name="img"
+                (change)="onFileSelect($event)"
+                />
+            </div>
+          }
 
-          <div *ngIf="is_submit_in_progress" class="col-sm-12">
-            <label for="img" class="control-label frozenImage" id="imgId">{{
-              this.titleImage
-            }}</label>
-          </div>
+          @if (is_submit_in_progress) {
+            <div class="col-sm-12">
+              <label for="img" class="control-label frozenImage" id="imgId">{{
+                this.titleImage
+              }}</label>
+            </div>
+          }
         </div>
       </div>
 
@@ -64,20 +70,26 @@
               {{ this.inputCondition.errorLoad }}
             </p>
             <!-- Register Button -->
-            <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-              <button type="submit" class="submitButton">{{ store_txt }}</button>
-            </div>
-            <div *ngIf="is_submit_in_progress" class="col-sm-12">
-              <button type="submit" class="frozenSubmitButton">
-                {{ submitInProgress_txt }}
-              </button>
-            </div>
+            @if (!is_submit_in_progress) {
+              <div class="col-sm-12">
+                <button type="submit" class="submitButton">{{ store_txt }}</button>
+              </div>
+            }
+            @if (is_submit_in_progress) {
+              <div class="col-sm-12">
+                <button type="submit" class="frozenSubmitButton">
+                  {{ submitInProgress_txt }}
+                </button>
+              </div>
+            }
           </div>
         </div>
       </div>
     </form>
     <div class="submitContainer">
-      <img [src]="imgURL" height="200" *ngIf="imgURL" />
+      @if (imgURL) {
+        <img [src]="imgURL" height="200" />
+      }
     </div>
   </div>
 </div>

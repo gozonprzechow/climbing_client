@@ -1,31 +1,35 @@
 <div class="modal-header">
   <h4></h4>
-  <h4 *ngIf="imageInformation" class="modal-title">{{ list.achatdbCollection.title }}</h4>
+  @if (imageInformation) {
+    <h4 class="modal-title">{{ list.achatdbCollection.title }}</h4>
+  }
   <div class="btn-group" role="group" aria-label="Basic example">
-    <button
-      *ngIf="!imageInformation"
-      type="button"
-      class="btn informationStyle active"
-      aria-label="Close"
-      (click)="showImageInformation()"
-    >
-      ?
-    </button>
-    <button
-      *ngIf="imageInformation"
-      type="button"
-      class="btn informationStyle"
-      aria-label="Close"
-      (click)="hideImageInformation()"
-    >
-      -
-    </button>
+    @if (!imageInformation) {
+      <button
+        type="button"
+        class="btn informationStyle active"
+        aria-label="Close"
+        (click)="showImageInformation()"
+        >
+        ?
+      </button>
+    }
+    @if (imageInformation) {
+      <button
+        type="button"
+        class="btn informationStyle"
+        aria-label="Close"
+        (click)="hideImageInformation()"
+        >
+        -
+      </button>
+    }
     <button
       type="button"
       class="btn closeStyle"
       aria-label="Close"
       (click)="bsModalRef.hide()"
-    >
+      >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -36,192 +40,222 @@
     (activeSlideChange)="logChangeSlide($event)"
     [showIndicators]="false"
     [interval]="false"
-  >
+    >
     <slide>
       <div class="picsum-img-wrapper">
         <img
           class="img-fluid carrouselImage"
           [attr.src]="getImageLarge(list.achatdbCollection.imgName)"
           alt="image slide"
-        />
+          />
       </div>
-      <div *ngIf="imageInformation" class="imageComment">
-        <br />[{{ getDateFormated(list.achatdbCollection.date) }}] {{ list.achatdbCollection.comment }}
-      </div>
+      @if (imageInformation) {
+        <div class="imageComment">
+          <br />[{{ getDateFormated(list.achatdbCollection.date) }}] {{ list.achatdbCollection.comment }}
+        </div>
+      }
     </slide>
-    <slide *ngFor="let achatImage of list.achatdbCollection.achatImages">
-      <div class="picsum-img-wrapper">
-        <img
-          class="img-fluid carrouselImage"
-          [attr.src]="getImageLarge(achatImage.imgName)"
-          alt="image slide"
-        />
-      </div>
-      <div *ngIf="imageInformation" class="imageComment">
-        <br />[{{ getDateFormated(list.achatdbCollection.date) }}] {{ achatImage.comment }}
-      </div>
-    </slide>
+    @for (achatImage of list.achatdbCollection.achatImages; track achatImage) {
+      <slide>
+        <div class="picsum-img-wrapper">
+          <img
+            class="img-fluid carrouselImage"
+            [attr.src]="getImageLarge(achatImage.imgName)"
+            alt="image slide"
+            />
+        </div>
+        @if (imageInformation) {
+          <div class="imageComment">
+            <br />[{{ getDateFormated(list.achatdbCollection.date) }}] {{ achatImage.comment }}
+          </div>
+        }
+      </slide>
+    }
   </carousel>
 </div>
 <div class="modal-footer">
   <div>
     <div class="row">
       <div class="col">
-        <img
-          *ngIf="ifLoginLikeImage(list.achatdbCollection.status)"
-          class="LikeImage"
-          [src]="imgSrc"
-          (mouseover)="imgSrc = '../../../assets/skins/like_button_hover.png'"
-          (mouseout)="imgSrc = '../../../assets/skins/like_button.png'"
-          (click)="runLikeImage(list.achatdbCollection)"
-        />
-        <img
-          *ngIf="ifLogoutLikeImage(list.achatdbCollection.status)"
-          class="LikeImageLogout"
-          [src]="imgSrc"
-        />
-        <div *ngIf="ifLike(list.achatdbCollection.status)" class="row">
-          <div class="col">
-            <p class="LikeNumber">{{ list.achatdbCollection.likes.quantity }}</p>
+        @if (ifLoginLikeImage(list.achatdbCollection.status)) {
+          <img
+            class="LikeImage"
+            [src]="imgSrc"
+            (mouseover)="imgSrc = '../../../assets/skins/like_button_hover.png'"
+            (mouseout)="imgSrc = '../../../assets/skins/like_button.png'"
+            (click)="runLikeImage(list.achatdbCollection)"
+            />
+        }
+        @if (ifLogoutLikeImage(list.achatdbCollection.status)) {
+          <img
+            class="LikeImageLogout"
+            [src]="imgSrc"
+            />
+        }
+        @if (ifLike(list.achatdbCollection.status)) {
+          <div class="row">
+            <div class="col">
+              <p class="LikeNumber">{{ list.achatdbCollection.likes.quantity }}</p>
+            </div>
           </div>
-        </div>
+        }
 
-        <img
-          *ngIf="ifLoginPriceBindImage(list.achatdbCollection.status)"
-          class="CostImage"
-          [src]="imgPriceSrc"
+        @if (ifLoginPriceBindImage(list.achatdbCollection.status)) {
+          <img
+            class="CostImage"
+            [src]="imgPriceSrc"
           (mouseover)="
             imgPriceSrc = '../../../assets/skins/insert_prize_collection_hover.png'
           "
-          (mouseout)="imgPriceSrc = '../../../assets/skins/insert_prize_collection.png'"
-          (click)="sendOfferModal()"
-        />
-        <img
-          *ngIf="ifLogoutPriceBindImage(list.achatdbCollection.status)"
-          class="CostImageLogout"
-          [src]="imgPriceSrc"
-        />
-        <div *ngIf="ifPrice(list.achatdbCollection.status)" class="row">
-          <div class="col">
-            <p class="LikeNumber">
-              {{ list.achatdbCollection.price }} {{ list.achatdbCollection.currency }}
-            </p>
+            (mouseout)="imgPriceSrc = '../../../assets/skins/insert_prize_collection.png'"
+            (click)="sendOfferModal()"
+            />
+        }
+        @if (ifLogoutPriceBindImage(list.achatdbCollection.status)) {
+          <img
+            class="CostImageLogout"
+            [src]="imgPriceSrc"
+            />
+        }
+        @if (ifPrice(list.achatdbCollection.status)) {
+          <div class="row">
+            <div class="col">
+              <p class="LikeNumber">
+                {{ list.achatdbCollection.price }} {{ list.achatdbCollection.currency }}
+              </p>
+            </div>
           </div>
-        </div>
+        }
 
-        <img
-          *ngIf="ifLoginAuctionBindImage(list.achatdbCollection.status)"
-          class="CostImage"
-          [src]="imgAuctionSrc"
+        @if (ifLoginAuctionBindImage(list.achatdbCollection.status)) {
+          <img
+            class="CostImage"
+            [src]="imgAuctionSrc"
           (mouseover)="
             imgAuctionSrc = '../../../assets/skins/insert_auction_collection_hover.png'
           "
           (mouseout)="
             imgAuctionSrc = '../../../assets/skins/insert_auction_collection.png'
           "
-          (click)="sendOfferModal()"
-        />
-        <img
-          *ngIf="ifLogoutAuctionBindImage(list.achatdbCollection.status)"
-          class="CostImageLogout"
-          [src]="imgAuctionSrc"
-        />
-        <div *ngIf="ifAuction(list.achatdbCollection.status)" class="row">
-          <div class="col">
-            <p class="LikeNumber">
-              {{ list.achatdbCollection.price }} {{ list.achatdbCollection.currency }}
-            </p>
+            (click)="sendOfferModal()"
+            />
+        }
+        @if (ifLogoutAuctionBindImage(list.achatdbCollection.status)) {
+          <img
+            class="CostImageLogout"
+            [src]="imgAuctionSrc"
+            />
+        }
+        @if (ifAuction(list.achatdbCollection.status)) {
+          <div class="row">
+            <div class="col">
+              <p class="LikeNumber">
+                {{ list.achatdbCollection.price }} {{ list.achatdbCollection.currency }}
+              </p>
+            </div>
           </div>
-        </div>
+        }
       </div>
       <div class="col">
-        <button
-          *ngIf="imageInformation"
-          type="button"
-          class={{getCommentBtnClass()}}
-          (click)="seeComments(list.achatdbCollection)"
-        >
-          {{ comments_txt }}
-        </button>
-      </div>
-      <div class="col">
-        <button
-          *ngIf="showEditItem(list.achatdbCollection.postedBy)"
-          type="button"
-          class="btn btnCancle"
-          (click)="editImage(list.achatdbCollection)"
-        >
-          {{ edit_txt }}
-        </button>
-      </div>
-    </div>
-  </div>
-  <div
-    *ngIf="showComments"
-    class="containerComment"
-    [ngClass]="{ containerCommentLogIn: auth.isLoggedIn() }"
-  >
-    <div *ngIf="auth.isLoggedIn()" class="containerComment_inputComment">
-      <div class="containerComment_inputCommentBtn">
-        <div class="row">
-          <div *ngIf="!showAddComment" class="col">
-            <button type="button" class="btn btnAddComment" (click)="seeAddComment()">
-              {{ addNew_txt }}
-            </button>
-          </div>
-
-          <div *ngIf="showAddComment" class={{getBtnAddComentColumn()}}>
-            <button
-              type="button"
-              class={{getSubmitCommentBtnClass()}}
-              (click)="submitComment(list.achatdbCollection)"
-            >
-              {{ submit_txt }}
-            </button>
-            <button
-              type="button"
-              class={{getCancleAddCommentBtnClass()}}
-              (click)="canceAddComment()"
-            >
-              {{ cancle_txt }}
-            </button>
-          </div>
-          <div *ngIf="showAddComment" class={{getInputComentColumn()}}>
-            <textarea
-              class="inputCommentBox"
-              ref-textarea
-              [(ngModel)]="textValue"
-              rows="4"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      *ngFor="let communityComment of list.achatdbCollection.communityComments"
-      class="containerComment_text"
-    >
-      <div class="row">
-        <div
-          *ngIf="isItemYours(communityComment.commentBy)"
-          class="col-2 commentPosterNameColumn"
-        >
-          <div class="communityCommentPosterName">{{ communityComment.posterName }}</div>
+        @if (imageInformation) {
           <button
             type="button"
-            class="btn btnCommunityComments"
-            (click)="openConfirmModal(list.achatdbCollection, communityComment)"
-          >
-            {{ delete_txt }}
+            class={{getCommentBtnClass()}}
+            (click)="seeComments(list.achatdbCollection)"
+            >
+            {{ comments_txt }}
           </button>
-        </div>
-        <!-- <div class="col-sm-2">
-          <div class="communityCommentText">{{communityComment.posterName}}</div>
-        </div> -->
-        <div class="co-10">
-          <div class="communityCommentText">{{ communityComment.message }}</div>
-        </div>
+        }
+      </div>
+      <div class="col">
+        @if (showEditItem(list.achatdbCollection.postedBy)) {
+          <button
+            type="button"
+            class="btn btnCancle"
+            (click)="editImage(list.achatdbCollection)"
+            >
+            {{ edit_txt }}
+          </button>
+        }
       </div>
     </div>
   </div>
+  @if (showComments) {
+    <div
+      class="containerComment"
+      [ngClass]="{ containerCommentLogIn: auth.isLoggedIn() }"
+      >
+      @if (auth.isLoggedIn()) {
+        <div class="containerComment_inputComment">
+          <div class="containerComment_inputCommentBtn">
+            <div class="row">
+              @if (!showAddComment) {
+                <div class="col">
+                  <button type="button" class="btn btnAddComment" (click)="seeAddComment()">
+                    {{ addNew_txt }}
+                  </button>
+                </div>
+              }
+              @if (showAddComment) {
+                <div class={{getBtnAddComentColumn()}}>
+                  <button
+                    type="button"
+                    class={{getSubmitCommentBtnClass()}}
+                    (click)="submitComment(list.achatdbCollection)"
+                    >
+                    {{ submit_txt }}
+                  </button>
+                  <button
+                    type="button"
+                    class={{getCancleAddCommentBtnClass()}}
+                    (click)="canceAddComment()"
+                    >
+                    {{ cancle_txt }}
+                  </button>
+                </div>
+              }
+              @if (showAddComment) {
+                <div class={{getInputComentColumn()}}>
+                  <textarea
+                    class="inputCommentBox"
+                    ref-textarea
+                    [(ngModel)]="textValue"
+                    rows="4"
+                  ></textarea>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+      @for (communityComment of list.achatdbCollection.communityComments; track communityComment) {
+        <div
+          class="containerComment_text"
+          >
+          <div class="row">
+            @if (isItemYours(communityComment.commentBy)) {
+              <div
+                class="col-2 commentPosterNameColumn"
+                >
+                <div class="communityCommentPosterName">{{ communityComment.posterName }}</div>
+                <button
+                  type="button"
+                  class="btn btnCommunityComments"
+                  (click)="openConfirmModal(list.achatdbCollection, communityComment)"
+                  >
+                  {{ delete_txt }}
+                </button>
+              </div>
+            }
+            <!-- <div class="col-sm-2">
+            <div class="communityCommentText">{{communityComment.posterName}}</div>
+          </div> -->
+          <div class="co-10">
+            <div class="communityCommentText">{{ communityComment.message }}</div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
 </div>

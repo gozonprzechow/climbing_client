@@ -6,13 +6,13 @@ import { Directive, HostListener, HostBinding, Output, EventEmitter, Input } fro
 })
 
 export class FileDragNDrop {
-  //@Input() private allowed_extensions : Array<string> = ['png', 'jpg', 'bmp'];
-  @Output() private filesChangeEmiter : EventEmitter<FileList> = new EventEmitter();
-  //@Output() private filesInvalidEmiter : EventEmitter<File[]> = new EventEmitter();
-  @HostBinding('style.background') private background = '#eee';
-  @HostBinding('style.border') private borderStyle = '2px dashed';
-  @HostBinding('style.border-color') private borderColor = '#3088CF';
-  @HostBinding('style.border-radius') private borderRadius = '5px';
+  //@Input() allowed_extensions : Array<string> = ['png', 'jpg', 'bmp'];
+  @Output() filesChangeEmiter : EventEmitter<FileList> = new EventEmitter();
+  //@Output() filesInvalidEmiter : EventEmitter<File[]> = new EventEmitter();
+  @HostBinding('style.background') background = '#eee';
+  @HostBinding('style.border') borderStyle = '2px dashed';
+  @HostBinding('style.border-color') borderColor = '#3088CF';
+  @HostBinding('style.border-radius') borderRadius = '5px';
 
   constructor() { }
 

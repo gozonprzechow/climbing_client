@@ -6,7 +6,7 @@
       class="btn closeStyle"
       aria-label="Close"
       (click)="bsModalRef.hide()"
-    >
+      >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -16,45 +16,50 @@
       <div class="col-sm-12">
         <label for="price" class="control-label required"
           >{{ offerPrice_txt }}
-          <p *ngIf="this.offerService.isPrice(this.list.achat_collection.status)">
-            {{ this.list.achat_collection.price }}
-            {{ this.list.achat_collection.currency }}
-          </p></label
-        >
-        <input
-          *ngIf="this.offerService.isAuction(this.list.achat_collection.status)"
-          type="number"
-          formControlName="price"
-          class="form-control"
-          id="price"
-          name="price"
-        />
-        <p *ngIf="invalidPrice()" id="price_error" class="help-block">
-          {{ this.serviceErrors.price || 'Invalid price.' }}
-        </p>
-        <p class="help-block">{{ this.serverServiceErrors.price }}</p>
+          @if (this.offerService.isPrice(this.list.achat_collection.status)) {
+            <p>
+              {{ this.list.achat_collection.price }}
+              {{ this.list.achat_collection.currency }}
+            </p>
+            }</label
+            >
+            @if (this.offerService.isAuction(this.list.achat_collection.status)) {
+              <input
+                type="number"
+                formControlName="price"
+                class="form-control"
+                id="price"
+                name="price"
+                />
+            }
+            @if (invalidPrice()) {
+              <p id="price_error" class="help-block">
+                {{ this.serviceErrors.price || 'Invalid price.' }}
+              </p>
+            }
+            <p class="help-block">{{ this.serverServiceErrors.price }}</p>
+          </div>
+        </div>
+
+
+        <div class="form-group" [ngClass]="{ 'has-error': invalidMessage() }">
+          <p>
+            {{ message_txt }}
+          </p>
+          <textarea
+            class="inputMessageBox"
+            formControlName="message"
+          ></textarea>
+        </div>
+
+
       </div>
-    </div>
-
-
-    <div class="form-group" [ngClass]="{ 'has-error': invalidMessage() }">
-        <p>
-          {{ message_txt }}
-        </p>
-        <textarea
-          class="inputMessageBox"
-          formControlName="message"
-        ></textarea>
-    </div>
-
-
-  </div>
-  <div class="modal-footer">
-    <div class="float-left">
-      <button type="submit" class="btn btnConfirm">Ok</button>
-    </div>
-    <button type="button" class="btn btnCancle" (click)="bsModalRef.hide()">
-      Cancle
-    </button>
-  </div>
-</form>
+      <div class="modal-footer">
+        <div class="float-left">
+          <button type="submit" class="btn btnConfirm">Ok</button>
+        </div>
+        <button type="button" class="btn btnCancle" (click)="bsModalRef.hide()">
+          Cancle
+        </button>
+      </div>
+    </form>

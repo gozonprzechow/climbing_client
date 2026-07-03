@@ -21,10 +21,12 @@
             id="name"
             name="name"
             placeholder="{{ name_txt }}"
-          />
-          <p *ngIf="invalidName()" id="name_error" class="help-block">
-            {{ this.serviceErrors.name || 'Invalid name.' }}
-          </p>
+            />
+          @if (invalidName()) {
+            <p id="name_error" class="help-block">
+              {{ this.serviceErrors.name || 'Invalid name.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.name }}</p>
         </div>
       </div>
@@ -40,10 +42,12 @@
             id="email"
             name="email"
             placeholder="email"
-          />
-          <p *ngIf="invalidEmail()" id="email_error" class="help-block">
-            {{ this.serviceErrors.email || 'Invalid email.' }}
-          </p>
+            />
+          @if (invalidEmail()) {
+            <p id="email_error" class="help-block">
+              {{ this.serviceErrors.email || 'Invalid email.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.email }}</p>
         </div>
       </div>
@@ -59,10 +63,12 @@
             id="password"
             name="password"
             placeholder="*********"
-          />
-          <p *ngIf="invalidPassword()" id="password_error" class="help-block">
-            {{ this.serviceErrors.password || 'Invalid password.' }}
-          </p>
+            />
+          @if (invalidPassword()) {
+            <p id="password_error" class="help-block">
+              {{ this.serviceErrors.password || 'Invalid password.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.password }}</p>
         </div>
       </div>
@@ -77,16 +83,20 @@
             {{ this.inputCondition.errorLoad && this.serverServiceErrors.uploadSuccess }}
           </p>
           <!-- Register Button -->
-          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="{{ getSubmitBtnClass() }}">
-              {{ createAccount_txt }}
-            </button>
-          </div>
-          <div *ngIf="is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="{{ getSubmitFrozenBtnClass() }}">
-              {{ submitInProgress_txt }}
-            </button>
-          </div>
+          @if (!is_submit_in_progress) {
+            <div class="col-sm-12">
+              <button type="submit" class="{{ getSubmitBtnClass() }}">
+                {{ createAccount_txt }}
+              </button>
+            </div>
+          }
+          @if (is_submit_in_progress) {
+            <div class="col-sm-12">
+              <button type="submit" class="{{ getSubmitFrozenBtnClass() }}">
+                {{ submitInProgress_txt }}
+              </button>
+            </div>
+          }
         </div>
         <div class="col-sm-12 center-text">{{this.create_account_message}}</div>
       </div>

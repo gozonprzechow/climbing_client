@@ -13,7 +13,7 @@
       class="imgSetCollectionInput"
       [src]="imgSetStandardSrc"
       (click)="activeLeadCollectionInput()"
-    />
+      />
 
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
       <div class="form-group" [ngClass]="displayFieldCss('title')">
@@ -27,10 +27,12 @@
             id="title"
             name="title"
             placeholder="{{ title_txt }}"
-          />
-          <p *ngIf="invalidTitle()" id="title_error" class="help-block">
-            {{ 'Invalid title.' }}
-          </p>
+            />
+          @if (invalidTitle()) {
+            <p id="title_error" class="help-block">
+              {{ 'Invalid title.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.title }}</p>
         </div>
       </div>
@@ -45,7 +47,7 @@
             (click)="openInputAreaModal()"
             (mouseover)="imgAddArea = '../../../assets/skins/add_friend_button_hover.png'"
             (mouseout)="imgAddArea = '../../../assets/skins/add_friend_button.png'"
-          />
+            />
           <select
             type="text"
             (change)="changeArea($event.target.value)"
@@ -53,14 +55,18 @@
             class="form-control"
             id="area"
             name="area"
-          >
-            <option *ngFor="let area of allLocality" value="{{ area.name }}">
-              {{ area.name }}
-            </option>
+            >
+            @for (area of allLocality; track area) {
+              <option value="{{ area.name }}">
+                {{ area.name }}
+              </option>
+            }
           </select>
-          <p *ngIf="invalidArea()" id="area_error" class="help-block">
-            {{ 'Invalid area.' }}
-          </p>
+          @if (invalidArea()) {
+            <p id="area_error" class="help-block">
+              {{ 'Invalid area.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.area }}</p>
         </div>
       </div>
@@ -77,21 +83,25 @@
               imgAddSector = '../../../assets/skins/add_friend_button_hover.png'
             "
             (mouseout)="imgAddSector = '../../../assets/skins/add_friend_button.png'"
-          />
+            />
           <select
             type="text"
             formControlName="sector"
             class="form-control"
             id="sector"
             name="sector"
-          >
-            <option *ngFor="let sector of allSectors" value="{{ sector.name }}">
-              {{ sector.name }}
-            </option>
+            >
+            @for (sector of allSectors; track sector) {
+              <option value="{{ sector.name }}">
+                {{ sector.name }}
+              </option>
+            }
           </select>
-          <p *ngIf="invalidSector()" id="sector_error" class="help-block">
-            {{ 'Invalid sector.' }}
-          </p>
+          @if (invalidSector()) {
+            <p id="sector_error" class="help-block">
+              {{ 'Invalid sector.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.sector }}</p>
         </div>
       </div>
@@ -108,18 +118,21 @@
             class="form-control"
             id="difficulty"
             name="difficulty"
-          >
-            <option
-              *ngFor="let difficulty_item of difficulty_array"
-              value="{{ difficulty_item }}"
             >
-              {{ difficulty_item }}
-            </option>
+            @for (difficulty_item of difficulty_array; track difficulty_item) {
+              <option
+                value="{{ difficulty_item }}"
+                >
+                {{ difficulty_item }}
+              </option>
+            }
           </select>
         </div>
-        <p *ngIf="invalidDifficulty()" id="sector_error" class="help-block">
-          {{ 'Invalid classification.' }}
-        </p>
+        @if (invalidDifficulty()) {
+          <p id="sector_error" class="help-block">
+            {{ 'Invalid classification.' }}
+          </p>
+        }
         <p class="help-block">{{ this.serverServiceErrors.difficulty }}</p>
       </div>
 
@@ -133,15 +146,19 @@
             class="form-control"
             id="style"
             name="style"
-          >
-            <option *ngFor="let style_item of style_array" value="{{ style_item }}">
-              {{ style_item }}
-            </option>
+            >
+            @for (style_item of style_array; track style_item) {
+              <option value="{{ style_item }}">
+                {{ style_item }}
+              </option>
+            }
           </select>
         </div>
-        <p *ngIf="invalidStyle()" id="sector_error" class="help-block">
-          {{ 'Invalid style.' }}
-        </p>
+        @if (invalidStyle()) {
+          <p id="sector_error" class="help-block">
+            {{ 'Invalid style.' }}
+          </p>
+        }
         <p class="help-block">{{ this.serverServiceErrors.style }}</p>
       </div>
 
@@ -156,10 +173,12 @@
             id="comment"
             name="comment"
             placeholder="{{ comment_txt }}"
-          />
-          <p *ngIf="invalidComment()" id="comment_error" class="help-block">
-            {{ 'Invalid comment.' }}
-          </p>
+            />
+          @if (invalidComment()) {
+            <p id="comment_error" class="help-block">
+              {{ 'Invalid comment.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.comment }}</p>
         </div>
       </div>
@@ -174,10 +193,12 @@
             class="form-control"
             id="priority"
             name="priority"
-          />
-          <p *ngIf="invalidPriority()" id="priority_error" class="help-block">
-            {{ 'Invalid priority.' }}
-          </p>
+            />
+          @if (invalidPriority()) {
+            <p id="priority_error" class="help-block">
+              {{ 'Invalid priority.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.priority }}</p>
         </div>
       </div>
@@ -193,10 +214,12 @@
             id="date"
             name="date"
             placeholder="#####"
-          />
-          <p *ngIf="invalidDate()" id="date_error" class="help-block">
-            {{ 'Invalid date.' }}
-          </p>
+            />
+          @if (invalidDate()) {
+            <p id="date_error" class="help-block">
+              {{ 'Invalid date.' }}
+            </p>
+          }
           <p class="help-block">{{ this.serverServiceErrors.date }}</p>
         </div>
       </div>
@@ -204,25 +227,29 @@
       <div class="form-group" [ngClass]="displayFieldCss('img')">
         <!-- Password -->
         <div class="dropzone" fileDragDrop (filesChangeEmiter)="onFileSelect($event)">
-          <div *ngIf="!is_submit_in_progress">
-            <label for="img" class="control-label image" id="imgId">{{
-              this.titleImage
-            }}</label>
-            <input
-              type="file"
-              class="form-control"
-              id="img"
-              name="img"
-              (change)="onFileSelect($event.target.files)"
-              multiple
-            />
-          </div>
+          @if (!is_submit_in_progress) {
+            <div>
+              <label for="img" class="control-label image" id="imgId">{{
+                this.titleImage
+              }}</label>
+              <input
+                type="file"
+                class="form-control"
+                id="img"
+                name="img"
+                (change)="onFileSelect($event.target.files)"
+                multiple
+                />
+            </div>
+          }
 
-          <div *ngIf="is_submit_in_progress">
-            <label for="img" class="control-label frozenImage" id="imgId">{{
-              this.titleImage
-            }}</label>
-          </div>
+          @if (is_submit_in_progress) {
+            <div>
+              <label for="img" class="control-label frozenImage" id="imgId">{{
+                this.titleImage
+              }}</label>
+            </div>
+          }
         </div>
       </div>
 
@@ -234,29 +261,33 @@
 
       <div class="form-group has-error">
         <div class="submitContainer">
-          <div *ngIf="!is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="submitButton">{{ store_txt }}</button>
-          </div>
-          <div *ngIf="is_submit_in_progress" class="col-sm-12">
-            <button type="submit" class="frozenSubmitButton">
-              {{ submitInProgress_txt }}
-            </button>
-          </div>
+          @if (!is_submit_in_progress) {
+            <div class="col-sm-12">
+              <button type="submit" class="submitButton">{{ store_txt }}</button>
+            </div>
+          }
+          @if (is_submit_in_progress) {
+            <div class="col-sm-12">
+              <button type="submit" class="frozenSubmitButton">
+                {{ submitInProgress_txt }}
+              </button>
+            </div>
+          }
         </div>
       </div>
     </form>
     <!-- <div class="submitContainer">
-      <img *ngFor="let preview of previews" [src]="preview" height="200" />
-    </div> -->
-  </div>
+    <img *ngFor="let preview of previews" [src]="preview" height="200" />
+  </div> -->
 </div>
-<div
-  *ngFor="let image_info of input_mineral_service.getImagesInfo(); let j = index"
-  class="imageContainer"
->
-  <img
-    [src]="image_info.image_url"
-    class="imageMineral"
+</div>
+@for (image_info of input_mineral_service.getImagesInfo(); track image_info; let j = $index) {
+  <div
+    class="imageContainer"
+    >
+    <img
+      [src]="image_info.image_url"
+      class="imageMineral"
     [ngStyle]="{
       'margin-top': resizeSvc.getPictureMarginSize() + 'px',
       width: resizeSvc.getPictureWidth() + 'px',
@@ -268,45 +299,47 @@
       'border-width': input_mineral_service.getImageBorderSize(j),
       'border-color': input_mineral_service.getImageBorderColour(j)
     }"
-    (click)="input_mineral_service.setNewFrontImage(j)"
-  />
-  <button
-    *ngIf="input_mineral_service.ifShowRemoveImgBtn(j, is_submit_in_progress)"
-    type="button"
-    class="btn imageTopRight removeStyle"
+      (click)="input_mineral_service.setNewFrontImage(j)"
+      />
+    @if (input_mineral_service.ifShowRemoveImgBtn(j, is_submit_in_progress)) {
+      <button
+        type="button"
+        class="btn imageTopRight removeStyle"
     [ngStyle]="{
       'margin-top': resizeSvc.getPictureMarginSize() + 'px',
       left: resizeSvc.getFirstImageOffset(3, j, false) + 'px',
       top: resizeSvc.getFirstImageOffsetTop(j) + 'px'
     }"
-    (click)="input_mineral_service.removeImage(j)"
-  >
-    &times;
-  </button>
-
-  <button
-    *ngIf="input_mineral_service.ifShowSuccessImgUploadBtn(j)"
-    type="button"
-    class="btn imageTopRight passStyle"
+        (click)="input_mineral_service.removeImage(j)"
+        >
+        &times;
+      </button>
+    }
+    @if (input_mineral_service.ifShowSuccessImgUploadBtn(j)) {
+      <button
+        type="button"
+        class="btn imageTopRight passStyle"
     [ngStyle]="{
       'margin-top': resizeSvc.getPictureMarginSize() + 'px',
       left: resizeSvc.getFirstImageOffset(3, j, false) + 'px',
       top: resizeSvc.getFirstImageOffsetTop(j) + 'px'
     }"
-  >
-    &#10003;
-  </button>
-
-  <button
-    *ngIf="input_mineral_service.ifShowFailImgUploadBtn(j)"
-    type="button"
-    class="btn imageTopRight faultStyle"
+        >
+        &#10003;
+      </button>
+    }
+    @if (input_mineral_service.ifShowFailImgUploadBtn(j)) {
+      <button
+        type="button"
+        class="btn imageTopRight faultStyle"
     [ngStyle]="{
       'margin-top': resizeSvc.getPictureMarginSize() + 'px',
       left: resizeSvc.getFirstImageOffset(3, j, false) + 'px',
       top: resizeSvc.getFirstImageOffsetTop(j) + 'px'
     }"
-  >
-    &times;
-  </button>
-</div>
+        >
+        &times;
+      </button>
+    }
+  </div>
+}

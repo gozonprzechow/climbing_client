@@ -12,27 +12,27 @@
   [ngStyle]="{
     width: resizeSvc.getPageWidth() + 'px'
   }"
->
+  >
   <div class="wrap">
-    <div
-      *ngFor="let otherUsersCollection of otherUsersCollections; let i = index"
-      class="userWrapper"
-    >
+    @for (otherUsersCollection of otherUsersCollections; track otherUsersCollection; let i = $index) {
       <div
-        *ngIf="otherUsersCollection.otherUser.profileImgName"
-        class="list-inline"
+        class="userWrapper"
+        >
+        @if (otherUsersCollection.otherUser.profileImgName) {
+          <div
+            class="list-inline"
         [ngStyle]="{
           'min-height': (resizeSvc.getPictureHeight() * 2) / 3 + 'px'
         }"
-      >
-        <img
+            >
+            <img
           [attr.src]="
             imageService.getImage(
               otherUsersCollection.otherUser.profileImgName,
               otherUsersCollection.otherUser.profileImgPath
             )
           "
-          class="imageProfile"
+              class="imageProfile"
           [ngStyle]="{
             width: (resizeSvc.getPictureWidth() * 2) / 3 + 'px',
             left:
@@ -42,75 +42,81 @@
                 (resizeSvc.getPictureWidth() * 2) / 3
               ) + 'px'
           }"
-          (click)="routeToAnotherUsersLocalities(otherUsersCollection.otherUser.postedBy)"
-        />
-      </div>
-      <div class="userDescription">
-        <a
-          class="{{ getUserNameClass() }}"
-          (click)="routeToAnotherUsersLocalities(otherUsersCollection.otherUser.postedBy)"
-          >{{ otherUsersCollection.otherUser.name }}</a
-        >
-        <div class="dropdownLocality" ngbDropdown>
-          <button
-            *ngIf="chatService.isDropDownActive(otherUsersCollection.otherUser.postedBy)"
-            type="button"
-            id="dropdown01"
-            class="{{ getUserDropDownClass() }}"
-            ngbDropdownToggle
-          ></button>
-          <div
-            *ngIf="chatService.isDropDownActive(otherUsersCollection.otherUser.postedBy)"
-            ngbDropdownMenu
-            class="dropdownStyle"
-            aria-labelledby="dropdown01"
-          >
-            <a
-              *ngIf="
-                chatService.isSendMessageActive(otherUsersCollection.otherUser.postedBy)
-              "
-              (click)="sendMessage(otherUsersCollection.otherUser)"
-              class="dropdown-item"
-            >
-              {{ sendMessage_txt }}</a
-            >
-            <a
-              *ngIf="chatService.isAddFriendActive(otherUsersCollection.otherUser)"
-              class="dropdown-item"
-              (click)="sendFriendshipRequest(otherUsersCollection.otherUser.postedBy, i)"
-              >{{ addFriend_txt }}</a
-            >
-            <a
-              *ngIf="chatService.isConfirmFriendActive(otherUsersCollection.otherUser)"
-              class="dropdown-item"
-              (click)="sendConfirmFriendship(otherUsersCollection.otherUser.postedBy, i)"
-              >{{ confirmFriend_txt }}</a
-            >
+              (click)="routeToAnotherUsersLocalities(otherUsersCollection.otherUser.postedBy)"
+              />
           </div>
-        </div>
-      </div>
-      <div>
-        <ul
-          class="list-inline"
+        }
+        <div class="userDescription">
+          <a
+            class="{{ getUserNameClass() }}"
+            (click)="routeToAnotherUsersLocalities(otherUsersCollection.otherUser.postedBy)"
+            >{{ otherUsersCollection.otherUser.name }}</a
+            >
+            <div class="dropdownLocality" ngbDropdown>
+              @if (chatService.isDropDownActive(otherUsersCollection.otherUser.postedBy)) {
+                <button
+                  type="button"
+                  id="dropdown01"
+                  class="{{ getUserDropDownClass() }}"
+                  ngbDropdownToggle
+                ></button>
+              }
+              @if (chatService.isDropDownActive(otherUsersCollection.otherUser.postedBy)) {
+                <div
+                  ngbDropdownMenu
+                  class="dropdownStyle"
+                  aria-labelledby="dropdown01"
+                  >
+                  @if (
+                    chatService.isSendMessageActive(otherUsersCollection.otherUser.postedBy)
+                    ) {
+                    <a
+                      (click)="sendMessage(otherUsersCollection.otherUser)"
+                      class="dropdown-item"
+                      >
+                      {{ sendMessage_txt }}</a
+                      >
+                    }
+                    @if (chatService.isAddFriendActive(otherUsersCollection.otherUser)) {
+                      <a
+                        class="dropdown-item"
+                        (click)="sendFriendshipRequest(otherUsersCollection.otherUser.postedBy, i)"
+                        >{{ addFriend_txt }}</a
+                        >
+                      }
+                      @if (chatService.isConfirmFriendActive(otherUsersCollection.otherUser)) {
+                        <a
+                          class="dropdown-item"
+                          (click)="sendConfirmFriendship(otherUsersCollection.otherUser.postedBy, i)"
+                          >{{ confirmFriend_txt }}</a
+                          >
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+                <div>
+                  <ul
+                    class="list-inline"
           [ngStyle]="{
             'min-height': resizeSvc.getPictureHeight() + 'px'
           }"
-        >
-          <li
-            *ngFor="
-              let achatdbCollection of otherUsersCollection.achatdbCollections;
-              let j = index
-            "
-          >
-            <div *ngIf="achatdbCollection" class="imageContainer">
-              <img
+                    >
+                    @for (
+                      achatdbCollection of otherUsersCollection.achatdbCollections; track
+                      achatdbCollection; let j = $index) {
+                      <li
+                        >
+                        @if (achatdbCollection) {
+                          <div class="imageContainer">
+                            <img
                 [attr.src]="
                   imageService.getImage(
                     achatdbCollection.imgName,
                     achatdbCollection.imgPath
                   )
                 "
-                class="imageMineral"
+                              class="imageMineral"
                 [ngStyle]="{
                   'margin-top': resizeSvc.getPictureMarginSize() + 'px',
                   width: resizeSvc.getPictureWidth() + 'px',
@@ -120,23 +126,27 @@
                       j
                     ) + 'px'
                 }"
-                (click)="openModal(achatdbCollection, j)"
-              />
-            </div>
-          </li>
-        </ul>
-      </div>
-      <hr
-        class="enderLine"
+                              (click)="openModal(achatdbCollection, j)"
+                              />
+                          </div>
+                        }
+                      </li>
+                    }
+                  </ul>
+                </div>
+                <hr
+                  class="enderLine"
         [ngStyle]="{
           width: resizeSvc.getEndLinerWidth(3) + 'px'
         }"
-      />
-    </div>
-    <app-paging-buttons
-      *ngIf="this.pagingButtons.ifAnyMorePage()"
-      [buttonCollections]="buttonCollections"
-      (clickPageButtonEvent)="clickPageButton($event)"
-    ></app-paging-buttons>
-  </div>
-</div>
+                  />
+              </div>
+            }
+            @if (this.pagingButtons.ifAnyMorePage()) {
+              <app-paging-buttons
+                [buttonCollections]="buttonCollections"
+                (clickPageButtonEvent)="clickPageButton($event)"
+              ></app-paging-buttons>
+            }
+          </div>
+        </div>

@@ -2,14 +2,14 @@
   <nav
     class="navbar navbar-expand-lg navbar-dark fixed-top"
     style="background-color: #242020"
-  >
+    >
     <a class="navbar-brand" href="#"></a>
     <button
       class="navbar-toggler"
       type="button"
       (click)="toggleNavbar()"
       data-bs-toggle="collapse"
-    >
+      >
       <span class="navbar-toggler-icon"></span>
     </button>
     <!-- <div class="containerNavbar"> -->
@@ -17,193 +17,224 @@
       class="collapse navbar-collapse"
       id="navbarsExampleDefault"
       [ngClass]="{ show: navbarOpen, collapseFrame: navbarOpen }"
-    >
+      >
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li *ngIf="ifDisplayHome()" class="nav-item">
-          <a
-            class="{{ activePage.homePage }}"
-            (click)="routeToHome()"
-            [ngClass]="{ navbarTogglerActive: navbarOpen }"
-            >{{ home_txt }}</a
-          >
-        </li>
-        <li *ngIf="ifDisplayMyHome()" class="nav-item">
-          <a
-            class="{{ activePage.homePage }}"
-            (click)="routeToMyHome()"
-            [ngClass]="{ navbarTogglerActive: navbarOpen }"
-            >{{ home_txt }}</a
-          >
-        </li>
-        <li *ngIf="ifDisplayLocalities()" class="nav-item">
-          <a
-            class="{{ activePage.userLocality }}"
-            (click)="routeToUserLocalities()"
-            [ngClass]="{ navbarTogglerActive: navbarOpen }"
-            >{{ userLocalities_txt }}</a
-          >
-        </li>
-        <li *ngIf="ifDisplayLocality()" class="nav-item" ngbDropdown>
-          <a
-            class="{{ activePage.loaclity }}"
-            id="dropdown01"
-            ngbDropdownToggle
-            [ngClass]="{ navbarTogglerActive: navbarOpen }"
-            >{{ locality_txt }}</a
-          >
-          <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown01">
+        @if (ifDisplayHome()) {
+          <li class="nav-item">
             <a
-              *ngFor="let locality of allLocality"
-              class="dropdown-item"
-              (click)="routeToUserLocalities(locality.name, locality.sector_count)"
-              >{{ locality.name }}</a
-            >
-          </div>
-        </li>
-        <li *ngIf="ifDisplayAdd()" class="nav-item" ngbDropdown>
-          <a
-            class="{{ activePage.add }}"
-            id="dropdown02"
-            ngbDropdownToggle
-            [ngClass]="{ navbarTogglerActive: navbarOpen }"
-            >{{ add_txt }}</a
-          >
-          <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown02">
-            <a class="dropdown-item" (click)="routerService.inputRoute()">{{
-              inputMineral_txt
-            }}</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a
-            class="{{ activePage.otherUsers }}"
-            (click)="routerService.otherUsers(0)"
-            [ngClass]="{ navbarTogglerActive: navbarOpen }"
-            >{{ otherUsers_txt }}</a
-          >
-        </li>
-      </ul>
+              class="{{ activePage.homePage }}"
+              (click)="routeToHome()"
+              [ngClass]="{ navbarTogglerActive: navbarOpen }"
+              >{{ home_txt }}</a
+              >
+            </li>
+          }
+          @if (ifDisplayMyHome()) {
+            <li class="nav-item">
+              <a
+                class="{{ activePage.homePage }}"
+                (click)="routeToMyHome()"
+                [ngClass]="{ navbarTogglerActive: navbarOpen }"
+                >{{ home_txt }}</a
+                >
+              </li>
+            }
+            @if (ifDisplayLocalities()) {
+              <li class="nav-item">
+                <a
+                  class="{{ activePage.userLocality }}"
+                  (click)="routeToUserLocalities()"
+                  [ngClass]="{ navbarTogglerActive: navbarOpen }"
+                  >{{ userLocalities_txt }}</a
+                  >
+                </li>
+              }
+              @if (ifDisplayLocality()) {
+                <li class="nav-item" ngbDropdown>
+                  <a
+                    class="{{ activePage.loaclity }}"
+                    id="dropdown01"
+                    ngbDropdownToggle
+                    [ngClass]="{ navbarTogglerActive: navbarOpen }"
+                    >{{ locality_txt }}</a
+                    >
+                    <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown01">
+                      @for (locality of allLocality; track locality) {
+                        <a
+                          class="dropdown-item"
+                          (click)="routeToUserLocalities(locality.name, locality.sector_count)"
+                          >{{ locality.name }}</a
+                          >
+                        }
+                      </div>
+                    </li>
+                  }
+                  @if (ifDisplayAdd()) {
+                    <li class="nav-item" ngbDropdown>
+                      <a
+                        class="{{ activePage.add }}"
+                        id="dropdown02"
+                        ngbDropdownToggle
+                        [ngClass]="{ navbarTogglerActive: navbarOpen }"
+                        >{{ add_txt }}</a
+                        >
+                        <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown02">
+                          <a class="dropdown-item" (click)="routerService.inputRoute()">{{
+                            inputMineral_txt
+                          }}</a>
+                        </div>
+                      </li>
+                    }
+                    <li class="nav-item">
+                      <a
+                        class="{{ activePage.otherUsers }}"
+                        (click)="routerService.otherUsers(0)"
+                        [ngClass]="{ navbarTogglerActive: navbarOpen }"
+                        >{{ otherUsers_txt }}</a
+                        >
+                      </li>
+                    </ul>
 
-      <div ngbDropdown>
-        <div *ngIf="ifDisplayAddFriend()" class="chatImageBox">
-          <div class="chatImageBoxRelative">
-            <img
-              class="addFriendImage"
-              [src]="imgAddSrc"
+                    <div ngbDropdown>
+                      @if (ifDisplayAddFriend()) {
+                        <div class="chatImageBox">
+                          <div class="chatImageBoxRelative">
+                            <img
+                              class="addFriendImage"
+                              [src]="imgAddSrc"
               (mouseover)="
                 imgAddSrc = '../../../assets/skins/add_friend_button_hover.png'
               "
-              (mouseout)="imgAddSrc = '../../../assets/skins/add_friend_button.png'"
-              (click)="openAddFriendshipModal()"
-              [ngClass]="{ chatButton: navbarOpen }"
-            />
-          </div>
-        </div>
+                              (mouseout)="imgAddSrc = '../../../assets/skins/add_friend_button.png'"
+                              (click)="openAddFriendshipModal()"
+                              [ngClass]="{ chatButton: navbarOpen }"
+                              />
+                          </div>
+                        </div>
+                      }
 
-        <div *ngIf="auth.isLoggedIn()" class="chatImageBox">
-          <div class="chatImageBoxRelative">
-            <img
-              class="chatImage"
-              [src]="imgChatSrc"
-              (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
-              (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
-              (click)="routerService.chat(null, 0)"
-              [ngClass]="{ chatButton: navbarOpen }"
-            />
-            <div class="chatImageBoxAbsolute">
-              <p *ngIf="alerts.message_alert" class="alertChat">!</p>
+                      @if (auth.isLoggedIn()) {
+                        <div class="chatImageBox">
+                          <div class="chatImageBoxRelative">
+                            <img
+                              class="chatImage"
+                              [src]="imgChatSrc"
+                              (mouseover)="imgChatSrc = '../../../assets/skins/message_button_hoover.png'"
+                              (mouseout)="imgChatSrc = '../../../assets/skins/message_button.png'"
+                              (click)="routerService.chat(null, 0)"
+                              [ngClass]="{ chatButton: navbarOpen }"
+                              />
+                            <div class="chatImageBoxAbsolute">
+                              @if (alerts.message_alert) {
+                                <p class="alertChat">!</p>
+                              }
+                            </div>
+                            <div class="chatImageBoxAbsolutePrice">
+                              @if (alerts.price_alert) {
+                                <p class="alertChat">$</p>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      }
+
+                      @if (ifDisplayMap()) {
+                        <div class="chatImageBox">
+                          <div class="chatImageBoxRelative">
+                            <img
+                              class="mapImage"
+                              [src]="imgMapSrc"
+                              (mouseover)="imgMapSrc = '../../../assets/skins/globus_button_hover.png'"
+                              (mouseout)="imgMapSrc = '../../../assets/skins/globus_button.png'"
+                              (click)="routeToUserMap()"
+                              [ngClass]="{ mapButton: navbarOpen }"
+                              />
+                          </div>
+                        </div>
+                      }
+
+                      @if (ifDisplayMapFirstIcon()) {
+                        <div class="chatImageBox">
+                          <div class="chatImageBoxRelative">
+                            <img
+                              class="mapImage"
+                              [src]="imgMapSrc"
+                              (mouseover)="imgMapSrc = '../../../assets/skins/globus_button_hover.png'"
+                              (mouseout)="imgMapSrc = '../../../assets/skins/globus_button.png'"
+                              (click)="routeToUserMap()"
+                              [ngClass]="{ mapButtonFirstIcon: navbarOpen }"
+                              />
+                          </div>
+                        </div>
+                      }
+
+                      @if (auth.isLoggedIn()) {
+                        <div class="chatImageBox">
+                          <div class="chatImageBoxRelative">
+                            <img
+                              class="settingsImage dropdown-toggle"
+                              ngbDropdownToggle
+                              [src]="imgSrc"
+                              (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
+                              (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
+                              [ngClass]="{ settingsButton: navbarOpen }"
+                              />
+                          </div>
+                        </div>
+                      }
+                      @if (auth.isLoggedIn()) {
+                        <div
+                          ngbDropdownMenu
+                          class="{{ getDropdownMenuClass(navbarOpen) }} dropdownStyle"
+                          aria-labelledby="dropdown03"
+                          [ngClass]="{ settingsButtonDropdown: navbarOpen }"
+                          >
+                          @if (this.auth.isLoggedIn()) {
+                            <a
+                              class="dropdown-item"
+                              (click)="routerService.userSettings()"
+                              >{{ userSettings_txt }}
+                            </a>
+                          }
+                          @if (this.auth.isUserAdmin()) {
+                            <a
+                              class="dropdown-item"
+                              (click)="routerService.adminHlavni()"
+                              >{{ adminPage_txt }}
+                            </a>
+                          }
+                        </div>
+                      }
+
+                      @if (auth.isLoggedIn()) {
+                        <button
+                          class="btn btnLogin"
+                          (click)="logOutHandler()"
+                          [ngClass]="{ logButton: navbarOpen }"
+                          >
+                          {{ logOut_txt }}
+                        </button>
+                      }
+                      @if (!auth.isLoggedIn()) {
+                        <button
+                          class="btn btn-outline-success my-2 my-sm-0"
+                          (click)="logInHandler()"
+                          [ngClass]="{ logButton: navbarOpen }"
+                          >
+                          {{ logIn_txt }}
+                        </button>
+                      }
+                      @if (!auth.isLoggedIn()) {
+                        <button
+                          class="btn btn-outline-success my-2 my-sm-0 registerButton"
+                          (click)="registerHandler()"
+                          [ngClass]="{ logButton: navbarOpen }"
+                          >
+                          {{ register_txt }}
+                        </button>
+                      }
+                    </div>
+                  </div>
+                <!-- </div> -->
+              </nav>
             </div>
-            <div class="chatImageBoxAbsolutePrice">
-              <p *ngIf="alerts.price_alert" class="alertChat">$</p>
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="ifDisplayMap()" class="chatImageBox">
-          <div class="chatImageBoxRelative">
-            <img
-              class="mapImage"
-              [src]="imgMapSrc"
-              (mouseover)="imgMapSrc = '../../../assets/skins/globus_button_hover.png'"
-              (mouseout)="imgMapSrc = '../../../assets/skins/globus_button.png'"
-              (click)="routeToUserMap()"
-              [ngClass]="{ mapButton: navbarOpen }"
-            />
-          </div>
-        </div>
-
-        <div *ngIf="ifDisplayMapFirstIcon()" class="chatImageBox">
-          <div class="chatImageBoxRelative">
-            <img
-              class="mapImage"
-              [src]="imgMapSrc"
-              (mouseover)="imgMapSrc = '../../../assets/skins/globus_button_hover.png'"
-              (mouseout)="imgMapSrc = '../../../assets/skins/globus_button.png'"
-              (click)="routeToUserMap()"
-              [ngClass]="{ mapButtonFirstIcon: navbarOpen }"
-            />
-          </div>
-        </div>
-
-        <div *ngIf="auth.isLoggedIn()" class="chatImageBox">
-          <div class="chatImageBoxRelative">
-            <img
-              class="settingsImage dropdown-toggle"
-              ngbDropdownToggle
-              [src]="imgSrc"
-              (mouseover)="imgSrc = '../../../assets/skins/settings_button_hover.png'"
-              (mouseout)="imgSrc = '../../../assets/skins/settings_button.png'"
-              [ngClass]="{ settingsButton: navbarOpen }"
-            />
-          </div>
-        </div>
-        <div
-          *ngIf="auth.isLoggedIn()"
-          ngbDropdownMenu
-          class="{{ getDropdownMenuClass(navbarOpen) }} dropdownStyle"
-          aria-labelledby="dropdown03"
-          [ngClass]="{ settingsButtonDropdown: navbarOpen }"
-        >
-          <a
-            *ngIf="this.auth.isLoggedIn()"
-            class="dropdown-item"
-            (click)="routerService.userSettings()"
-            >{{ userSettings_txt }}
-          </a>
-          <a
-            *ngIf="this.auth.isUserAdmin()"
-            class="dropdown-item"
-            (click)="routerService.adminHlavni()"
-            >{{ adminPage_txt }}
-          </a>
-        </div>
-
-        <button
-          *ngIf="auth.isLoggedIn()"
-          class="btn btnLogin"
-          (click)="logOutHandler()"
-          [ngClass]="{ logButton: navbarOpen }"
-        >
-          {{ logOut_txt }}
-        </button>
-        <button
-          *ngIf="!auth.isLoggedIn()"
-          class="btn btn-outline-success my-2 my-sm-0"
-          (click)="logInHandler()"
-          [ngClass]="{ logButton: navbarOpen }"
-        >
-          {{ logIn_txt }}
-        </button>
-        <button
-          *ngIf="!auth.isLoggedIn()"
-          class="btn btn-outline-success my-2 my-sm-0 registerButton"
-          (click)="registerHandler()"
-          [ngClass]="{ logButton: navbarOpen }"
-        >
-          {{ register_txt }}
-        </button>
-      </div>
-    </div>
-    <!-- </div> -->
-  </nav>
-</div>
