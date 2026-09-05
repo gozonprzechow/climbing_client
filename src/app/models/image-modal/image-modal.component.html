@@ -197,7 +197,7 @@
                 </div>
               }
               @if (showAddComment) {
-                <div class={{getBtnAddComentColumn()}}>
+                <div class="commentActions" [ngClass]="getBtnAddComentColumn()">
                   <button
                     type="button"
                     class={{getSubmitCommentBtnClass()}}

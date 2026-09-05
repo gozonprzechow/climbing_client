@@ -129,10 +129,7 @@
   background-color: rgb(85, 83, 83) !important;
   color: white;
   cursor: pointer;
-  position: absolute;
-  right: 60%;
-  left: 40%;
-  top: 20px;
+  max-width: 100%;
 }
 
 /* Style on hover colour */
@@ -150,16 +147,21 @@
   background-color: rgb(85, 83, 83) !important;
   color: white;
   cursor: pointer;
-  position: absolute;
-  right: 60%;
-  left: 40%;
-  bottom: 20px;
+  max-width: 100%;
 }
 
 /* Style on hover colour */
 .btnCancleAddComment:hover {
   background-color: rgb(160, 160, 160) !important;
   color: black;
+}
+
+.commentActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 12px;
 }
 
 .inputCommentBox {
