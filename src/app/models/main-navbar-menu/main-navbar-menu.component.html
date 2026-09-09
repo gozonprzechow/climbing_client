@@ -59,13 +59,16 @@
                     >{{ locality_txt }}</a
                     >
                     <div ngbDropdownMenu class="dropdownStyle" aria-labelledby="dropdown01">
-                      @for (locality of allLocality; track locality) {
-                        <a
-                          class="dropdown-item"
-                          (click)="routeToUserLocalities(locality.name, locality.sector_count)"
-                          >{{ locality.name }}</a
-                          >
+                      @let userId = auth.getActualUserId();
+                      @if (userId && userId !== 'null' && userId !== 'undefined') {
+                        @for (locality of allLocality; track locality) {
+                          <a
+                            class="dropdown-item"
+                            (click)="routeToUserLocalities(locality.name, locality.sector_count)"
+                            >{{ locality.name }}</a
+                            >
                         }
+                      }
                       </div>
                     </li>
                   }
